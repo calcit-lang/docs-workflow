@@ -1,12 +1,34 @@
 
-Docs workflow
+Docs workflow in Calcit-js
 ----
 
-> a template for putting up docs.
+> Respo web page based on [calcit-js](https://github.com/calcit-lang/calcit).
+
+Demo http://r.tiye.me/mvc-works/docs-calcit-workflow/ .
+
+### Usages
+
+To develop:
+
+```bash
+cr --emit-js # watching
+
+yarn # to install vite
+yarn vite # watching and running on localhost:3000
+```
+
+calcit-js is using [Calcit Editor](https://github.com/calcit-lang/editor).
+
+To build:
+
+```bash
+yarn vite build
+http-server dist/
+```
 
 ### Workflow
 
-Workflow https://github.com/mvc-works/calcit-workflow
+https://github.com/mvc-works/docs-calcit-workflow
 
 ### License
 
