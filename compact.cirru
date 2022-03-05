@@ -8,11 +8,16 @@
     |app.comp.container $ {}
       :ns $ quote
         ns app.comp.container $ :require (respo-ui.core :as ui)
-          respo.core :refer $ defcomp defeffect <> >> div button textarea span input
+          respo-ui.core :refer $ hsl
+          respo.core :refer $ defcomp defeffect <> >> div button textarea span input list->
           respo.comp.space :refer $ =<
           reel.comp.reel :refer $ comp-reel
           respo-md.comp.md :refer $ comp-md
           app.config :refer $ dev?
+          app.schema :refer $ docs
+          "\"remarkable" :refer $ Remarkable
+          "\"highlight.js" :default hljs
+          "\"cirru-color" :as color
       :defs $ {}
         |comp-container $ quote
           defcomp comp-container (reel)
@@ -21,25 +26,58 @@
                 states $ :states store
                 cursor $ or (:cursor states) ([])
                 state $ or (:data states)
-                  {} $ :content "\""
+                  {} $ :selected nil
               div
-                {} $ :style (merge ui/global ui/row)
-                textarea $ {}
-                  :value $ :content state
-                  :placeholder "\"Content"
-                  :style $ merge ui/expand ui/textarea
-                    {} $ :height 320
-                  :on-input $ fn (e d!)
-                    d! cursor $ assoc state :content (:value e)
-                =< 8 nil
+                {} $ :style (merge ui/fullscreen ui/global ui/row)
                 div
-                  {} $ :style ui/expand
-                  comp-md "|This is some content with `code`"
-                  =< |8px nil
-                  button $ {} (:style ui/button) (:inner-text "\"Run")
-                    :on-click $ fn (e d!)
-                      println $ :content state
+                  {} $ :style
+                    {} (:width "\"20%") (:max-width 240)
+                      :border-right $ str "\"1px solid " (hsl 0 0 94)
+                  input $ {}
+                    :style $ merge ui/input
+                      {} (:width "\"100%") (:border :none) (:line-height 32) (:height 32)
+                        :border-bottom $ str "\"1px solid " (hsl 0 0 90)
+                    :placeholder "\"Search..."
+                  list-> ({})
+                    -> docs $ map-indexed
+                      fn (idx entry)
+                        [] idx $ div
+                          {} (:class-name "\"doc-entry")
+                            :style $ merge style-entry
+                              if
+                                = (:selected state) (:key entry)
+                                {} $ :border-left
+                                  str "\"10px solid " $ hsl 200 90 70
+                            :on-click $ fn (e d!)
+                              d! cursor $ assoc state :selected (:key entry)
+                          <> $ :title entry
+                let
+                    target $ find docs
+                      fn (entry)
+                        = (:selected state) (:key entry)
+                  if (some? target)
+                    div
+                      {} $ :style
+                        {} $ :padding "\"8px 16px"
+                      div $ {}
+                        :innerHTML $ .!render md (:content target)
+                    div
+                      {} $ :style
+                        merge ui/expand $ {} (:padding "\"20px 16px")
+                      do $ <> "\"Empty"
+                        {} (:font-family ui/font-fancy) (:font-style :italic)
+                          :color $ hsl 0 0 80
                 when dev? $ comp-reel (>> states :reel) reel ({})
+        |md $ quote
+          def md $ new Remarkable
+            js-object (:html false) (:breaks true)
+              :highlight $ fn (code lang)
+                if (= lang "\"cirru") (color/generate code)
+                  .-value $ .!highlightAuto hljs code lang
+        |style-entry $ quote
+          def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
+            :border-bottom $ str "\"1px solid " (hsl 0 0 90)
+            :border-left $ str "\"0px solid " (hsl 200 90 60)
     |app.schema $ {}
       :ns $ quote (ns app.schema)
       :defs $ {}
@@ -47,6 +85,15 @@
           def store $ {}
             :states $ {}
               :cursor $ []
+        |docs $ quote
+          def docs $ []
+            {} (:title "\"Guide") (:key :guide)
+              :content $ load-doc "\"guide.md"
+            {} (:title "\"Design") (:key :design)
+              :content $ load-doc "\"design.md"
+        |load-doc $ quote
+          defmacro load-doc (filename)
+            read-file $ str "\"docs/" filename
     |app.updater $ {}
       :ns $ quote
         ns app.updater $ :require
@@ -71,6 +118,9 @@
           app.config :as config
           "\"./calcit.build-errors" :default build-errors
           "\"bottom-tip" :default hud!
+          "\"highlight.js" :default hljs
+          "\"highlight.js/lib/languages/bash" :default bash-lang
+          "\"highlight.js/lib/languages/clojure" :default clojure-lang
       :defs $ {}
         |render-app! $ quote
           defn render-app! () $ render! mount-target (comp-container @*reel) dispatch!
@@ -83,7 +133,7 @@
         |*reel $ quote
           defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
         |main! $ quote
-          defn main! ()
+          defn main! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang)
             println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
             if config/dev? $ load-console-formatter!
             render-app!
