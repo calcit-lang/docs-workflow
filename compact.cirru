@@ -1,7 +1,7 @@
 
 {} (:package |app)
   :configs $ {} (:init-fn |app.main/main!) (:reload-fn |app.main/reload!)
-    :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/
+    :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/
     :version |0.0.1
   :entries $ {}
   :files $ {}
@@ -28,9 +28,12 @@
                 state $ or (:data states)
                   {} $ :selected ([])
               div
-                {} $ :style (merge ui/fullscreen ui/global ui/row)
+                {} (:class-name "\"calcit-tile")
+                  :style $ merge ui/fullscreen ui/global ui/row
                 list->
-                  {} $ :style ui/row
+                  {} $ :style
+                    merge ui/row $ {}
+                      :background-color $ hsl 0 0 94 0.8
                   apply-args
                       []
                       , docs ([]) (:selected state)
@@ -58,7 +61,8 @@
                   if (some? target)
                     div
                       {} $ :style
-                        {} $ :padding "\"8px 16px"
+                        merge ui/expand $ {} (:padding "\"8px 16px")
+                          :background-color $ hsl 0 0 100 0.6
                       div $ {}
                         :innerHTML $ .!render md (:content target)
                     div
@@ -76,8 +80,9 @@
                   .-value $ .!highlightAuto hljs code lang
         |style-entry $ quote
           def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
-            :border-bottom $ str "\"1px solid " (hsl 0 0 90)
+            :border-bottom $ str "\"1px solid " (hsl 0 0 92)
             :border-left $ str "\"0px solid " (hsl 200 90 60)
+            :background-color $ hsl 0 0 100 0.6
         |comp-sidebar $ quote
           defcomp comp-sidebar (states selected entries on-select)
             let
@@ -109,8 +114,8 @@
                           :style $ merge style-entry
                             if
                               = selected $ :key entry
-                              {} $ :border-left
-                                str "\"10px solid " $ hsl 200 90 70
+                              {} (:background-color :white)
+                                :border-left $ str "\"10px solid " (hsl 200 90 70)
                           :on-click $ fn (e d!)
                             on-select (:key entry) d!
                         <> $ :title entry

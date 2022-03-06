@@ -167,6 +167,10 @@
                                   |j $ {} (:type :leaf) (:by |root) (:at 1521129814235) (:text |ui/global)
                                   |r $ {} (:type :leaf) (:by |root) (:at 1499755354983) (:text |ui/row)
                                   |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646492442820) (:text |ui/fullscreen)
+                          |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565413319)
+                            :data $ {}
+                              |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565413319) (:text |:class-name)
+                              |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565413319) (:text "|\"calcit-tile")
                       |x $ {} (:type :expr) (:by |root) (:at 1521954055333)
                         :data $ {}
                           |D $ {} (:type :leaf) (:by |root) (:at 1521954057510) (:text |when)
@@ -248,13 +252,27 @@
                                       |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646494467367)
                                         :data $ {}
                                           |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494470752) (:text |:style)
-                                          |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646494471063)
+                                          |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565335404)
                                             :data $ {}
-                                              |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494471412) (:text |{})
-                                              |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646494471637)
+                                              |T $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646494471063)
                                                 :data $ {}
-                                                  |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494472713) (:text |:padding)
-                                                  |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494478456) (:text "|\"8px 16px")
+                                                  |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494471412) (:text |{})
+                                                  |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646494471637)
+                                                    :data $ {}
+                                                      |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494472713) (:text |:padding)
+                                                      |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494478456) (:text "|\"8px 16px")
+                                                  |h $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565442852)
+                                                    :data $ {}
+                                                      |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565442852) (:text |:background-color)
+                                                      |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565442852)
+                                                        :data $ {}
+                                                          |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565442852) (:text |hsl)
+                                                          |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565442852) (:text |0)
+                                                          |h $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565442852) (:text |0)
+                                                          |l $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565442852) (:text |100)
+                                                          |o $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565442852) (:text |0.6)
+                                              |D $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565336206) (:text |merge)
+                                              |L $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565338466) (:text |ui/expand)
                                   |h $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646493384433)
                                     :data $ {}
                                       |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646493387452) (:text |div)
@@ -462,7 +480,23 @@
                               |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646553985100)
                                 :data $ {}
                                   |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646553985883) (:text |:style)
-                                  |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646553989023) (:text |ui/row)
+                                  |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565468692)
+                                    :data $ {}
+                                      |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565470523) (:text |ui/row)
+                                      |D $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565471276) (:text |merge)
+                                      |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565473548)
+                                        :data $ {}
+                                          |T $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565472238)
+                                            :data $ {}
+                                              |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565472238) (:text |:background-color)
+                                              |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565472238)
+                                                :data $ {}
+                                                  |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565472238) (:text |hsl)
+                                                  |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565472238) (:text |0)
+                                                  |h $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565472238) (:text |0)
+                                                  |l $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565585545) (:text |94)
+                                                  |o $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565477369) (:text |0.8)
+                                          |D $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565474018) (:text |{})
           |md $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646492173414)
             :data $ {}
               |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646492173414) (:text |def)
@@ -540,7 +574,7 @@
                               |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494585653) (:text |hsl)
                               |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494586231) (:text |0)
                               |h $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494586509) (:text |0)
-                              |l $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494587262) (:text |90)
+                              |l $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565642794) (:text |92)
                   |o $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646494738504)
                     :data $ {}
                       |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494738504) (:text |:border-left)
@@ -562,6 +596,16 @@
                     :data $ {}
                       |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494942135) (:text |:line-height)
                       |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494948906) (:text |2.4)
+                  |q $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565599982)
+                    :data $ {}
+                      |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565602454) (:text |:background-color)
+                      |b $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565602693)
+                        :data $ {}
+                          |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565603036) (:text |hsl)
+                          |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565603672) (:text |0)
+                          |h $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565603961) (:text |0)
+                          |l $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565621577) (:text |100)
+                          |o $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565613946) (:text |0.6)
           |comp-sidebar $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646551076305)
             :data $ {}
               |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646551078342) (:text |defcomp)
@@ -789,6 +833,10 @@
                                                                               |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646551080447) (:text |200)
                                                                               |h $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646551080447) (:text |90)
                                                                               |l $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646551080447) (:text |70)
+                                                                  |X $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646565541408)
+                                                                    :data $ {}
+                                                                      |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565545402) (:text |:background-color)
+                                                                      |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646565546607) (:text |:white)
                                                   |l $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646551080447)
                                                     :data $ {}
                                                       |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646551080447) (:text |:on-click)
@@ -1531,7 +1579,7 @@
         :proc $ {} (:type :expr) (:by |root) (:at 1527788237503)
           :data $ {}
   :configs $ {} (:port 6001) (:storage-key |calcit.cirru) (:init-fn |app.main/main!) (:reload-fn |app.main/reload!)
-    :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/
+    :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/
     :version |0.0.1
     :output |src
     :compact-output? true

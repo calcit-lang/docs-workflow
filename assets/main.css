@@ -59,3 +59,9 @@ pre {
 :-moz-placeholder { /* Firefox 18- */
   color: #ccc;
 }
+
+
+.calcit-tile {
+  background-image: url('./calcit-tile.png');
+  background-size: 163px 395px;
+}
