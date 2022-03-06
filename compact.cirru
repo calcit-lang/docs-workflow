@@ -26,35 +26,34 @@
                 states $ :states store
                 cursor $ or (:cursor states) ([])
                 state $ or (:data states)
-                  {} $ :selected nil
+                  {} $ :selected ([])
               div
                 {} $ :style (merge ui/fullscreen ui/global ui/row)
-                div
-                  {} $ :style
-                    {} (:width "\"20%") (:max-width 240)
-                      :border-right $ str "\"1px solid " (hsl 0 0 94)
-                  input $ {}
-                    :style $ merge ui/input
-                      {} (:width "\"100%") (:border :none) (:line-height 32) (:height 32)
-                        :border-bottom $ str "\"1px solid " (hsl 0 0 90)
-                    :placeholder "\"Search..."
-                  list-> ({})
-                    -> docs $ map-indexed
-                      fn (idx entry)
-                        [] idx $ div
-                          {} (:class-name "\"doc-entry")
-                            :style $ merge style-entry
-                              if
-                                = (:selected state) (:key entry)
-                                {} $ :border-left
-                                  str "\"10px solid " $ hsl 200 90 70
-                            :on-click $ fn (e d!)
-                              d! cursor $ assoc state :selected (:key entry)
-                          <> $ :title entry
+                list->
+                  {} $ :style ui/row
+                  apply-args
+                      []
+                      , docs ([]) (:selected state)
+                    fn (acc entries base-path selected)
+                      let
+                          next-acc $ conj acc
+                            [] (count acc)
+                              comp-sidebar
+                                >> states $ count acc
+                                first selected
+                                , entries base-path $ fn (p d!)
+                                  d! cursor $ assoc state :selected p
+                        if (empty? selected) next-acc $ let
+                            s0 $ first selected
+                            target $ find entries
+                              fn (entry)
+                                = s0 $ :key entry
+                          if
+                            or (nil? target)
+                              empty? $ get target :children
+                            , next-acc $ recur next-acc (get target :children) (conj base-path s0) (rest selected)
                 let
-                    target $ find docs
-                      fn (entry)
-                        = (:selected state) (:key entry)
+                    target $ find-target docs (:selected state)
                   if (some? target)
                     div
                       {} $ :style
@@ -78,6 +77,56 @@
           def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
             :border-bottom $ str "\"1px solid " (hsl 0 0 90)
             :border-left $ str "\"0px solid " (hsl 200 90 60)
+        |comp-sidebar $ quote
+          defcomp comp-sidebar (states selected entries base-path on-select)
+            let
+                cursor $ :cursor states
+                state $ or (:data states)
+                  {} $ :query "\""
+              div
+                {} $ :style
+                  {} (:min-width 200) (:max-width 240)
+                    :border-right $ str "\"1px solid " (hsl 0 0 94)
+                input $ {}
+                  :style $ merge ui/input
+                    {} (:width "\"100%") (:border :none) (:line-height 32) (:height 32)
+                      :border-bottom $ str "\"1px solid " (hsl 0 0 90)
+                  :placeholder "\"Search..."
+                  :value $ :query state
+                  :on-input $ fn (e d!)
+                    d! cursor $ assoc state :query (:value e)
+                list-> ({})
+                  -> entries
+                    filter $ fn (entry)
+                      if
+                        blank? $ :query state
+                        , true $ -> (:title entry) .!toLowerCase
+                          .includes? $ :query state
+                    map-indexed $ fn (idx entry)
+                      [] idx $ div
+                        {} (:class-name "\"doc-entry")
+                          :style $ merge style-entry
+                            if
+                              = selected $ :key entry
+                              {} $ :border-left
+                                str "\"10px solid " $ hsl 200 90 70
+                          :on-click $ fn (e d!)
+                            on-select
+                              conj base-path $ :key entry
+                              , d!
+                        <> $ :title entry
+        |find-target $ quote
+          defn find-target (entries path)
+            if (empty? path) nil $ let
+                p0 $ first path
+              if-let
+                target $ find entries
+                  fn (entry)
+                    = p0 $ :key entry
+                if
+                  = 1 $ count path
+                  , target $ recur (:children target) (rest path)
+                w-log nil
     |app.schema $ {}
       :ns $ quote (ns app.schema)
       :defs $ {}
@@ -91,6 +140,15 @@
               :content $ load-doc "\"guide.md"
             {} (:title "\"Design") (:key :design)
               :content $ load-doc "\"design.md"
+              :children $ []
+                {} (:title "\"Guide") (:key :guide)
+                  :content $ load-doc "\"guide.md"
+                {} (:title "\"Design") (:key :design)
+                  :content $ load-doc "\"design.md"
+                {} (:title "\"Overview") (:key :overview)
+                  :content $ load-doc "\"overview.md"
+            {} (:title "\"About") (:key :about)
+              :content $ load-doc "\"about.md"
         |load-doc $ quote
           defmacro load-doc (filename)
             read-file $ str "\"docs/" filename
