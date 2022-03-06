@@ -36,13 +36,14 @@
                       , docs ([]) (:selected state)
                     fn (acc entries base-path selected)
                       let
+                          base-path' base-path $ ; "\"problem in compiling tail recursions"
                           next-acc $ conj acc
                             [] (count acc)
                               comp-sidebar
                                 >> states $ count acc
                                 first selected
-                                , entries base-path $ fn (p d!)
-                                  d! cursor $ assoc state :selected p
+                                , entries $ fn (p d!)
+                                  d! cursor $ assoc state :selected (conj base-path' p)
                         if (empty? selected) next-acc $ let
                             s0 $ first selected
                             target $ find entries
@@ -78,7 +79,7 @@
             :border-bottom $ str "\"1px solid " (hsl 0 0 90)
             :border-left $ str "\"0px solid " (hsl 200 90 60)
         |comp-sidebar $ quote
-          defcomp comp-sidebar (states selected entries base-path on-select)
+          defcomp comp-sidebar (states selected entries on-select)
             let
                 cursor $ :cursor states
                 state $ or (:data states)
@@ -111,9 +112,7 @@
                               {} $ :border-left
                                 str "\"10px solid " $ hsl 200 90 70
                           :on-click $ fn (e d!)
-                            on-select
-                              conj base-path $ :key entry
-                              , d!
+                            on-select (:key entry) d!
                         <> $ :title entry
         |find-target $ quote
           defn find-target (entries path)
