@@ -54,7 +54,7 @@
                                 :style $ {} (:cursor :pointer)
                                   :background-color $ hsl 180 90 94
                                 :on-click $ fn (e d!)
-                                  d! cursor $ assoc state :selected sub-path
+                                  d! cursor $ next-path state sub-path
                               <> $ str "\"< "
                                 or (:title target) "\"NOT FOUND"
                       []
@@ -62,8 +62,19 @@
                       parent-path $ or (butlast selected) ([])
                       entries $ find-entries docs parent-path
                     comp-page-entries (last selected) parent-path entries $ fn (xs d!)
-                      d! cursor $ assoc state :selected xs
+                      d! cursor $ next-path state xs
                   div ({}) (<> "\"Histories")
+                    list-> ({})
+                      -> history $ map-indexed
+                        fn (idx path)
+                          [] idx $ let
+                              target $ find-target docs path
+                            div
+                              {} (:class-name "\"doc-entry")
+                                :style $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
+                                :on-click $ fn (e d!)
+                                  d! cursor $ next-path state path
+                              <> $ :title target
                 let
                     target $ find-target docs (:selected state)
                   div
@@ -76,7 +87,7 @@
                         div ({})
                           <> "\"Children pages" $ {} (:font-family ui/font-fancy)
                         comp-page-entries nil (:selected state) children $ fn (xs d!)
-                          d! cursor $ assoc state :selected xs
+                          d! cursor $ next-path state xs
                     comp-doc-page target
                 when dev? $ comp-reel (>> states :reel) reel ({})
         |md $ quote
@@ -146,6 +157,16 @@
               target $ find-target entries path
               :children target
               do (js/console.warn "\"no entries found for" entries path) ([])
+        |next-path $ quote
+          defn next-path (state path)
+            -> state (assoc :selected path)
+              update :history $ fn (xs)
+                if (.includes? xs path) xs $ prepend
+                  if
+                    > (count xs) 5
+                    butlast xs
+                    , xs
+                  , path
     |docs-workflow.schema $ {}
       :ns $ quote (ns docs-workflow.schema)
       :defs $ {}
