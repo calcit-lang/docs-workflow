@@ -2,9 +2,13 @@
 Docs workflow in Calcit-js
 ----
 
-> Respo web page based on [calcit-js](https://github.com/calcit-lang/calcit).
-
 Demo http://r.tiye.me/mvc-works/docs-calcit-workflow/ .
+
+### APIs
+
+```cirru
+docs-workflow.comp.container/comp-container reel docs
+```
 
 ### Usages
 

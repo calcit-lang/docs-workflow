@@ -1,26 +1,26 @@
 
-{} (:package |app)
-  :configs $ {} (:init-fn |app.main/main!) (:reload-fn |app.main/reload!)
+{} (:package |docs-workflow)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/
     :version |0.0.1
   :entries $ {}
   :files $ {}
-    |app.comp.container $ {}
+    |docs-workflow.comp.container $ {}
       :ns $ quote
-        ns app.comp.container $ :require (respo-ui.core :as ui)
+        ns docs-workflow.comp.container $ :require (respo-ui.core :as ui)
           respo-ui.core :refer $ hsl
           respo.core :refer $ defcomp defeffect <> >> div button textarea span input list->
           respo.comp.space :refer $ =<
           reel.comp.reel :refer $ comp-reel
           respo-md.comp.md :refer $ comp-md
-          app.config :refer $ dev?
-          app.schema :refer $ docs
+          docs-workflow.config :refer $ dev?
+          docs-workflow.schema :refer $ docs
           "\"remarkable" :refer $ Remarkable
           "\"highlight.js" :default hljs
           "\"cirru-color" :as color
       :defs $ {}
         |comp-container $ quote
-          defcomp comp-container (reel)
+          defcomp comp-container (reel docs)
             let
                 store $ :store reel
                 states $ :states store
@@ -146,8 +146,8 @@
               target $ find-target entries path
               :children target
               do (js/console.warn "\"no entries found for" entries path) ([])
-    |app.schema $ {}
-      :ns $ quote (ns app.schema)
+    |docs-workflow.schema $ {}
+      :ns $ quote (ns docs-workflow.schema)
       :defs $ {}
         |store $ quote
           def store $ {}
@@ -171,9 +171,9 @@
         |load-doc $ quote
           defmacro load-doc (filename)
             read-file $ str "\"docs/" filename
-    |app.updater $ {}
+    |docs-workflow.updater $ {}
       :ns $ quote
-        ns app.updater $ :require
+        ns docs-workflow.updater $ :require
           respo.cursor :refer $ update-states
       :defs $ {}
         |updater $ quote
@@ -182,17 +182,17 @@
               do (println "\"unknown op:" op) store
               :states $ update-states store data
               :hydrate-storage data
-    |app.main $ {}
+    |docs-workflow.main $ {}
       :ns $ quote
-        ns app.main $ :require
+        ns docs-workflow.main $ :require
           respo.core :refer $ render! clear-cache!
-          app.comp.container :refer $ comp-container
-          app.updater :refer $ updater
-          app.schema :as schema
+          docs-workflow.comp.container :refer $ comp-container
+          docs-workflow.updater :refer $ updater
+          docs-workflow.schema :as schema
           reel.util :refer $ listen-devtools!
           reel.core :refer $ reel-updater refresh-reel
           reel.schema :as reel-schema
-          app.config :as config
+          docs-workflow.config :as config
           "\"./calcit.build-errors" :default build-errors
           "\"bottom-tip" :default hud!
           "\"highlight.js" :default hljs
@@ -200,7 +200,7 @@
           "\"highlight.js/lib/languages/clojure" :default clojure-lang
       :defs $ {}
         |render-app! $ quote
-          defn render-app! () $ render! mount-target (comp-container @*reel) dispatch!
+          defn render-app! () $ render! mount-target (comp-container @*reel schema/docs) dispatch!
         |persist-storage! $ quote
           defn persist-storage! () (js/console.log "\"persist")
             js/localStorage.setItem (:storage-key config/site)
@@ -236,8 +236,8 @@
               reset! *reel $ refresh-reel @*reel schema/store updater
               hud! "\"ok~" "\"Ok"
             hud! "\"error" build-errors
-    |app.config $ {}
-      :ns $ quote (ns app.config)
+    |docs-workflow.config $ {}
+      :ns $ quote (ns docs-workflow.config)
       :defs $ {}
         |dev? $ quote
           def dev? $ = "\"dev" (get-env "\"mode")
