@@ -21,8 +21,28 @@
           respo-alerts.core :refer $ use-modal
       :defs $ {}
         |comp-nav-tree $ quote
-          defcomp comp-nav-tree (docs on-select)
-            div ({}) (<> "\"TODO")
+          defcomp comp-nav-tree (docs base-path on-select)
+            list-> ({})
+              -> docs $ map
+                fn (entry)
+                  [] (:key entry)
+                    div ({})
+                      div
+                        {} (:class-name "\"doc-entry")
+                          :style $ {} (:padding "\"0 8px") (:cursor :pointer)
+                          :on-click $ fn (e d!)
+                            on-select
+                              conj base-path $ :key entry
+                              , d!
+                        <> $ :title entry
+                      if-let
+                        xs $ :children entry
+                        div
+                          {} $ :style
+                            {} $ :padding-left 16
+                          comp-nav-tree xs
+                            conj base-path $ :key entry
+                            , on-select
         |style-entry $ quote
           def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
             :border-bottom $ str "\"1px solid " (hsl 0 0 92)
@@ -42,13 +62,14 @@
                 history $ :history state
                 quick-modal $ use-modal (>> states :quick)
                   {} (:title "|Quick jump")
-                    :style $ {} (:max-width "\"60vw") (:height "\"80vh")
+                    :style $ {} (:max-width "\"40vw") (:height "\"90vh") (:max-height "\"90vh") (:margin-right 0)
                     :render $ fn (on-close)
                       div
                         {} $ :style
                           {} $ :padding "\"0 16px"
-                        comp-nav-tree docs $ fn (path d!)
-                          d! cursor $ next-path state path
+                        comp-nav-tree docs ([])
+                          fn (path d!)
+                            d! cursor $ next-path state path
               div
                 {} (:class-name "\"calcit-tile")
                   :style $ merge ui/fullscreen ui/global ui/row
@@ -59,7 +80,7 @@
                   div
                     {} $ :on-click
                       fn (e d!) (.show quick-modal d!)
-                    <> "\"Quick Search"
+                    <> "\"Quick Search" $ {} (:cursor :pointer)
                   div
                     {} $ :style
                       {} $ :margin-top 12
