@@ -1,7 +1,7 @@
 
 {} (:package |docs-workflow)
   :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!)
-    :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/
+    :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
     :version |0.0.1
   :entries $ {}
   :files $ {}
@@ -18,7 +18,16 @@
           "\"remarkable" :refer $ Remarkable
           "\"highlight.js" :default hljs
           "\"cirru-color" :as color
+          respo-alerts.core :refer $ use-modal
       :defs $ {}
+        |comp-nav-tree $ quote
+          defcomp comp-nav-tree (docs on-select)
+            div ({}) (<> "\"TODO")
+        |style-entry $ quote
+          def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
+            :border-bottom $ str "\"1px solid " (hsl 0 0 92)
+            :border-left $ str "\"0px solid " (hsl 200 90 60)
+            :background-color $ hsl 0 0 100 0.6
         |comp-container $ quote
           defcomp comp-container (reel docs)
             let
@@ -31,50 +40,43 @@
                     :history $ []
                 selected $ :selected state
                 history $ :history state
+                quick-modal $ use-modal (>> states :quick)
+                  {} (:title "|Quick jump")
+                    :style $ {} (:max-width "\"60vw") (:height "\"80vh")
+                    :render $ fn (on-close)
+                      div
+                        {} $ :style
+                          {} $ :padding "\"0 16px"
+                        comp-nav-tree docs $ fn (path d!)
+                          d! cursor $ next-path state path
               div
                 {} (:class-name "\"calcit-tile")
                   :style $ merge ui/fullscreen ui/global ui/row
                 div
                   {} $ :style
-                    {} $ :background-color :white
-                  div ({}) (<> "\"Search entry")
-                  div ({}) (<> "\"Pages")
-                  list->
-                    {} $ :style ({})
-                    if
-                      > (count selected) 0
-                      ->
-                        range $ dec (count selected)
-                        map $ fn (idx)
-                          let
-                              sub-path $ slice selected 0 (inc idx)
-                              target $ find-target docs sub-path
-                            [] idx $ div
-                              {}
-                                :style $ {} (:cursor :pointer)
-                                  :background-color $ hsl 180 90 94
-                                :on-click $ fn (e d!)
-                                  d! cursor $ next-path state sub-path
-                              <> $ str "\"< "
-                                or (:title target) "\"NOT FOUND"
-                      []
+                    {} (:padding "\"0 8px") (:width "\"20%") (:min-width 266) (:background-color :white)
+                      :border-right $ str "\"1px solid " (hsl 0 0 94)
+                  div
+                    {} $ :on-click
+                      fn (e d!) (.show quick-modal d!)
+                    <> "\"Quick Search"
+                  div
+                    {} $ :style
+                      {} $ :margin-top 12
+                    <> "\"Pages" $ {} (:font-family ui/font-fancy)
+                  comp-parent-menu selected docs $ fn (path d!)
+                    d! cursor $ next-path state path
                   let
                       parent-path $ or (butlast selected) ([])
                       entries $ find-entries docs parent-path
                     comp-page-entries (last selected) parent-path entries $ fn (xs d!)
                       d! cursor $ next-path state xs
-                  div ({}) (<> "\"Histories")
-                    list-> ({})
-                      -> history $ map-indexed
-                        fn (idx path)
-                          [] idx $ let
-                              target $ find-target docs path
-                            div
-                              {} (:class-name "\"doc-entry")
-                                :style $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
-                                :on-click $ fn (e d!)
-                                  d! cursor $ next-path state path
-                              <> $ :title target
+                  div
+                    {} $ :style
+                      {} $ :margin-top 20
+                    <> "\"Histories" $ {} (:font-family ui/font-fancy)
+                    comp-history-menu history $ fn (path d!)
+                      d! cursor $ next-path state path
                 let
                     target $ find-target docs (:selected state)
                   div
@@ -89,18 +91,8 @@
                         comp-page-entries nil (:selected state) children $ fn (xs d!)
                           d! cursor $ next-path state xs
                     comp-doc-page target
+                .render quick-modal
                 when dev? $ comp-reel (>> states :reel) reel ({})
-        |md $ quote
-          def md $ new Remarkable
-            js-object (:html false) (:breaks true)
-              :highlight $ fn (code lang)
-                if (= lang "\"cirru") (color/generate code)
-                  .-value $ .!highlightAuto hljs code lang
-        |style-entry $ quote
-          def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
-            :border-bottom $ str "\"1px solid " (hsl 0 0 92)
-            :border-left $ str "\"0px solid " (hsl 200 90 60)
-            :background-color $ hsl 0 0 100 0.6
         |find-target $ quote
           defn find-target (entries path)
             if (empty? path) nil $ let
@@ -113,27 +105,37 @@
                   = 1 $ count path
                   , target $ recur (:children target) (rest path)
                 , nil
-        |comp-doc-page $ quote
-          defcomp comp-doc-page (target)
-            if (some? target)
-              div
-                {} $ :style
-                  merge ui/expand $ {} (:padding "\"8px 16px")
-                    :background-color $ hsl 0 0 100 0.6
-                div $ {}
-                  :innerHTML $ .!render md (:content target)
-              div
-                {} $ :style
-                  merge ui/expand $ {} (:padding "\"20px 16px")
-                do $ <> "\"Empty"
-                  {} (:font-family ui/font-fancy) (:font-style :italic)
-                    :color $ hsl 0 0 80
+        |comp-parent-menu $ quote
+          defcomp comp-parent-menu (selected docs on-select)
+            list->
+              {} $ :style ({})
+              if
+                > (count selected) 0
+                ->
+                  range $ dec (count selected)
+                  map $ fn (idx)
+                    let
+                        sub-path $ slice selected 0 (inc idx)
+                        target $ find-target docs sub-path
+                      [] idx $ div
+                        {}
+                          :style $ {} (:cursor :pointer) (:font-style :italic)
+                            :background-color $ hsl 180 90 94
+                          :on-click $ fn (e d!) (on-select sub-path d!)
+                        <> $ str "\"< "
+                          or (:title target) "\"NOT FOUND"
+                []
+        |md $ quote
+          def md $ new Remarkable
+            js-object (:html false) (:breaks true)
+              :highlight $ fn (code lang)
+                if (= lang "\"cirru") (color/generate code)
+                  .-value $ .!highlightAuto hljs code lang
         |comp-page-entries $ quote
           defcomp comp-page-entries (selected parent-path entries on-select)
             div
               {} $ :style
-                {} (:min-width 200) (:max-width 240)
-                  :border-right $ str "\"1px solid " (hsl 0 0 94)
+                {} (:min-width 240) (:max-width 320)
               list-> ({})
                 -> entries $ map-indexed
                   fn (idx entry)
@@ -151,22 +153,50 @@
                               if selected? $ {} (:background-color :white)
                                 :border-left $ str "\"10px solid " (hsl 200 90 70)
                           <> $ :title entry
-        |find-entries $ quote
-          defn find-entries (entries path)
-            if (empty? path) entries $ if-let
-              target $ find-target entries path
-              :children target
-              do (js/console.warn "\"no entries found for" entries path) ([])
+        |comp-doc-page $ quote
+          defcomp comp-doc-page (target)
+            if (some? target)
+              div
+                {} $ :style
+                  merge ui/expand $ {} (:padding "\"8px 16px")
+                    :background-color $ hsl 0 0 100 0.6
+                div $ {}
+                  :innerHTML $ .!render md (:content target)
+              div
+                {} $ :style
+                  merge ui/expand $ {} (:padding "\"20px 16px")
+                do $ <> "\"Empty"
+                  {} (:font-family ui/font-fancy) (:font-style :italic)
+                    :color $ hsl 0 0 80
+        |comp-history-menu $ quote
+          defcomp comp-history-menu (history on-select)
+            list-> ({})
+              -> history $ map-indexed
+                fn (idx path)
+                  [] idx $ let
+                      target $ find-target docs path
+                    div
+                      {} (:class-name "\"doc-entry")
+                        :style $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
+                          :color $ hsl 0 0 60
+                        :on-click $ fn (e d!) (on-select path d!)
+                      <> $ :title target
         |next-path $ quote
           defn next-path (state path)
             -> state (assoc :selected path)
               update :history $ fn (xs)
                 if (.includes? xs path) xs $ prepend
                   if
-                    > (count xs) 5
+                    > (count xs) 3
                     butlast xs
                     , xs
                   , path
+        |find-entries $ quote
+          defn find-entries (entries path)
+            if (empty? path) entries $ if-let
+              target $ find-target entries path
+              :children target
+              do (js/console.warn "\"no entries found for" entries path) ([])
     |docs-workflow.schema $ {}
       :ns $ quote (ns docs-workflow.schema)
       :defs $ {}
@@ -239,7 +269,7 @@
             listen-devtools! |k dispatch!
             js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
             flipped js/setInterval 60000 persist-storage!
-            let
+            ; let
                 raw $ js/localStorage.getItem (:storage-key config/site)
               when (some? raw)
                 dispatch! :hydrate-storage $ parse-cirru-edn raw
