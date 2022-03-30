@@ -78,9 +78,10 @@
                     {} (:padding "\"0 8px") (:width "\"20%") (:min-width 266) (:background-color :white)
                       :border-right $ str "\"1px solid " (hsl 0 0 94)
                   div
-                    {} $ :on-click
-                      fn (e d!) (.show quick-modal d!)
-                    <> "\"Quick Search" $ {} (:cursor :pointer)
+                    {}
+                      :style $ {} (:position :absolute) (:right 8) (:top 4)
+                      :on-click $ fn (e d!) (.show quick-modal d!)
+                    <> "\"Quick Jump" $ {} (:cursor :pointer) (:font-family ui/font-fancy)
                   div
                     {} $ :style
                       {} $ :margin-top 12
