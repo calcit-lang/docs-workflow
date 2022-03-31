@@ -98,4 +98,4 @@ jobs:
         dest: 'rsync-user@tiye.me:/web-assets/repo/${{ github.repository }}'
 
     - name: Display status from deploy
-      run: echo "${{ steps.deploy.outputs.status }}"
+      run: echo "${{ steps.deploy-mdbook.outputs.status }}"
