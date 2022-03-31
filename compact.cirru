@@ -2,7 +2,7 @@
 {} (:package |docs-workflow)
   :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
-    :version |0.0.3
+    :version |0.0.4
   :entries $ {}
   :files $ {}
     |docs-workflow.comp.container $ {}
@@ -62,6 +62,8 @@
                 quick-modal $ use-modal (>> states :quick)
                   {} (:title "|Quick jump")
                     :style $ {} (:max-width "\"40vw") (:height "\"90vh") (:max-height "\"90vh") (:margin-right 0)
+                    :backdrop-style $ {}
+                      :background-color $ hsl 0 29 10 0.2
                     :render $ fn (on-close)
                       div
                         {} $ :style
@@ -112,6 +114,7 @@
                         comp-page-entries nil (:selected state) children $ fn (xs d!)
                           d! cursor $ next-path state xs
                     comp-doc-page target
+                    =< nil 120
                 .render quick-modal
                 when dev? $ comp-reel (>> states :reel) reel ({})
         |find-target $ quote
@@ -208,7 +211,7 @@
               update :history $ fn (xs)
                 if (.includes? xs path) xs $ prepend
                   if
-                    > (count xs) 3
+                    > (count xs) 4
                     butlast xs
                     , xs
                   , path
