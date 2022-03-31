@@ -44,7 +44,7 @@ pre {
 }
 
 .doc-entry:hover {
-  background-color: hsla(190, 10%, 80%, 0.1);
+  background-color: hsla(190, 10%, 70%, 0.1);
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
