@@ -1113,7 +1113,10 @@
                                           |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646493878817) (:text |hljs)
                                           |h $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646493819896) (:text |code)
                                           |D $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494093763) (:text |.!highlightAuto)
-                                          |l $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494161183) (:text |lang)
+                                          |l $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1648712633823)
+                                            :data $ {}
+                                              |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494161183) (:text |lang)
+                                              |D $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648712636605) (:text |js-array)
                       |e $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646492231134)
                         :data $ {}
                           |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646492232743) (:text |:breaks)
@@ -1830,6 +1833,11 @@
                     |v $ {} (:type :expr) (:by |root) (:at 1507399680857)
                       :data $ {}
                         |j $ {} (:type :leaf) (:by |root) (:at 1518156292092) (:text |listen-devtools!)
+                |zP $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646494001394)
+                  :data $ {}
+                    |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648712651808) (:text "|\"highlight.js/lib/languages/rust")
+                    |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494001394) (:text |:default)
+                    |h $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648712653714) (:text |rust-lang)
                 |yr $ {} (:type :expr) (:by |root) (:at 1507399683930)
                   :data $ {}
                     |j $ {} (:type :leaf) (:by |root) (:at 1507399687162) (:text |reel.core)
@@ -1956,6 +1964,12 @@
                   |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494026927) (:text |hljs)
                   |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494015483) (:text "|\"bash")
                   |h $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494015483) (:text |bash-lang)
+                  |D $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494029494) (:text |.!registerLanguage)
+              |sj $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646494015483)
+                :data $ {}
+                  |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494026927) (:text |hljs)
+                  |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648712660426) (:text "|\"rust")
+                  |h $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648712658907) (:text |rust-lang)
                   |D $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646494029494) (:text |.!registerLanguage)
               |yD $ {} (:type :expr) (:by |root) (:at 1507461684494)
                 :data $ {}
@@ -2191,5 +2205,5 @@
           :data $ {}
   :configs $ {} (:port 6001) (:storage-key |calcit.cirru) (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
-    :version |0.0.2
+    :version |0.0.3
   :entries $ {}

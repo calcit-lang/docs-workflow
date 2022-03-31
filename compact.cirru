@@ -2,7 +2,7 @@
 {} (:package |docs-workflow)
   :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
-    :version |0.0.2
+    :version |0.0.3
   :entries $ {}
   :files $ {}
     |docs-workflow.comp.container $ {}
@@ -151,7 +151,7 @@
             js-object (:html false) (:breaks true)
               :highlight $ fn (code lang)
                 if (= lang "\"cirru") (color/generate code)
-                  .-value $ .!highlightAuto hljs code lang
+                  .-value $ .!highlightAuto hljs code (js-array lang)
         |comp-page-entries $ quote
           defcomp comp-page-entries (selected parent-path entries on-select)
             div
@@ -270,6 +270,7 @@
           "\"highlight.js" :default hljs
           "\"highlight.js/lib/languages/bash" :default bash-lang
           "\"highlight.js/lib/languages/clojure" :default clojure-lang
+          "\"highlight.js/lib/languages/rust" :default rust-lang
       :defs $ {}
         |render-app! $ quote
           defn render-app! () $ render! mount-target (comp-container @*reel schema/docs) dispatch!
@@ -282,7 +283,7 @@
         |*reel $ quote
           defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
         |main! $ quote
-          defn main! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang)
+          defn main! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang) (.!registerLanguage hljs "\"rust" rust-lang)
             println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
             if config/dev? $ load-console-formatter!
             render-app!
