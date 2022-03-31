@@ -2,7 +2,7 @@
 Docs workflow in Calcit-js
 ----
 
-Demo http://r.tiye.me/mvc-works/docs-calcit-workflow/ .
+Demo http://repo.calcit-lang.org/docs-workflow/ .
 
 ### APIs
 
