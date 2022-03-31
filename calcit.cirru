@@ -93,13 +93,6 @@
                     |v $ {} (:type :expr) (:by |root) (:at 1507461856484)
                       :data $ {}
                         |j $ {} (:type :leaf) (:by |root) (:at 1507461858342) (:text |comp-reel)
-                |z $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646492007497)
-                  :data $ {}
-                    |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646492009835) (:text |docs-workflow.schema)
-                    |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646492010685) (:text |:refer)
-                    |h $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1646492010953)
-                      :data $ {}
-                        |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1646492011724) (:text |docs)
         :defs $ {}
           |comp-nav-tree $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1648635878003)
             :data $ {}
@@ -778,6 +771,7 @@
                                         :data $ {}
                                           |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648636037590) (:text |path)
                                           |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648636038159) (:text |d!)
+                                  |e $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648710651267) (:text |docs)
                           |S $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1648636124869)
                             :data $ {}
                               |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648636101157) (:text |comp-parent-menu)
@@ -1483,6 +1477,7 @@
                 :data $ {}
                   |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648636016944) (:text |history)
                   |b $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648636019428) (:text |on-select)
+                  |X $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648710655004) (:text |docs)
           |next-path $ {} (:type :expr) (:by |rJG4IHzWf) (:at 1648585921826)
             :data $ {}
               |T $ {} (:type :leaf) (:by |rJG4IHzWf) (:at 1648585921826) (:text |defn)
@@ -2196,5 +2191,5 @@
           :data $ {}
   :configs $ {} (:port 6001) (:storage-key |calcit.cirru) (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
-    :version |0.0.1
+    :version |0.0.2
   :entries $ {}

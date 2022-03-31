@@ -2,7 +2,7 @@
 {} (:package |docs-workflow)
   :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
-    :version |0.0.1
+    :version |0.0.2
   :entries $ {}
   :files $ {}
     |docs-workflow.comp.container $ {}
@@ -14,7 +14,6 @@
           reel.comp.reel :refer $ comp-reel
           respo-md.comp.md :refer $ comp-md
           docs-workflow.config :refer $ dev?
-          docs-workflow.schema :refer $ docs
           "\"remarkable" :refer $ Remarkable
           "\"highlight.js" :default hljs
           "\"cirru-color" :as color
@@ -97,7 +96,7 @@
                     {} $ :style
                       {} $ :margin-top 20
                     <> "\"Histories" $ {} (:font-family ui/font-fancy)
-                    comp-history-menu history $ fn (path d!)
+                    comp-history-menu history docs $ fn (path d!)
                       d! cursor $ next-path state path
                 let
                     target $ find-target docs (:selected state)
@@ -191,7 +190,7 @@
                   {} (:font-family ui/font-fancy) (:font-style :italic)
                     :color $ hsl 0 0 80
         |comp-history-menu $ quote
-          defcomp comp-history-menu (history on-select)
+          defcomp comp-history-menu (history docs on-select)
             list-> ({})
               -> history $ map-indexed
                 fn (idx path)

@@ -1,4 +1,5 @@
 {
+  "version": "0.0.2",
   "dependencies": {
     "@calcit/procs": "^0.5.28"
   },
@@ -9,6 +10,5 @@
     "highlight.js": "^11.5.0",
     "remarkable": "^2.0.1",
     "vite": "^2.8.6"
-  },
-  "version": "0.0.1"
+  }
 }
