@@ -2,7 +2,7 @@
 {} (:package |docs-workflow)
   :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
-    :version |0.0.1
+    :version |0.0.4
   :entries $ {}
   :files $ {}
     |docs-workflow.comp.container $ {}
@@ -14,7 +14,6 @@
           reel.comp.reel :refer $ comp-reel
           respo-md.comp.md :refer $ comp-md
           docs-workflow.config :refer $ dev?
-          docs-workflow.schema :refer $ docs
           "\"remarkable" :refer $ Remarkable
           "\"highlight.js" :default hljs
           "\"cirru-color" :as color
@@ -63,6 +62,8 @@
                 quick-modal $ use-modal (>> states :quick)
                   {} (:title "|Quick jump")
                     :style $ {} (:max-width "\"40vw") (:height "\"90vh") (:max-height "\"90vh") (:margin-right 0)
+                    :backdrop-style $ {}
+                      :background-color $ hsl 0 29 10 0.2
                     :render $ fn (on-close)
                       div
                         {} $ :style
@@ -97,7 +98,7 @@
                     {} $ :style
                       {} $ :margin-top 20
                     <> "\"Histories" $ {} (:font-family ui/font-fancy)
-                    comp-history-menu history $ fn (path d!)
+                    comp-history-menu history docs $ fn (path d!)
                       d! cursor $ next-path state path
                 let
                     target $ find-target docs (:selected state)
@@ -113,6 +114,7 @@
                         comp-page-entries nil (:selected state) children $ fn (xs d!)
                           d! cursor $ next-path state xs
                     comp-doc-page target
+                    =< nil 120
                 .render quick-modal
                 when dev? $ comp-reel (>> states :reel) reel ({})
         |find-target $ quote
@@ -152,7 +154,7 @@
             js-object (:html false) (:breaks true)
               :highlight $ fn (code lang)
                 if (= lang "\"cirru") (color/generate code)
-                  .-value $ .!highlightAuto hljs code lang
+                  .-value $ .!highlightAuto hljs code (js-array lang)
         |comp-page-entries $ quote
           defcomp comp-page-entries (selected parent-path entries on-select)
             div
@@ -191,7 +193,7 @@
                   {} (:font-family ui/font-fancy) (:font-style :italic)
                     :color $ hsl 0 0 80
         |comp-history-menu $ quote
-          defcomp comp-history-menu (history on-select)
+          defcomp comp-history-menu (history docs on-select)
             list-> ({})
               -> history $ map-indexed
                 fn (idx path)
@@ -209,7 +211,7 @@
               update :history $ fn (xs)
                 if (.includes? xs path) xs $ prepend
                   if
-                    > (count xs) 3
+                    > (count xs) 4
                     butlast xs
                     , xs
                   , path
@@ -271,6 +273,7 @@
           "\"highlight.js" :default hljs
           "\"highlight.js/lib/languages/bash" :default bash-lang
           "\"highlight.js/lib/languages/clojure" :default clojure-lang
+          "\"highlight.js/lib/languages/rust" :default rust-lang
       :defs $ {}
         |render-app! $ quote
           defn render-app! () $ render! mount-target (comp-container @*reel schema/docs) dispatch!
@@ -283,7 +286,7 @@
         |*reel $ quote
           defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
         |main! $ quote
-          defn main! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang)
+          defn main! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang) (.!registerLanguage hljs "\"rust" rust-lang)
             println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
             if config/dev? $ load-console-formatter!
             render-app!
