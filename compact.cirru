@@ -9,7 +9,7 @@
       :ns $ quote
         ns docs-workflow.comp.container $ :require (respo-ui.core :as ui)
           respo-ui.core :refer $ hsl
-          respo.core :refer $ defcomp defeffect <> >> div button textarea span input list->
+          respo.core :refer $ defcomp defeffect <> >> div button textarea span input list-> a
           respo.comp.space :refer $ =<
           reel.comp.reel :refer $ comp-reel
           respo-md.comp.md :refer $ comp-md
@@ -46,7 +46,9 @@
           def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
             :border-bottom $ str "\"1px solid " (hsl 0 0 92)
             :border-left $ str "\"0px solid " (hsl 200 90 60)
-            :background-color $ hsl 0 0 100 0.6
+        |style-title $ quote
+          def style-title $ {} (:font-family ui/font-fancy) (:font-size 18) (:font-weight 300)
+            :color $ hsl 0 0 60
         |comp-container $ quote
           defcomp comp-container (reel docs)
             let
@@ -56,6 +58,7 @@
                 state $ or (:data states)
                   {}
                     :selected $ []
+                      :key $ first docs
                     :history $ []
                 selected $ :selected state
                 history $ :history state
@@ -67,16 +70,17 @@
                     :render $ fn (on-close)
                       div
                         {} $ :style
-                          {} $ :padding "\"0 16px"
+                          merge ui/expand $ {} (:padding "\"0 16px")
                         comp-nav-tree docs ([])
                           fn (path d!)
                             d! cursor $ next-path state path
+                        =< nil 120
               div
                 {} (:class-name "\"calcit-tile")
                   :style $ merge ui/fullscreen ui/global ui/row
                 div
                   {} $ :style
-                    {} (:padding "\"0 8px") (:width "\"20%") (:min-width 266) (:background-color :white)
+                    merge ui/column $ {} (:padding "\"0 8px") (:width "\"20%") (:min-width 266) (:background-color :white)
                       :border-right $ str "\"1px solid " (hsl 0 0 94)
                   div
                     {}
@@ -85,19 +89,23 @@
                     <> "\"Quick Jump" $ {} (:cursor :pointer) (:font-family ui/font-fancy)
                   div
                     {} $ :style
-                      {} $ :margin-top 12
-                    <> "\"Pages" $ {} (:font-family ui/font-fancy)
+                      merge ui/row-parted $ {} (:margin-top 12)
+                    <> "\"Pages" style-title
+                    a $ {} (:href "\"mdbook.html") (:inner-text "\"mdbook")
+                      :style $ {} (:font-size 12) (:font-family ui/font-fancy) (:opacity 0.3)
                   comp-parent-menu selected docs $ fn (path d!)
                     d! cursor $ next-path state path
                   let
                       parent-path $ or (butlast selected) ([])
                       entries $ find-entries docs parent-path
-                    comp-page-entries (last selected) parent-path entries $ fn (xs d!)
-                      d! cursor $ next-path state xs
+                    div
+                      {} $ :style ui/expand
+                      comp-page-entries (last selected) parent-path entries $ fn (xs d!)
+                        d! cursor $ next-path state xs
                   div
                     {} $ :style
                       {} $ :margin-top 20
-                    <> "\"Histories" $ {} (:font-family ui/font-fancy)
+                    <> "\"Histories" style-title
                     comp-history-menu history docs $ fn (path d!)
                       d! cursor $ next-path state path
                 let
@@ -143,7 +151,8 @@
                         target $ find-target docs sub-path
                       [] idx $ div
                         {}
-                          :style $ {} (:cursor :pointer) (:font-style :italic)
+                          :style $ {} (:cursor :pointer) (:font-style :italic) (:font-family ui/font-fancy)
+                            :color $ hsl 0 0 40
                             :background-color $ hsl 180 90 94
                           :on-click $ fn (e d!) (on-select sub-path d!)
                         <> $ str "\"< "
@@ -174,9 +183,14 @@
                         div
                           {} (:class-name "\"doc-entry")
                             :style $ merge style-entry
-                              if selected? $ {} (:background-color :white)
+                              if selected? $ {}
                                 :border-left $ str "\"10px solid " (hsl 200 90 70)
                           <> $ :title entry
+                          =< 8 nil
+                          if
+                            not $ empty? (:children entry)
+                            <> "\"☰" $ {}
+                              :color $ hsl 180 80 60
         |comp-doc-page $ quote
           defcomp comp-doc-page (target)
             if (some? target)
@@ -241,8 +255,13 @@
                   :content $ load-doc "\"design.md"
                 {} (:title "\"Overview") (:key :overview)
                   :content $ load-doc "\"overview.md"
+                  :children $ []
+                    {} (:title "\"Cirru") (:key :cirru)
+                      :content $ load-doc "\"cirru.md"
             {} (:title "\"About") (:key :about)
               :content $ load-doc "\"about.md"
+            {} (:title "\"Cirru") (:key :cirru)
+              :content $ load-doc "\"cirru.md"
         |load-doc $ quote
           defmacro load-doc (filename)
             read-file $ str "\"docs/" filename
