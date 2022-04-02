@@ -2,7 +2,7 @@
 {} (:package |docs-workflow)
   :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
-    :version |0.0.4
+    :version |0.0.5
   :entries $ {}
   :files $ {}
     |docs-workflow.comp.container $ {}
@@ -70,11 +70,11 @@
                     :render $ fn (on-close)
                       div
                         {} $ :style
-                          merge ui/expand $ {} (:padding "\"0 16px")
+                          merge ui/expand $ {} (:padding "\"16px 16px 120px")
+                            :border-top $ str "\"1px solid " (hsl 0 0 94)
                         comp-nav-tree docs ([])
                           fn (path d!)
                             d! cursor $ next-path state path
-                        =< nil 120
               div
                 {} (:class-name "\"calcit-tile")
                   :style $ merge ui/fullscreen ui/global ui/row
@@ -86,7 +86,8 @@
                     {}
                       :style $ {} (:position :absolute) (:right 8) (:top 4)
                       :on-click $ fn (e d!) (.show quick-modal d!)
-                    <> "\"Quick Jump" $ {} (:cursor :pointer) (:font-family ui/font-fancy)
+                    <> "\"Quick Jump" $ merge
+                      {} (:cursor :pointer) (:font-family ui/font-fancy)
                   div
                     {} $ :style
                       merge ui/row-parted $ {} (:margin-top 12)
@@ -114,17 +115,15 @@
                     {} $ :style ui/expand
                     let
                         children $ or (:children target) ([])
-                      if (empty? children) nil $ div
-                        {} $ :style
-                          {} $ :padding "\"16px"
-                        div ({})
-                          <> "\"Children pages" $ {} (:font-family ui/font-fancy)
-                        comp-page-entries nil (:selected state) children $ fn (xs d!)
+                      if (empty? children) nil $ comp-child-entries (:selected state) children
+                        fn (xs d!)
                           d! cursor $ next-path state xs
                     comp-doc-page target
                     =< nil 120
                 .render quick-modal
                 when dev? $ comp-reel (>> states :reel) reel ({})
+        |style-child-entry $ quote
+          def style-child-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
         |find-target $ quote
           defn find-target (entries path)
             if (empty? path) nil $ let
@@ -235,6 +234,30 @@
               target $ find-target entries path
               :children target
               do (js/console.warn "\"no entries found for" entries path) ([])
+        |comp-child-entries $ quote
+          defcomp comp-child-entries (parent-path entries on-select)
+            div
+              {} $ :style
+                {} (:padding "\"8px") (:min-width 320) (:max-width 400) (:background-color :white) (:margin "\"8px 12px") (:border-radius "\"4px")
+                  :border $ str "\"1px solid " (hsl 0 0 86)
+              <> "\"Child pages" style-title
+              list-> ({})
+                -> entries $ map-indexed
+                  fn (idx entry)
+                    [] idx $ div
+                      {} $ :on-click
+                        fn (e d!)
+                          on-select
+                            conj parent-path $ :key entry
+                            , d!
+                      div
+                        {} (:class-name "\"doc-entry") (:style style-child-entry)
+                        <> $ :title entry
+                        =< 8 nil
+                        if
+                          not $ empty? (:children entry)
+                          <> "\"☰" $ {}
+                            :color $ hsl 180 80 60
     |docs-workflow.schema $ {}
       :ns $ quote (ns docs-workflow.schema)
       :defs $ {}
@@ -289,10 +312,6 @@
           docs-workflow.config :as config
           "\"./calcit.build-errors" :default build-errors
           "\"bottom-tip" :default hud!
-          "\"highlight.js" :default hljs
-          "\"highlight.js/lib/languages/bash" :default bash-lang
-          "\"highlight.js/lib/languages/clojure" :default clojure-lang
-          "\"highlight.js/lib/languages/rust" :default rust-lang
       :defs $ {}
         |render-app! $ quote
           defn render-app! () $ render! mount-target (comp-container @*reel schema/docs) dispatch!
@@ -305,7 +324,7 @@
         |*reel $ quote
           defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
         |main! $ quote
-          defn main! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang) (.!registerLanguage hljs "\"rust" rust-lang)
+          defn main! () (config/register-languages!)
             println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
             if config/dev? $ load-console-formatter!
             render-app!
@@ -332,9 +351,12 @@
               hud! "\"ok~" "\"Ok"
             hud! "\"error" build-errors
     |docs-workflow.config $ {}
-      :ns $ quote (ns docs-workflow.config)
+      :ns $ quote
+        ns docs-workflow.config $ :require ("\"highlight.js/lib/languages/rust" :default rust-lang) ("\"highlight.js/lib/languages/clojure" :default clojure-lang) ("\"highlight.js/lib/languages/bash" :default bash-lang) ("\"highlight.js" :default hljs)
       :defs $ {}
         |dev? $ quote
           def dev? $ = "\"dev" (get-env "\"mode")
         |site $ quote
           def site $ {} (:storage-key "\"workflow")
+        |register-languages! $ quote
+          defn register-languages! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang) (.!registerLanguage hljs "\"rust" rust-lang)
