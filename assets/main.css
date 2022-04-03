@@ -1,7 +1,7 @@
 
 @import url("./github-gist.css");
-@import url("../node_modules/github-markdown-css/github-markdown.css");
-@import url("../node_modules/cirru-color/assets/cirru.css");
+@import url("github-markdown-css/github-markdown.css");
+@import url("cirru-color/assets/cirru.css");
 
 body {
   margin: 0;

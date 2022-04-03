@@ -1,0 +1,11 @@
+
+.github/
+book/
+js-out/
+docs/
+calcit.cirru
+compact.cirru
+yarn.lock
+.*.cirru
+index.html
+main.mjs
