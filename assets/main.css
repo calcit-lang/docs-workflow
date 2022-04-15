@@ -45,6 +45,15 @@ pre {
   border-radius: 4px;
 }
 
+blockquote {
+  margin: 16px 0;
+  padding: 1px 16px;
+  color: #777;
+  background-color: #eee8e8;
+  border-left: 4px solid #ccc;
+  line-height: 1.5em;
+}
+
 .doc-entry:hover {
   background-color: hsla(190, 10%, 70%, 0.1);
 }
