@@ -1,54 +1,35 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.5)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
-    :version |0.0.5
   :entries $ {}
   :files $ {}
     |docs-workflow.comp.container $ {}
-      :ns $ quote
-        ns docs-workflow.comp.container $ :require (respo-ui.core :as ui)
-          respo-ui.core :refer $ hsl
-          respo.core :refer $ defcomp defeffect <> >> div button textarea span input list-> a
-          respo.comp.space :refer $ =<
-          reel.comp.reel :refer $ comp-reel
-          respo-md.comp.md :refer $ comp-md
-          docs-workflow.config :refer $ dev?
-          "\"remarkable" :refer $ Remarkable
-          "\"highlight.js" :default hljs
-          "\"cirru-color" :as color
-          respo-alerts.core :refer $ use-modal
       :defs $ {}
-        |comp-nav-tree $ quote
-          defcomp comp-nav-tree (docs base-path on-select)
-            list-> ({})
-              -> docs $ map
-                fn (entry)
-                  [] (:key entry)
-                    div ({})
+        |comp-child-entries $ quote
+          defcomp comp-child-entries (parent-path entries on-select)
+            div
+              {} $ :style
+                {} (:padding "\"8px") (:min-width 320) (:max-width 400) (:background-color :white) (:margin "\"8px 12px") (:border-radius "\"4px")
+                  :border $ str "\"1px solid " (hsl 0 0 86)
+              <> "\"Child pages" style-title
+              list-> ({})
+                -> entries $ map-indexed
+                  fn (idx entry)
+                    [] idx $ div
+                      {} $ :on-click
+                        fn (e d!)
+                          on-select
+                            conj parent-path $ :key entry
+                            , d!
                       div
-                        {} (:class-name "\"doc-entry")
-                          :style $ {} (:padding "\"0 8px") (:cursor :pointer)
-                          :on-click $ fn (e d!)
-                            on-select
-                              conj base-path $ :key entry
-                              , d!
+                        {} (:class-name "\"doc-entry") (:style style-child-entry)
                         <> $ :title entry
-                      if-let
-                        xs $ :children entry
-                        div
-                          {} $ :style
-                            {} $ :padding-left 16
-                          comp-nav-tree xs
-                            conj base-path $ :key entry
-                            , on-select
-        |style-entry $ quote
-          def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
-            :border-bottom $ str "\"1px solid " (hsl 0 0 92)
-            :border-left $ str "\"0px solid " (hsl 200 90 60)
-        |style-title $ quote
-          def style-title $ {} (:font-family ui/font-fancy) (:font-size 18) (:font-weight 300)
-            :color $ hsl 0 0 60
+                        =< 8 nil
+                        if
+                          not $ empty? (:children entry)
+                          <> "\"☰" $ {}
+                            :color $ hsl 180 80 60
         |comp-container $ quote
           defcomp comp-container (reel docs)
             let
@@ -122,74 +103,6 @@
                     =< nil 120
                 .render quick-modal
                 when dev? $ comp-reel (>> states :reel) reel ({})
-        |style-child-entry $ quote
-          def style-child-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
-        |find-target $ quote
-          defn find-target (entries path)
-            if (empty? path) nil $ let
-                p0 $ first path
-              if-let
-                target $ find entries
-                  fn (entry)
-                    = p0 $ :key entry
-                if
-                  = 1 $ count path
-                  , target $ recur (:children target) (rest path)
-                , nil
-        |comp-parent-menu $ quote
-          defcomp comp-parent-menu (selected docs on-select)
-            list->
-              {} $ :style ({})
-              if
-                > (count selected) 0
-                ->
-                  range $ dec (count selected)
-                  map $ fn (idx)
-                    let
-                        sub-path $ slice selected 0 (inc idx)
-                        target $ find-target docs sub-path
-                      [] idx $ div
-                        {}
-                          :style $ {} (:cursor :pointer) (:font-style :italic) (:font-family ui/font-fancy)
-                            :color $ hsl 0 0 40
-                            :background-color $ hsl 180 90 94
-                          :on-click $ fn (e d!) (on-select sub-path d!)
-                        <> $ str "\"< "
-                          or (:title target) "\"NOT FOUND"
-                []
-        |md $ quote
-          def md $ new Remarkable
-            js-object (:html false) (:breaks true)
-              :highlight $ fn (code lang)
-                if (= lang "\"cirru") (color/generate code)
-                  .-value $ .!highlightAuto hljs code (js-array lang)
-        |comp-page-entries $ quote
-          defcomp comp-page-entries (selected parent-path entries on-select)
-            div
-              {} $ :style
-                {} (:min-width 240) (:max-width 320)
-              list-> ({})
-                -> entries $ map-indexed
-                  fn (idx entry)
-                    [] idx $ let
-                        selected? $ = selected (:key entry)
-                      div
-                        {} $ :on-click
-                          fn (e d!)
-                            on-select
-                              conj parent-path $ :key entry
-                              , d!
-                        div
-                          {} (:class-name "\"doc-entry")
-                            :style $ merge style-entry
-                              if selected? $ {}
-                                :border-left $ str "\"10px solid " (hsl 200 90 70)
-                          <> $ :title entry
-                          =< 8 nil
-                          if
-                            not $ empty? (:children entry)
-                            <> "\"☰" $ {}
-                              :color $ hsl 180 80 60
         |comp-doc-page $ quote
           defcomp comp-doc-page (target)
             if (some? target)
@@ -218,6 +131,101 @@
                           :color $ hsl 0 0 60
                         :on-click $ fn (e d!) (on-select path d!)
                       <> $ :title target
+        |comp-nav-tree $ quote
+          defcomp comp-nav-tree (docs base-path on-select)
+            list-> ({})
+              -> docs $ map
+                fn (entry)
+                  [] (:key entry)
+                    div ({})
+                      div
+                        {} (:class-name "\"doc-entry")
+                          :style $ {} (:padding "\"0 8px") (:cursor :pointer)
+                          :on-click $ fn (e d!)
+                            on-select
+                              conj base-path $ :key entry
+                              , d!
+                        <> $ :title entry
+                      if-let
+                        xs $ :children entry
+                        div
+                          {} $ :style
+                            {} $ :padding-left 16
+                          comp-nav-tree xs
+                            conj base-path $ :key entry
+                            , on-select
+        |comp-page-entries $ quote
+          defcomp comp-page-entries (selected parent-path entries on-select)
+            div
+              {} $ :style
+                {} (:min-width 240) (:max-width 320)
+              list-> ({})
+                -> entries $ map-indexed
+                  fn (idx entry)
+                    [] idx $ let
+                        selected? $ = selected (:key entry)
+                      div
+                        {} $ :on-click
+                          fn (e d!)
+                            on-select
+                              conj parent-path $ :key entry
+                              , d!
+                        div
+                          {} (:class-name "\"doc-entry")
+                            :style $ merge style-entry
+                              if selected? $ {}
+                                :border-left $ str "\"10px solid " (hsl 200 90 70)
+                          <> $ :title entry
+                          =< 8 nil
+                          if
+                            not $ empty? (:children entry)
+                            <> "\"☰" $ {}
+                              :color $ hsl 180 80 60
+        |comp-parent-menu $ quote
+          defcomp comp-parent-menu (selected docs on-select)
+            list->
+              {} $ :style ({})
+              if
+                > (count selected) 0
+                ->
+                  range $ dec (count selected)
+                  map $ fn (idx)
+                    let
+                        sub-path $ slice selected 0 (inc idx)
+                        target $ find-target docs sub-path
+                      [] idx $ div
+                        {}
+                          :style $ {} (:cursor :pointer) (:font-style :italic) (:font-family ui/font-fancy)
+                            :color $ hsl 0 0 40
+                            :background-color $ hsl 180 90 94
+                          :on-click $ fn (e d!) (on-select sub-path d!)
+                        <> $ str "\"< "
+                          or (:title target) "\"NOT FOUND"
+                []
+        |find-entries $ quote
+          defn find-entries (entries path)
+            if (empty? path) entries $ if-let
+              target $ find-target entries path
+              :children target
+              do (js/console.warn "\"no entries found for" entries path) ([])
+        |find-target $ quote
+          defn find-target (entries path)
+            if (empty? path) nil $ let
+                p0 $ first path
+              if-let
+                target $ find entries
+                  fn (entry)
+                    = p0 $ :key entry
+                if
+                  = 1 $ count path
+                  , target $ recur (:children target) (rest path)
+                , nil
+        |md $ quote
+          def md $ new Remarkable
+            js-object (:html false) (:breaks true)
+              :highlight $ fn (code lang)
+                if (= lang "\"cirru") (color/generate code)
+                  .-value $ .!highlightAuto hljs code (js-array lang)
         |next-path $ quote
           defn next-path (state path)
             -> state (assoc :selected path)
@@ -228,43 +236,90 @@
                     butlast xs
                     , xs
                   , path
-        |find-entries $ quote
-          defn find-entries (entries path)
-            if (empty? path) entries $ if-let
-              target $ find-target entries path
-              :children target
-              do (js/console.warn "\"no entries found for" entries path) ([])
-        |comp-child-entries $ quote
-          defcomp comp-child-entries (parent-path entries on-select)
-            div
-              {} $ :style
-                {} (:padding "\"8px") (:min-width 320) (:max-width 400) (:background-color :white) (:margin "\"8px 12px") (:border-radius "\"4px")
-                  :border $ str "\"1px solid " (hsl 0 0 86)
-              <> "\"Child pages" style-title
-              list-> ({})
-                -> entries $ map-indexed
-                  fn (idx entry)
-                    [] idx $ div
-                      {} $ :on-click
-                        fn (e d!)
-                          on-select
-                            conj parent-path $ :key entry
-                            , d!
-                      div
-                        {} (:class-name "\"doc-entry") (:style style-child-entry)
-                        <> $ :title entry
-                        =< 8 nil
-                        if
-                          not $ empty? (:children entry)
-                          <> "\"☰" $ {}
-                            :color $ hsl 180 80 60
-    |docs-workflow.schema $ {}
-      :ns $ quote (ns docs-workflow.schema)
+        |style-child-entry $ quote
+          def style-child-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
+        |style-entry $ quote
+          def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
+            :border-bottom $ str "\"1px solid " (hsl 0 0 92)
+            :border-left $ str "\"0px solid " (hsl 200 90 60)
+        |style-title $ quote
+          def style-title $ {} (:font-family ui/font-fancy) (:font-size 18) (:font-weight 300)
+            :color $ hsl 0 0 60
+      :ns $ quote
+        ns docs-workflow.comp.container $ :require (respo-ui.core :as ui)
+          respo-ui.core :refer $ hsl
+          respo.core :refer $ defcomp defeffect <> >> div button textarea span input list-> a
+          respo.comp.space :refer $ =<
+          reel.comp.reel :refer $ comp-reel
+          respo-md.comp.md :refer $ comp-md
+          docs-workflow.config :refer $ dev?
+          "\"remarkable" :refer $ Remarkable
+          "\"highlight.js" :default hljs
+          "\"cirru-color" :as color
+          respo-alerts.core :refer $ use-modal
+    |docs-workflow.config $ {}
       :defs $ {}
-        |store $ quote
-          def store $ {}
-            :states $ {}
-              :cursor $ []
+        |dev? $ quote
+          def dev? $ = "\"dev" (get-env "\"mode" "\"release")
+        |register-languages! $ quote
+          defn register-languages! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang) (.!registerLanguage hljs "\"rust" rust-lang)
+        |site $ quote
+          def site $ {} (:storage-key "\"workflow")
+      :ns $ quote
+        ns docs-workflow.config $ :require ("\"highlight.js/lib/languages/rust" :default rust-lang) ("\"highlight.js/lib/languages/clojure" :default clojure-lang) ("\"highlight.js/lib/languages/bash" :default bash-lang) ("\"highlight.js" :default hljs)
+    |docs-workflow.main $ {}
+      :defs $ {}
+        |*reel $ quote
+          defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
+        |dispatch! $ quote
+          defn dispatch! (op op-data)
+            when
+              and config/dev? $ not= op :states
+              println "\"Dispatch:" op
+            reset! *reel $ reel-updater updater @*reel op op-data
+        |main! $ quote
+          defn main! () (config/register-languages!)
+            println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
+            if config/dev? $ load-console-formatter!
+            render-app!
+            add-watch *reel :changes $ fn (reel prev) (render-app!)
+            listen-devtools! |k dispatch!
+            js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
+            flipped js/setInterval 60000 persist-storage!
+            ; let
+                raw $ js/localStorage.getItem (:storage-key config/site)
+              when (some? raw)
+                dispatch! :hydrate-storage $ parse-cirru-edn raw
+            println "|App started."
+        |mount-target $ quote
+          def mount-target $ .!querySelector js/document |.app
+        |persist-storage! $ quote
+          defn persist-storage! () (js/console.log "\"persist")
+            js/localStorage.setItem (:storage-key config/site)
+              format-cirru-edn $ :store @*reel
+        |reload! $ quote
+          defn reload! () $ if (nil? build-errors)
+            do (remove-watch *reel :changes) (clear-cache!)
+              add-watch *reel :changes $ fn (reel prev) (render-app!)
+              reset! *reel $ refresh-reel @*reel schema/store updater
+              hud! "\"ok~" "\"Ok"
+            hud! "\"error" build-errors
+        |render-app! $ quote
+          defn render-app! () $ render! mount-target (comp-container @*reel schema/docs) dispatch!
+      :ns $ quote
+        ns docs-workflow.main $ :require
+          respo.core :refer $ render! clear-cache!
+          docs-workflow.comp.container :refer $ comp-container
+          docs-workflow.updater :refer $ updater
+          docs-workflow.schema :as schema
+          reel.util :refer $ listen-devtools!
+          reel.core :refer $ reel-updater refresh-reel
+          reel.schema :as reel-schema
+          docs-workflow.config :as config
+          "\"./calcit.build-errors" :default build-errors
+          "\"bottom-tip" :default hud!
+    |docs-workflow.schema $ {}
+      :defs $ {}
         |docs $ quote
           def docs $ []
             {} (:title "\"Guide") (:key :guide)
@@ -288,10 +343,12 @@
         |load-doc $ quote
           defmacro load-doc (filename)
             read-file $ str "\"docs/" filename
+        |store $ quote
+          def store $ {}
+            :states $ {}
+              :cursor $ []
+      :ns $ quote (ns docs-workflow.schema)
     |docs-workflow.updater $ {}
-      :ns $ quote
-        ns docs-workflow.updater $ :require
-          respo.cursor :refer $ update-states
       :defs $ {}
         |updater $ quote
           defn updater (store op data op-id op-time)
@@ -299,64 +356,6 @@
               do (println "\"unknown op:" op) store
               :states $ update-states store data
               :hydrate-storage data
-    |docs-workflow.main $ {}
       :ns $ quote
-        ns docs-workflow.main $ :require
-          respo.core :refer $ render! clear-cache!
-          docs-workflow.comp.container :refer $ comp-container
-          docs-workflow.updater :refer $ updater
-          docs-workflow.schema :as schema
-          reel.util :refer $ listen-devtools!
-          reel.core :refer $ reel-updater refresh-reel
-          reel.schema :as reel-schema
-          docs-workflow.config :as config
-          "\"./calcit.build-errors" :default build-errors
-          "\"bottom-tip" :default hud!
-      :defs $ {}
-        |render-app! $ quote
-          defn render-app! () $ render! mount-target (comp-container @*reel schema/docs) dispatch!
-        |persist-storage! $ quote
-          defn persist-storage! () (js/console.log "\"persist")
-            js/localStorage.setItem (:storage-key config/site)
-              format-cirru-edn $ :store @*reel
-        |mount-target $ quote
-          def mount-target $ .!querySelector js/document |.app
-        |*reel $ quote
-          defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
-        |main! $ quote
-          defn main! () (config/register-languages!)
-            println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
-            if config/dev? $ load-console-formatter!
-            render-app!
-            add-watch *reel :changes $ fn (reel prev) (render-app!)
-            listen-devtools! |k dispatch!
-            js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
-            flipped js/setInterval 60000 persist-storage!
-            ; let
-                raw $ js/localStorage.getItem (:storage-key config/site)
-              when (some? raw)
-                dispatch! :hydrate-storage $ parse-cirru-edn raw
-            println "|App started."
-        |dispatch! $ quote
-          defn dispatch! (op op-data)
-            when
-              and config/dev? $ not= op :states
-              println "\"Dispatch:" op
-            reset! *reel $ reel-updater updater @*reel op op-data
-        |reload! $ quote
-          defn reload! () $ if (nil? build-errors)
-            do (remove-watch *reel :changes) (clear-cache!)
-              add-watch *reel :changes $ fn (reel prev) (render-app!)
-              reset! *reel $ refresh-reel @*reel schema/store updater
-              hud! "\"ok~" "\"Ok"
-            hud! "\"error" build-errors
-    |docs-workflow.config $ {}
-      :ns $ quote
-        ns docs-workflow.config $ :require ("\"highlight.js/lib/languages/rust" :default rust-lang) ("\"highlight.js/lib/languages/clojure" :default clojure-lang) ("\"highlight.js/lib/languages/bash" :default bash-lang) ("\"highlight.js" :default hljs)
-      :defs $ {}
-        |dev? $ quote
-          def dev? $ = "\"dev" (get-env "\"mode")
-        |site $ quote
-          def site $ {} (:storage-key "\"workflow")
-        |register-languages! $ quote
-          defn register-languages! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang) (.!registerLanguage hljs "\"rust" rust-lang)
+        ns docs-workflow.updater $ :require
+          respo.cursor :refer $ update-states
