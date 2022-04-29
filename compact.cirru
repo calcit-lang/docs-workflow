@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.7)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.8)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -117,7 +117,7 @@
                   :on-click $ fn (e d1)
                     do
                       reset! *text-content $ []
-                      -> e :event .-target .-parentElement .-firstChild .-children js/Array.prototype.slice.call $ .!forEach
+                      -> e :event .-target .-parentElement .-firstChild .-children js/Array.from $ .!forEach
                         fn (child idx ? a)
                           if
                             not= "\"PRE" $ .-tagName child

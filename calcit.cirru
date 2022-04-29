@@ -1,6 +1,6 @@
 
 {}
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:port 6001) (:reload-fn |docs-workflow.main/reload!) (:storage-key |calcit.cirru) (:version |0.0.7)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:port 6001) (:reload-fn |docs-workflow.main/reload!) (:storage-key |calcit.cirru) (:version |0.0.8)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :ir $ {} (:package |docs-workflow)
@@ -886,7 +886,7 @@
                                               |o $ {} (:at 1651261936605) (:by |rJG4IHzWf) (:text |.-parentElement) (:type :leaf)
                                               |p $ {} (:at 1651261987392) (:by |rJG4IHzWf) (:text |.-firstChild) (:type :leaf)
                                               |pT $ {} (:at 1651261999467) (:by |rJG4IHzWf) (:text |.-children) (:type :leaf)
-                                              |pj $ {} (:at 1651262113957) (:by |rJG4IHzWf) (:text |js/Array.prototype.slice.call) (:type :leaf)
+                                              |pj $ {} (:at 1651263252298) (:by |rJG4IHzWf) (:text |js/Array.from) (:type :leaf)
                                               |pr $ {} (:at 1651262129055) (:by |rJG4IHzWf) (:type :expr)
                                                 :data $ {}
                                                   |T $ {} (:at 1651262131759) (:by |rJG4IHzWf) (:text |.!forEach) (:type :leaf)
