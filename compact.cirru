@@ -6,6 +6,8 @@
   :files $ {}
     |docs-workflow.comp.container $ {}
       :defs $ {}
+        |*text-content $ quote
+          defatom *text-content $ []
         |comp-child-entries $ quote
           defcomp comp-child-entries (parent-path entries on-select)
             div
@@ -107,11 +109,22 @@
           defcomp comp-doc-page (target)
             if (some? target)
               div
-                {} $ :style
-                  merge ui/expand $ {} (:padding "\"8px 16px")
-                    :background-color $ hsl 0 0 100 0.6
-                div $ {} (:class-name css-doc)
+                {} $ :class-name css-doc-page
+                div $ {}
                   :innerHTML $ .!render md (:content target)
+                a $ {} (:inner-text "\"Speech")
+                  :class-name $ str-spaced css/link css-speech-button
+                  :on-click $ fn (e d1)
+                    do
+                      reset! *text-content $ []
+                      -> e :event .-target .-parentElement .-firstChild .-children js/Array.prototype.slice.call $ .!forEach
+                        fn (child idx ? a)
+                          if
+                            not= "\"PRE" $ .-tagName child
+                            swap! *text-content conj $ .-innerText child
+                      speechOne (.join-str @*text-content &newline) (get-env "\"azure-key") (get-env "\"lang" "\"en-US")
+                        fn $
+                        fn $
               div
                 {} $ :style
                   merge ui/expand $ {} (:padding "\"20px 16px")
@@ -215,6 +228,15 @@
           defstyle css-doc-entry $ {} ("\"$0" style-entry)
             "\"$0:hover" $ {}
               :background-color $ hsl 190 10 70 0.1
+        |css-doc-page $ quote
+          defstyle css-doc-page $ {}
+            "\"$0" $ merge ui/expand
+              {} (:padding "\"8px 16px")
+                :background-color $ hsl 0 0 100 0.6
+                :position :relative
+        |css-speech-button $ quote
+          defstyle css-speech-button $ {}
+            "\"$0" $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
         |find-entries $ quote
           defn find-entries (entries path)
             if (empty? path) entries $ if-let
@@ -271,6 +293,8 @@
           "\"cirru-color" :as color
           respo-alerts.core :refer $ use-modal
           respo.css :refer $ defstyle
+          respo-ui.css :as css
+          "\"@memkits/azure-speech-util" :refer $ speechOne
     |docs-workflow.config $ {}
       :defs $ {}
         |dev? $ quote
