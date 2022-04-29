@@ -1,5 +1,5 @@
 {
-  "version": "0.0.6",
+  "version": "0.0.7",
   "name": "@calcit/docs-workflow",
   "dependencies": {
     "@calcit/procs": "^0.5.41"

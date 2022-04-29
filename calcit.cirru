@@ -1,6 +1,6 @@
 
 {}
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:port 6001) (:reload-fn |docs-workflow.main/reload!) (:storage-key |calcit.cirru) (:version |0.0.6)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:port 6001) (:reload-fn |docs-workflow.main/reload!) (:storage-key |calcit.cirru) (:version |0.0.7)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :ir $ {} (:package |docs-workflow)
