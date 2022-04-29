@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.5)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.6)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -110,7 +110,7 @@
                 {} $ :style
                   merge ui/expand $ {} (:padding "\"8px 16px")
                     :background-color $ hsl 0 0 100 0.6
-                div $ {}
+                div $ {} (:class-name css-doc)
                   :innerHTML $ .!render md (:content target)
               div
                 {} $ :style
@@ -126,7 +126,7 @@
                   [] idx $ let
                       target $ find-target docs path
                     div
-                      {} (:class-name "\"doc-entry")
+                      {} (:class-name css-doc-entry)
                         :style $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
                           :color $ hsl 0 0 60
                         :on-click $ fn (e d!) (on-select path d!)
@@ -139,7 +139,7 @@
                   [] (:key entry)
                     div ({})
                       div
-                        {} (:class-name "\"doc-entry")
+                        {} (:class-name css-doc-entry)
                           :style $ {} (:padding "\"0 8px") (:cursor :pointer)
                           :on-click $ fn (e d!)
                             on-select
@@ -171,7 +171,7 @@
                               conj parent-path $ :key entry
                               , d!
                         div
-                          {} (:class-name "\"doc-entry")
+                          {} (:class-name css-doc-entry)
                             :style $ merge style-entry
                               if selected? $ {}
                                 :border-left $ str "\"10px solid " (hsl 200 90 70)
@@ -202,6 +202,19 @@
                         <> $ str "\"< "
                           or (:title target) "\"NOT FOUND"
                 []
+        |css-doc $ quote
+          defstyle css-doc $ {}
+            "\"$0" $ {} (:font-size 15)
+            "\"$0 p" $ {} (:line-height 1.56)
+            "\"$0 p > code" $ {}
+              :background-color $ hsl 0 0 97
+              :padding "\"0 6px"
+              :border-radius "\"3px"
+              :border $ str "\"1px solid " (hsl 0 0 90)
+        |css-doc-entry $ quote
+          defstyle css-doc-entry $ {} ("\"$0" style-entry)
+            "\"$0:hover" $ {}
+              :background-color $ hsl 190 10 70 0.1
         |find-entries $ quote
           defn find-entries (entries path)
             if (empty? path) entries $ if-let
@@ -222,7 +235,7 @@
                 , nil
         |md $ quote
           def md $ new Remarkable
-            js-object (:html false) (:breaks true)
+            js-object (:html true) (:breaks true)
               :highlight $ fn (code lang)
                 if (= lang "\"cirru") (color/generate code)
                   .-value $ .!highlightAuto hljs code (js-array lang)
@@ -257,6 +270,7 @@
           "\"highlight.js" :default hljs
           "\"cirru-color" :as color
           respo-alerts.core :refer $ use-modal
+          respo.css :refer $ defstyle
     |docs-workflow.config $ {}
       :defs $ {}
         |dev? $ quote
