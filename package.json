@@ -3,7 +3,7 @@
   "name": "@calcit/docs-workflow",
   "dependencies": {
     "@calcit/procs": "^0.5.41",
-    "@memkits/azure-speech-util": "^0.0.2"
+    "@memkits/azure-speech-util": "^0.0.4"
   },
   "devDependencies": {
     "bottom-tip": "^0.1.3",

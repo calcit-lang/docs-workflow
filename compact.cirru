@@ -122,9 +122,12 @@
                           if
                             not= "\"PRE" $ .-tagName child
                             swap! *text-content conj $ .-innerText child
-                      speechOne (.join-str @*text-content &newline) (get-env "\"azure-key") (get-env "\"lang" "\"en-US")
-                        fn $
-                        fn $
+                      if-let
+                        key $ get-env "\"azure-key"
+                        speechOne (.join-str @*text-content &newline) (get-env "\"azure-key") (get-env "\"lang" "\"en-US")
+                          fn $
+                          fn $
+                        nativeSpeechOne (.join-str @*text-content &newline) (get-env "\"lang" "\"en-US")
               div
                 {} $ :style
                   merge ui/expand $ {} (:padding "\"20px 16px")
@@ -294,7 +297,7 @@
           respo-alerts.core :refer $ use-modal
           respo.css :refer $ defstyle
           respo-ui.css :as css
-          "\"@memkits/azure-speech-util" :refer $ speechOne
+          "\"@memkits/azure-speech-util" :refer $ speechOne nativeSpeechOne
     |docs-workflow.config $ {}
       :defs $ {}
         |dev? $ quote
