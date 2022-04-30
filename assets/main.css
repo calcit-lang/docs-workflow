@@ -54,10 +54,6 @@ blockquote {
   line-height: 1.5em;
 }
 
-.doc-entry:hover {
-  background-color: hsla(190, 10%, 70%, 0.1);
-}
-
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #ccc;
 }
@@ -70,7 +66,6 @@ blockquote {
 :-moz-placeholder { /* Firefox 18- */
   color: #ccc;
 }
-
 
 .calcit-tile {
   background-image: url('./calcit-tile.png');
