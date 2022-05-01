@@ -12,3 +12,6 @@ defn main ()
 <div>
   <iframe width="720" height="405" frameborder="0" src="https://www.ixigua.com/iframe/7075579723996201508?autoplay=0" referrerpolicy="unsafe-url" allowfullscreen></iframe>
 </div>
+
+
+<iframe width="720" height="405" frameborder="0" src="https://www.ixigua.com/iframe/7092697111279763975?autoplay=0" referrerpolicy="unsafe-url" allowfullscreen></iframe>

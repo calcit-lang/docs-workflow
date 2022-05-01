@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.9)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.10)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -67,7 +67,7 @@
                       :border-right $ str "\"1px solid " (hsl 0 0 94)
                   div
                     {}
-                      :style $ {} (:position :absolute) (:right 8) (:top 4)
+                      :style $ {} (:position :absolute) (:right 8) (:top 4) (:z-index 100)
                       :on-click $ fn (e d!) (.show quick-modal d!)
                     <> "\"Quick Jump" $ merge
                       {} (:cursor :pointer) (:font-family ui/font-fancy)
@@ -237,6 +237,8 @@
               {} (:padding "\"8px 16px")
                 :background-color $ hsl 0 0 100 0.6
                 :position :relative
+            "\"$0 iframe" $ {}
+              :border $ str "\"1px solid " (hsl 0 0 86)
         |css-speech-button $ quote
           defstyle css-speech-button $ {}
             "\"$0" $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
