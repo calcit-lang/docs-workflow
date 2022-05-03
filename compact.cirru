@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.8)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.10)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -67,7 +67,7 @@
                       :border-right $ str "\"1px solid " (hsl 0 0 94)
                   div
                     {}
-                      :style $ {} (:position :absolute) (:right 8) (:top 4)
+                      :style $ {} (:position :absolute) (:right 8) (:top 4) (:z-index 100)
                       :on-click $ fn (e d!) (.show quick-modal d!)
                     <> "\"Quick Jump" $ merge
                       {} (:cursor :pointer) (:font-family ui/font-fancy)
@@ -122,9 +122,12 @@
                           if
                             not= "\"PRE" $ .-tagName child
                             swap! *text-content conj $ .-innerText child
-                      speechOne (.join-str @*text-content &newline) (get-env "\"azure-key") (get-env "\"lang" "\"en-US")
-                        fn $
-                        fn $
+                      if-let
+                        key $ get-env "\"azure-key"
+                        speechOne (.join-str @*text-content &newline) (get-env "\"azure-key") (get-env "\"lang" "\"en-US")
+                          fn $
+                          fn $
+                        nativeSpeechOne (.join-str @*text-content &newline) (get-env "\"lang" "\"en-US")
               div
                 {} $ :style
                   merge ui/expand $ {} (:padding "\"20px 16px")
@@ -234,6 +237,8 @@
               {} (:padding "\"8px 16px")
                 :background-color $ hsl 0 0 100 0.6
                 :position :relative
+            "\"$0 iframe" $ {}
+              :border $ str "\"1px solid " (hsl 0 0 86)
         |css-speech-button $ quote
           defstyle css-speech-button $ {}
             "\"$0" $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
@@ -294,7 +299,7 @@
           respo-alerts.core :refer $ use-modal
           respo.css :refer $ defstyle
           respo-ui.css :as css
-          "\"@memkits/azure-speech-util" :refer $ speechOne
+          "\"@memkits/azure-speech-util" :refer $ speechOne nativeSpeechOne
     |docs-workflow.config $ {}
       :defs $ {}
         |dev? $ quote

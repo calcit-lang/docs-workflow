@@ -1,6 +1,6 @@
 
 {}
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:port 6001) (:reload-fn |docs-workflow.main/reload!) (:storage-key |calcit.cirru) (:version |0.0.8)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:port 6001) (:reload-fn |docs-workflow.main/reload!) (:storage-key |calcit.cirru) (:version |0.0.10)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :ir $ {} (:package |docs-workflow)
@@ -479,6 +479,10 @@
                                             :data $ {}
                                               |T $ {} (:at 1648637875525) (:by |rJG4IHzWf) (:text |:top) (:type :leaf)
                                               |b $ {} (:at 1648637881591) (:by |rJG4IHzWf) (:text |4) (:type :leaf)
+                                          |l $ {} (:at 1651401749594) (:by |rJG4IHzWf) (:type :expr)
+                                            :data $ {}
+                                              |T $ {} (:at 1651401751050) (:by |rJG4IHzWf) (:text |:z-index) (:type :leaf)
+                                              |b $ {} (:at 1651401751651) (:by |rJG4IHzWf) (:text |100) (:type :leaf)
                                   |b $ {} (:at 1648635629481) (:by |rJG4IHzWf) (:type :expr)
                                     :data $ {}
                                       |T $ {} (:at 1648635631847) (:by |rJG4IHzWf) (:text |:on-click) (:type :leaf)
@@ -919,33 +923,56 @@
                                                                 :data $ {}
                                                                   |D $ {} (:at 1651262248769) (:by |rJG4IHzWf) (:text |.-innerText) (:type :leaf)
                                                                   |T $ {} (:at 1651262145706) (:by |rJG4IHzWf) (:text |child) (:type :leaf)
-                                          |b $ {} (:at 1651262254376) (:by |rJG4IHzWf) (:type :expr)
+                                          |b $ {} (:at 1651341216268) (:by |rJG4IHzWf) (:type :expr)
                                             :data $ {}
-                                              |T $ {} (:at 1651262257427) (:by |rJG4IHzWf) (:text |speechOne) (:type :leaf)
-                                              |b $ {} (:at 1651262259950) (:by |rJG4IHzWf) (:type :expr)
+                                              |D $ {} (:at 1651341220450) (:by |rJG4IHzWf) (:text |if-let) (:type :leaf)
+                                              |L $ {} (:at 1651341241101) (:by |rJG4IHzWf) (:type :expr)
                                                 :data $ {}
-                                                  |T $ {} (:at 1651262261265) (:by |rJG4IHzWf) (:text |.join-str) (:type :leaf)
-                                                  |b $ {} (:at 1651262264737) (:by |rJG4IHzWf) (:text |@*text-content) (:type :leaf)
-                                                  |h $ {} (:at 1651262268042) (:by |rJG4IHzWf) (:text |&newline) (:type :leaf)
-                                              |h $ {} (:at 1651262271817) (:by |rJG4IHzWf) (:type :expr)
-                                                :data $ {}
-                                                  |T $ {} (:at 1651262272829) (:by |rJG4IHzWf) (:text |get-env) (:type :leaf)
-                                                  |b $ {} (:at 1651262276329) (:by |rJG4IHzWf) (:text "|\"azure-key") (:type :leaf)
-                                              |l $ {} (:at 1651262877982) (:by |rJG4IHzWf) (:type :expr)
-                                                :data $ {}
-                                                  |D $ {} (:at 1651262890952) (:by |rJG4IHzWf) (:text |get-env) (:type :leaf)
-                                                  |L $ {} (:at 1651262887938) (:by |rJG4IHzWf) (:text "|\"lang") (:type :leaf)
-                                                  |T $ {} (:at 1651262283558) (:by |rJG4IHzWf) (:text "|\"en-US") (:type :leaf)
-                                              |o $ {} (:at 1651262285905) (:by |rJG4IHzWf) (:type :expr)
-                                                :data $ {}
-                                                  |T $ {} (:at 1651262286294) (:by |rJG4IHzWf) (:text |fn) (:type :leaf)
-                                                  |b $ {} (:at 1651262287110) (:by |rJG4IHzWf) (:type :expr)
+                                                  |D $ {} (:at 1651341241934) (:by |rJG4IHzWf) (:text |key) (:type :leaf)
+                                                  |T $ {} (:at 1651341233672) (:by |rJG4IHzWf) (:type :expr)
                                                     :data $ {}
-                                              |q $ {} (:at 1651262285905) (:by |rJG4IHzWf) (:type :expr)
+                                                      |T $ {} (:at 1651341233672) (:by |rJG4IHzWf) (:text |get-env) (:type :leaf)
+                                                      |b $ {} (:at 1651341233672) (:by |rJG4IHzWf) (:text "|\"azure-key") (:type :leaf)
+                                              |T $ {} (:at 1651262254376) (:by |rJG4IHzWf) (:type :expr)
                                                 :data $ {}
-                                                  |T $ {} (:at 1651262286294) (:by |rJG4IHzWf) (:text |fn) (:type :leaf)
-                                                  |b $ {} (:at 1651262287110) (:by |rJG4IHzWf) (:type :expr)
+                                                  |T $ {} (:at 1651262257427) (:by |rJG4IHzWf) (:text |speechOne) (:type :leaf)
+                                                  |b $ {} (:at 1651262259950) (:by |rJG4IHzWf) (:type :expr)
                                                     :data $ {}
+                                                      |T $ {} (:at 1651262261265) (:by |rJG4IHzWf) (:text |.join-str) (:type :leaf)
+                                                      |b $ {} (:at 1651262264737) (:by |rJG4IHzWf) (:text |@*text-content) (:type :leaf)
+                                                      |h $ {} (:at 1651262268042) (:by |rJG4IHzWf) (:text |&newline) (:type :leaf)
+                                                  |h $ {} (:at 1651262271817) (:by |rJG4IHzWf) (:type :expr)
+                                                    :data $ {}
+                                                      |T $ {} (:at 1651262272829) (:by |rJG4IHzWf) (:text |get-env) (:type :leaf)
+                                                      |b $ {} (:at 1651262276329) (:by |rJG4IHzWf) (:text "|\"azure-key") (:type :leaf)
+                                                  |l $ {} (:at 1651262877982) (:by |rJG4IHzWf) (:type :expr)
+                                                    :data $ {}
+                                                      |D $ {} (:at 1651262890952) (:by |rJG4IHzWf) (:text |get-env) (:type :leaf)
+                                                      |L $ {} (:at 1651262887938) (:by |rJG4IHzWf) (:text "|\"lang") (:type :leaf)
+                                                      |T $ {} (:at 1651262283558) (:by |rJG4IHzWf) (:text "|\"en-US") (:type :leaf)
+                                                  |o $ {} (:at 1651262285905) (:by |rJG4IHzWf) (:type :expr)
+                                                    :data $ {}
+                                                      |T $ {} (:at 1651262286294) (:by |rJG4IHzWf) (:text |fn) (:type :leaf)
+                                                      |b $ {} (:at 1651262287110) (:by |rJG4IHzWf) (:type :expr)
+                                                        :data $ {}
+                                                  |q $ {} (:at 1651262285905) (:by |rJG4IHzWf) (:type :expr)
+                                                    :data $ {}
+                                                      |T $ {} (:at 1651262286294) (:by |rJG4IHzWf) (:text |fn) (:type :leaf)
+                                                      |b $ {} (:at 1651262287110) (:by |rJG4IHzWf) (:type :expr)
+                                                        :data $ {}
+                                              |b $ {} (:at 1651341244016) (:by |rJG4IHzWf) (:type :expr)
+                                                :data $ {}
+                                                  |T $ {} (:at 1651341247549) (:by |rJG4IHzWf) (:text |nativeSpeechOne) (:type :leaf)
+                                                  |b $ {} (:at 1651341251563) (:by |rJG4IHzWf) (:type :expr)
+                                                    :data $ {}
+                                                      |T $ {} (:at 1651341251563) (:by |rJG4IHzWf) (:text |.join-str) (:type :leaf)
+                                                      |b $ {} (:at 1651341251563) (:by |rJG4IHzWf) (:text |@*text-content) (:type :leaf)
+                                                      |h $ {} (:at 1651341251563) (:by |rJG4IHzWf) (:text |&newline) (:type :leaf)
+                                                  |h $ {} (:at 1651341254619) (:by |rJG4IHzWf) (:type :expr)
+                                                    :data $ {}
+                                                      |T $ {} (:at 1651341254619) (:by |rJG4IHzWf) (:text |get-env) (:type :leaf)
+                                                      |b $ {} (:at 1651341254619) (:by |rJG4IHzWf) (:text "|\"lang") (:type :leaf)
+                                                      |h $ {} (:at 1651341254619) (:by |rJG4IHzWf) (:text "|\"en-US") (:type :leaf)
                   |l $ {} (:at 1648582267400) (:by |rJG4IHzWf) (:type :expr)
                     :data $ {}
                       |T $ {} (:at 1648582267400) (:by |rJG4IHzWf) (:text |div) (:type :leaf)
@@ -1690,6 +1717,25 @@
                                 :data $ {}
                                   |T $ {} (:at 1651261721441) (:by |rJG4IHzWf) (:text |:position) (:type :leaf)
                                   |b $ {} (:at 1651261723559) (:by |rJG4IHzWf) (:text |:relative) (:type :leaf)
+                  |b $ {} (:at 1651401637633) (:by |rJG4IHzWf) (:type :expr)
+                    :data $ {}
+                      |T $ {} (:at 1651401665433) (:by |rJG4IHzWf) (:text "|\"$0 iframe") (:type :leaf)
+                      |b $ {} (:at 1651401645489) (:by |rJG4IHzWf) (:type :expr)
+                        :data $ {}
+                          |T $ {} (:at 1651401645880) (:by |rJG4IHzWf) (:text |{}) (:type :leaf)
+                          |b $ {} (:at 1651401646180) (:by |rJG4IHzWf) (:type :expr)
+                            :data $ {}
+                              |T $ {} (:at 1651401649727) (:by |rJG4IHzWf) (:text |:border) (:type :leaf)
+                              |b $ {} (:at 1651401650029) (:by |rJG4IHzWf) (:type :expr)
+                                :data $ {}
+                                  |T $ {} (:at 1651401650506) (:by |rJG4IHzWf) (:text |str) (:type :leaf)
+                                  |b $ {} (:at 1651401653542) (:by |rJG4IHzWf) (:text "|\"1px solid ") (:type :leaf)
+                                  |h $ {} (:at 1651401656085) (:by |rJG4IHzWf) (:type :expr)
+                                    :data $ {}
+                                      |T $ {} (:at 1651401657506) (:by |rJG4IHzWf) (:text |hsl) (:type :leaf)
+                                      |b $ {} (:at 1651401657874) (:by |rJG4IHzWf) (:text |0) (:type :leaf)
+                                      |h $ {} (:at 1651401658332) (:by |rJG4IHzWf) (:text |0) (:type :leaf)
+                                      |l $ {} (:at 1651401660781) (:by |rJG4IHzWf) (:text |86) (:type :leaf)
           |css-speech-button $ {} (:at 1651261772886) (:by |rJG4IHzWf) (:type :expr)
             :data $ {}
               |T $ {} (:at 1651261774634) (:by |rJG4IHzWf) (:text |defstyle) (:type :leaf)
@@ -2154,6 +2200,7 @@
                     |h $ {} (:at 1651261682745) (:by |rJG4IHzWf) (:type :expr)
                       :data $ {}
                         |T $ {} (:at 1651262177747) (:by |rJG4IHzWf) (:text |speechOne) (:type :leaf)
+                        |b $ {} (:at 1651341258965) (:by |rJG4IHzWf) (:text |nativeSpeechOne) (:type :leaf)
         :proc $ {} (:at 1499755354983) (:type :expr)
           :data $ {}
       |docs-workflow.config $ {}
