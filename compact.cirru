@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.11)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.12)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -101,6 +101,16 @@
                           d! cursor $ next-path state xs
                     comp-doc-page target
                     =< nil 120
+                comp-global-keydown
+                  {} $ :disabled-commands (#{} "\"p")
+                  fn (e d!)
+                    cond
+                        and
+                          = "\"p" $ :key e
+                          or (:meta? e) (:ctrl? e)
+                        .show quick-modal d!
+                      (= "\"Escape" (:key e))
+                        .close quick-modal d!
                 .render quick-modal
                 when dev? $ comp-reel (>> states :reel) reel ({})
         |comp-doc-page $ quote
@@ -309,6 +319,7 @@
           respo.css :refer $ defstyle
           respo-ui.css :as css
           "\"@memkits/azure-speech-util" :refer $ speechOne nativeSpeechOne
+          respo.comp.global-keydown :refer $ comp-global-keydown
     |docs-workflow.config $ {}
       :defs $ {}
         |dev? $ quote
