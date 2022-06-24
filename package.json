@@ -1,9 +1,9 @@
 {
-  "version": "0.0.10",
+  "version": "0.0.11",
   "name": "@calcit/docs-workflow",
   "dependencies": {
-    "@calcit/procs": "^0.5.41",
-    "@memkits/azure-speech-util": "^0.0.4"
+    "@calcit/procs": "^0.5.46",
+    "@memkits/azure-speech-util": "^0.0.5"
   },
   "devDependencies": {
     "bottom-tip": "^0.1.3",
@@ -11,6 +11,6 @@
     "github-markdown-css": "^5.1.0",
     "highlight.js": "^11.5.1",
     "remarkable": "^2.0.1",
-    "vite": "^2.9.7"
+    "vite": "^2.9.12"
   }
 }
