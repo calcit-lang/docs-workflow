@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.10)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.12)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -11,21 +11,19 @@
         |comp-child-entries $ quote
           defcomp comp-child-entries (parent-path entries on-select)
             div
-              {} $ :style
-                {} (:padding "\"8px") (:min-width 320) (:max-width 400) (:background-color :white) (:margin "\"8px 12px") (:border-radius "\"4px")
-                  :border $ str "\"1px solid " (hsl 0 0 86)
+              {} $ :class-name css-child-entries-block
               <> "\"Child pages" style-title
               list-> ({})
                 -> entries $ map-indexed
                   fn (idx entry)
                     [] idx $ div
-                      {} $ :on-click
-                        fn (e d!)
+                      {} (:tab-index 0)
+                        :on-click $ fn (e d!)
                           on-select
                             conj parent-path $ :key entry
                             , d!
                       div
-                        {} (:class-name "\"doc-entry") (:style style-child-entry)
+                        {} (:class-name css-child-entry) (:style style-child-entry)
                         <> $ :title entry
                         =< 8 nil
                         if
@@ -103,6 +101,16 @@
                           d! cursor $ next-path state xs
                     comp-doc-page target
                     =< nil 120
+                comp-global-keydown
+                  {} $ :disabled-commands (#{} "\"p")
+                  fn (e d!)
+                    cond
+                        and
+                          = "\"p" $ :key e
+                          or (:meta? e) (:ctrl? e)
+                        .show quick-modal d!
+                      (= "\"Escape" (:key e))
+                        .close quick-modal d!
                 .render quick-modal
                 when dev? $ comp-reel (>> states :reel) reel ({})
         |comp-doc-page $ quote
@@ -142,9 +150,8 @@
                   [] idx $ let
                       target $ find-target docs path
                     div
-                      {} (:class-name css-doc-entry)
-                        :style $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
-                          :color $ hsl 0 0 60
+                      {} (:tab-index 0)
+                        :class-name $ str-spaced css-doc-entry css-history-entry
                         :on-click $ fn (e d!) (on-select path d!)
                       <> $ :title target
         |comp-nav-tree $ quote
@@ -155,7 +162,7 @@
                   [] (:key entry)
                     div ({})
                       div
-                        {} (:class-name css-doc-entry)
+                        {} (:tab-index 0) (:class-name css-doc-entry)
                           :style $ {} (:padding "\"0 8px") (:cursor :pointer)
                           :on-click $ fn (e d!)
                             on-select
@@ -181,16 +188,16 @@
                     [] idx $ let
                         selected? $ = selected (:key entry)
                       div
-                        {} $ :on-click
-                          fn (e d!)
+                        {} (:tab-index 0)
+                          :on-click $ fn (e d!)
                             on-select
                               conj parent-path $ :key entry
                               , d!
                         div
                           {} (:class-name css-doc-entry)
-                            :style $ merge style-entry
-                              if selected? $ {}
-                                :border-left $ str "\"10px solid " (hsl 200 90 70)
+                            :style $ if selected?
+                              {} $ :border-left
+                                str "\"10px solid " $ hsl 200 90 70
                           <> $ :title entry
                           =< 8 nil
                           if
@@ -202,7 +209,7 @@
             list->
               {} $ :style ({})
               if
-                > (count selected) 0
+                not $ empty? selected
                 ->
                   range $ dec (count selected)
                   map $ fn (idx)
@@ -218,6 +225,14 @@
                         <> $ str "\"< "
                           or (:title target) "\"NOT FOUND"
                 []
+        |css-child-entries-block $ quote
+          defstyle css-child-entries-block $ {}
+            "\"$0" $ {} (:padding "\"8px") (:min-width 320) (:max-width 400) (:background-color :white) (:margin "\"8px 12px") (:border-radius "\"4px")
+              :border $ str "\"1px solid " (hsl 0 0 86)
+        |css-child-entry $ quote
+          defstyle css-child-entry $ {}
+            "\"$0:hover" $ {}
+              :background-color $ hsl 190 10 70 0.1
         |css-doc $ quote
           defstyle css-doc $ {}
             "\"$0" $ {} (:font-size 15)
@@ -239,6 +254,10 @@
                 :position :relative
             "\"$0 iframe" $ {}
               :border $ str "\"1px solid " (hsl 0 0 86)
+        |css-history-entry $ quote
+          defstyle css-history-entry $ {}
+            "\"$0" $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
+              :color $ hsl 0 0 60
         |css-speech-button $ quote
           defstyle css-speech-button $ {}
             "\"$0" $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
@@ -300,6 +319,7 @@
           respo.css :refer $ defstyle
           respo-ui.css :as css
           "\"@memkits/azure-speech-util" :refer $ speechOne nativeSpeechOne
+          respo.comp.global-keydown :refer $ comp-global-keydown
     |docs-workflow.config $ {}
       :defs $ {}
         |dev? $ quote
