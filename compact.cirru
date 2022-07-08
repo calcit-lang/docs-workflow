@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.12)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.13)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -118,7 +118,7 @@
             if (some? target)
               div
                 {} $ :class-name css-doc-page
-                div $ {}
+                div $ {} (:class-name css-markdown)
                   :innerHTML $ .!render md (:content target)
                 a $ {} (:inner-text "\"Speech")
                   :class-name $ str-spaced css/link css-speech-button
@@ -258,6 +258,13 @@
           defstyle css-history-entry $ {}
             "\"$0" $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
               :color $ hsl 0 0 60
+        |css-markdown $ quote
+          defstyle css-markdown $ {}
+            "\"$0 p code" $ {}
+              :border $ str "\"1px solid " (hsl 0 0 90)
+              :border-radius "\"4px"
+              :padding "\"2px 2px"
+              :margin "\"-2px 2px"
         |css-speech-button $ quote
           defstyle css-speech-button $ {}
             "\"$0" $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
@@ -325,11 +332,11 @@
         |dev? $ quote
           def dev? $ = "\"dev" (get-env "\"mode" "\"release")
         |register-languages! $ quote
-          defn register-languages! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang) (.!registerLanguage hljs "\"rust" rust-lang)
+          defn register-languages! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang) (.!registerLanguage hljs "\"rust" rust-lang) (.!registerLanguage hljs "\"glsl" glsl-lang)
         |site $ quote
           def site $ {} (:storage-key "\"workflow")
       :ns $ quote
-        ns docs-workflow.config $ :require ("\"highlight.js/lib/languages/rust" :default rust-lang) ("\"highlight.js/lib/languages/clojure" :default clojure-lang) ("\"highlight.js/lib/languages/bash" :default bash-lang) ("\"highlight.js" :default hljs)
+        ns docs-workflow.config $ :require ("\"highlight.js/lib/languages/rust" :default rust-lang) ("\"highlight.js/lib/languages/clojure" :default clojure-lang) ("\"highlight.js/lib/languages/bash" :default bash-lang) ("\"highlight.js/lib/languages/glsl" :default glsl-lang) ("\"highlight.js" :default hljs)
     |docs-workflow.main $ {}
       :defs $ {}
         |*reel $ quote

@@ -11,6 +11,8 @@ defn f1 ()
   + 1 2 4
 ```
 
+you also try Clojure `(eval "(+ 1 2)")`:
+
 ```clojure
 (+ 1 2)
 ```
