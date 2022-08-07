@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.13)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.14)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -120,7 +120,7 @@
                 {} $ :class-name css-doc-page
                 div $ {} (:class-name css-markdown)
                   :innerHTML $ .!render md (:content target)
-                a $ {} (:inner-text "\"Speech")
+                ; a $ {} (:inner-text "\"Speech")
                   :class-name $ str-spaced css/link css-speech-button
                   :on-click $ fn (e d1)
                     do
@@ -325,7 +325,6 @@
           respo-alerts.core :refer $ use-modal
           respo.css :refer $ defstyle
           respo-ui.css :as css
-          "\"@memkits/azure-speech-util" :refer $ speechOne nativeSpeechOne
           respo.comp.global-keydown :refer $ comp-global-keydown
     |docs-workflow.config $ {}
       :defs $ {}
