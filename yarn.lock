@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@calcit/procs@^0.6.23":
-  version "0.6.23"
-  resolved "https://registry.yarnpkg.com/@calcit/procs/-/procs-0.6.23.tgz#1568826e2275dd1a895bab19465514e7146f893f"
-  integrity sha512-qsNFmxZPsaa+D+p+oQhzRy8UOtpwQNpQF2wbCWgaxHKfvmvzt2fLFmZkSSUmY8ksmFb1rdK9zSbXK7U4/MO+uw==
+"@calcit/procs@^0.6.24":
+  version "0.6.24"
+  resolved "https://registry.yarnpkg.com/@calcit/procs/-/procs-0.6.24.tgz#2cfa35bb0e333da1f8036afe6d59e0774d4d10c8"
+  integrity sha512-cOXZXG/RtupozDGD0TdjAF7ELCR1p1Z7P0SA2DM58njHd01ezsy1XlaIopt5Mc0daOxrkvzixzmDgc8BLsab8g==
   dependencies:
     "@calcit/ternary-tree" "0.0.19"
     "@cirru/parser.ts" "^0.0.6"
@@ -150,11 +150,12 @@ autolinker@^3.11.0:
   dependencies:
     tslib "^2.3.0"
 
-bottom-tip@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/bottom-tip/-/bottom-tip-0.1.3.tgz#ad3a4bcc8c3d5b5c6dac68fd3d140bf18efc50f8"
-  integrity sha512-MJHQcCd9ni0IAOcMMdyT9kzt5hoQw1Gy6Uqee21wCuTMzbZ+L7calDYDp0lKdPSSZoAw0u2emjJBGVv1cwEphQ==
+bottom-tip@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/bottom-tip/-/bottom-tip-0.1.4.tgz#c319dca5b46a356b206e114cfaecc020b02658ea"
+  integrity sha512-mb0nZJENqcWB/iSdCVaFxbvD3HvR0GRyFEzJXTpyyfGQiekeyiu1xotP368CO230oGJygrLx+wbOV6p8VRKTOQ==
   dependencies:
+    nanoid "^4.0.1"
     virtual-dom "^2.1.1"
 
 browser-split@0.0.1:
@@ -285,6 +286,11 @@ nanoid@^3.3.4:
   resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-3.3.4.tgz#730b67e3cd09e2deacf03c027c81c9d9dbc5e8ab"
   integrity sha512-MqBkQh/OHTS2egovRtLk45wEyNXwF+cokD+1YPf9u5VfJiRdAiRwB2froX5Co9Rh20xs4siNPm8naNotSD6RBw==
 
+nanoid@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-4.0.1.tgz#398d7ccfdbf9faf2231b2ca7e8fff5dbca6a509b"
+  integrity sha512-udKGtCCUafD3nQtJg9wBhRP3KMbPglUsgV5JVsXhvyBs/oefqb4sqMEhKBBgqZncYowu58p1prsZQBYvAj/Gww==
+
 next-tick@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-0.2.2.tgz#75da4a927ee5887e39065880065b7336413b310d"
@@ -332,9 +338,9 @@ resolve@^1.22.1:
     supports-preserve-symlinks-flag "^1.0.0"
 
 rollup@^3.10.0:
-  version "3.17.2"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.17.2.tgz#a4ecd29c488672a0606e41ef57474fad715750a9"
-  integrity sha512-qMNZdlQPCkWodrAZ3qnJtvCAl4vpQ8q77uEujVCCbC/6CLB7Lcmvjq7HyiOSnf4fxTT9XgsE36oLHJBH49xjqA==
+  version "3.19.1"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.19.1.tgz#2b3a31ac1ff9f3afab2e523fa687fef5b0ee20fc"
+  integrity sha512-lAbrdN7neYCg/8WaoWn/ckzCtz+jr70GFfYdlf50OF7387HTg+wiuiqJRFYawwSPpqfqDNYqK7smY/ks2iAudg==
   optionalDependencies:
     fsevents "~2.3.2"
 
@@ -377,10 +383,10 @@ virtual-dom@^2.1.1:
     x-is-array "0.1.0"
     x-is-string "0.1.0"
 
-vite@^4.1.3:
-  version "4.1.3"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-4.1.3.tgz#001a038c3a7757d532787c0de429b8368136ded5"
-  integrity sha512-0Zqo4/Fr/swSOBmbl+HAAhOjrqNwju+yTtoe4hQX9UsARdcuc9njyOdr6xU0DDnV7YP0RT6mgTTOiRtZgxfCxA==
+vite@^4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-4.1.4.tgz#170d93bcff97e0ebc09764c053eebe130bfe6ca0"
+  integrity sha512-3knk/HsbSTKEin43zHu7jTwYWv81f8kgAL99G5NWBcA1LKvtvcVAC4JjBH1arBunO9kQka+1oGbrMKOjk4ZrBg==
   dependencies:
     esbuild "^0.16.14"
     postcss "^8.4.21"
