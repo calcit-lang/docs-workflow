@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.14)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.15)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -287,11 +287,14 @@
                   , target $ recur (:children target) (rest path)
                 , nil
         |md $ quote
-          def md $ new Remarkable
-            js-object (:html true) (:breaks true)
-              :highlight $ fn (code lang)
-                if (= lang "\"cirru") (color/generate code)
-                  .-value $ .!highlightAuto hljs code (js-array lang)
+          def md $ let
+              m $ new Remarkable
+                js-object (:html true) (:breaks true)
+                  :highlight $ fn (code lang)
+                    if (= lang "\"cirru") (color/generate code)
+                      .-value $ .!highlightAuto hljs code (js-array lang)
+            .!use m linkify
+            , m
         |next-path $ quote
           defn next-path (state path)
             -> state (assoc :selected path)
@@ -320,6 +323,7 @@
           respo-md.comp.md :refer $ comp-md
           docs-workflow.config :refer $ dev?
           "\"remarkable" :refer $ Remarkable
+          "\"remarkable/linkify" :refer $ linkify
           "\"highlight.js" :default hljs
           "\"cirru-color" :as color
           respo-alerts.core :refer $ use-modal
