@@ -345,11 +345,9 @@
         |*reel $ quote
           defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
         |dispatch! $ quote
-          defn dispatch! (op op-data)
-            when
-              and config/dev? $ not= op :states
-              println "\"Dispatch:" op
-            reset! *reel $ reel-updater updater @*reel op op-data
+          defn dispatch! (op)
+            when config/dev? $ println "\"Dispatch:" op
+            reset! *reel $ reel-updater updater @*reel op
         |main! $ quote
           defn main! () (config/register-languages!)
             println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
@@ -362,7 +360,7 @@
             ; let
                 raw $ js/localStorage.getItem (:storage-key config/site)
               when (some? raw)
-                dispatch! :hydrate-storage $ parse-cirru-edn raw
+                dispatch! $ :: :hydrate-storage (parse-cirru-edn raw)
             println "|App started."
         |mount-target $ quote
           def mount-target $ .!querySelector js/document |.app
@@ -424,11 +422,12 @@
     |docs-workflow.updater $ {}
       :defs $ {}
         |updater $ quote
-          defn updater (store op data op-id op-time)
-            case-default op
-              do (println "\"unknown op:" op) store
-              :states $ update-states store data
-              :hydrate-storage data
+          defn updater (store op op-id op-time)
+            tag-match op
+                :states cursor s
+                update-states store cursor s
+              (:hydrate-storage d) d
+              _ $ do (eprintln "\"unknown op:" op) store
       :ns $ quote
         ns docs-workflow.updater $ :require
           respo.cursor :refer $ update-states

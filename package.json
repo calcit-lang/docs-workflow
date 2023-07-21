@@ -2,7 +2,7 @@
   "version": "0.0.15",
   "name": "@calcit/docs-workflow",
   "dependencies": {
-    "@calcit/procs": "^0.7.0-a7"
+    "@calcit/procs": "^0.7.5"
   },
   "devDependencies": {
     "bottom-tip": "^0.1.5",
@@ -10,6 +10,6 @@
     "github-markdown-css": "^5.2.0",
     "highlight.js": "^11.8.0",
     "remarkable": "^2.0.1",
-    "vite": "^4.3.9"
+    "vite": "^4.4.6"
   }
 }
