@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.15)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.16)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -23,7 +23,7 @@
                             conj parent-path $ :key entry
                             , d!
                       div
-                        {} (:class-name css-child-entry) (:style style-child-entry)
+                        {} $ :class-name css-child-entry
                         <> $ :title entry
                         =< 8 nil
                         if
@@ -57,12 +57,9 @@
                           fn (path d!)
                             d! cursor $ next-path state path
               div
-                {} (:class-name "\"calcit-tile")
-                  :style $ merge ui/fullscreen ui/global ui/row
+                {} $ :class-name (str-spaced "\"calcit-tile" css/fullscreen css/global css/row)
                 div
-                  {} $ :style
-                    merge ui/column $ {} (:padding "\"0 8px") (:width "\"20%") (:min-width 266) (:background-color :white)
-                      :border-right $ str "\"1px solid " (hsl 0 0 94)
+                  {} $ :class-name (str-spaced css/column css-layout)
                   div
                     {}
                       :style $ {} (:position :absolute) (:right 8) (:top 4) (:z-index 100)
@@ -70,8 +67,8 @@
                     <> "\"Quick Jump" $ merge
                       {} (:cursor :pointer) (:font-family ui/font-fancy)
                   div
-                    {} $ :style
-                      merge ui/row-parted $ {} (:margin-top 12)
+                    {} (:class-name css/row-parted)
+                      :style $ {} (:margin-top 12)
                     <> "\"Pages" style-title
                     a $ {} (:href "\"mdbook.html") (:inner-text "\"mdbook")
                       :style $ {} (:font-size 12) (:font-family ui/font-fancy) (:opacity 0.3)
@@ -81,7 +78,7 @@
                       parent-path $ or (butlast selected) ([])
                       entries $ find-entries docs parent-path
                     div
-                      {} $ :style ui/expand
+                      {} $ :class-name css/expand
                       comp-page-entries (last selected) parent-path entries $ fn (xs d!)
                         d! cursor $ next-path state xs
                   div
@@ -93,7 +90,7 @@
                 let
                     target $ find-target docs (:selected state)
                   div
-                    {} $ :style ui/expand
+                    {} $ :class-name css/expand
                     let
                         children $ or (:children target) ([])
                       if (empty? children) nil $ comp-child-entries (:selected state) children
@@ -231,7 +228,8 @@
               :border $ str "\"1px solid " (hsl 0 0 86)
         |css-child-entry $ quote
           defstyle css-child-entry $ {}
-            "\"$0:hover" $ {}
+            "\"&" $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
+            "\"&:hover" $ {}
               :background-color $ hsl 190 10 70 0.1
         |css-doc $ quote
           defstyle css-doc $ {}
@@ -258,6 +256,10 @@
           defstyle css-history-entry $ {}
             "\"$0" $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
               :color $ hsl 0 0 60
+        |css-layout $ quote
+          defstyle css-layout $ {}
+            "\"&" $ {} (:padding "\"0 8px") (:width "\"20%") (:min-width 266) (:background-color :white)
+              :border-right $ str "\"1px solid " (hsl 0 0 94)
         |css-markdown $ quote
           defstyle css-markdown $ {}
             "\"$0 p code" $ {}
@@ -305,8 +307,6 @@
                     butlast xs
                     , xs
                   , path
-        |style-child-entry $ quote
-          def style-child-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
         |style-entry $ quote
           def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
             :border-bottom $ str "\"1px solid " (hsl 0 0 92)
