@@ -1,10 +1,10 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.17)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.18)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
-    |docs-workflow.comp.container $ {}
+    |docs-workflow.comp.container $ %{} :FileEntry
       :defs $ {}
         |*text-content $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -354,7 +354,7 @@
             respo.css :refer $ defstyle
             respo-ui.css :as css
             respo.comp.global-keydown :refer $ comp-global-keydown
-    |docs-workflow.config $ {}
+    |docs-workflow.config $ %{} :FileEntry
       :defs $ {}
         |dev? $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -368,7 +368,7 @@
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns docs-workflow.config $ :require ("\"highlight.js/lib/languages/rust" :default rust-lang) ("\"highlight.js/lib/languages/clojure" :default clojure-lang) ("\"highlight.js/lib/languages/bash" :default bash-lang) ("\"highlight.js/lib/languages/glsl" :default glsl-lang) ("\"highlight.js" :default hljs)
-    |docs-workflow.main $ {}
+    |docs-workflow.main $ %{} :FileEntry
       :defs $ {}
         |*reel $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -425,7 +425,7 @@
             docs-workflow.config :as config
             "\"./calcit.build-errors" :default build-errors
             "\"bottom-tip" :default hud!
-    |docs-workflow.schema $ {}
+    |docs-workflow.schema $ %{} :FileEntry
       :defs $ {}
         |docs $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -459,7 +459,7 @@
                 :cursor $ []
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote (ns docs-workflow.schema)
-    |docs-workflow.updater $ {}
+    |docs-workflow.updater $ %{} :FileEntry
       :defs $ {}
         |updater $ %{} :CodeEntry (:doc |)
           :code $ quote
