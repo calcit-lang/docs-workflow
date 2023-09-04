@@ -1,10 +1,10 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:port 6001) (:reload-fn |docs-workflow.main/reload!) (:storage-key |calcit.cirru) (:version |0.0.17)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:port 6001) (:reload-fn |docs-workflow.main/reload!) (:storage-key |calcit.cirru) (:version |0.0.18)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
-    |docs-workflow.comp.container $ {}
+    |docs-workflow.comp.container $ %{} :FileEntry
       :defs $ {}
         |*text-content $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1651262222161) (:by |rJG4IHzWf)
@@ -2413,7 +2413,7 @@
                     |h $ %{} :Expr (:at 1656037565860) (:by |rJG4IHzWf)
                       :data $ {}
                         |T $ %{} :Leaf (:at 1656037571469) (:by |rJG4IHzWf) (:text |comp-global-keydown)
-    |docs-workflow.config $ {}
+    |docs-workflow.config $ %{} :FileEntry
       :defs $ {}
         |dev? $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1544873875614) (:by |rJG4IHzWf)
@@ -2505,7 +2505,7 @@
                     |T $ %{} :Leaf (:at 1648924672501) (:by |rJG4IHzWf) (:text "|\"highlight.js")
                     |b $ %{} :Leaf (:at 1648924672501) (:by |rJG4IHzWf) (:text |:default)
                     |h $ %{} :Leaf (:at 1648924672501) (:by |rJG4IHzWf) (:text |hljs)
-    |docs-workflow.main $ {}
+    |docs-workflow.main $ %{} :FileEntry
       :defs $ {}
         |*reel $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1499755354983) (:by nil)
@@ -2842,7 +2842,7 @@
                     |T $ %{} :Leaf (:at 1648924675356) (:by |rJG4IHzWf) (:text "|\"bottom-tip")
                     |b $ %{} :Leaf (:at 1648924675356) (:by |rJG4IHzWf) (:text |:default)
                     |h $ %{} :Leaf (:at 1648924675356) (:by |rJG4IHzWf) (:text |hud!)
-    |docs-workflow.schema $ {}
+    |docs-workflow.schema $ %{} :FileEntry
       :defs $ {}
         |docs $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1646491858255) (:by |rJG4IHzWf)
@@ -3049,7 +3049,7 @@
           :data $ {}
             |T $ %{} :Leaf (:at 1499755354983) (:by |root) (:text |ns)
             |j $ %{} :Leaf (:at 1499755354983) (:by |root) (:text |docs-workflow.schema)
-    |docs-workflow.updater $ {}
+    |docs-workflow.updater $ %{} :FileEntry
       :defs $ {}
         |updater $ %{} :CodeEntry (:doc |)
           :code $ %{} :Expr (:at 1499755354983) (:by nil)

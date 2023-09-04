@@ -1,8 +1,8 @@
 {
-  "version": "0.0.17",
+  "version": "0.0.18",
   "name": "@calcit/docs-workflow",
   "dependencies": {
-    "@calcit/procs": "^0.8.0-a2"
+    "@calcit/procs": "^0.8.0-a5"
   },
   "devDependencies": {
     "bottom-tip": "^0.1.5",
