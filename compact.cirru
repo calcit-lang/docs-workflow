@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.18)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.19)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -13,7 +13,7 @@
           :code $ quote
             defcomp comp-child-entries (parent-path entries on-select)
               div
-                {} $ :class-name css-child-entries-block
+                {} $ :class-name style-child-entries-block
                 <> "\"Child pages" style-title
                 list-> ({})
                   -> entries $ map-indexed
@@ -25,7 +25,7 @@
                               conj parent-path $ :key entry
                               , d!
                         div
-                          {} $ :class-name css-child-entry
+                          {} $ :class-name style-child-entry
                           <> $ :title entry
                           =< 8 nil
                           if
@@ -48,31 +48,30 @@
                   history $ :history state
                   quick-modal $ use-modal (>> states :quick)
                     {} (:title "|Quick jump")
-                      :style $ {} (:max-width "\"40vw") (:height "\"90vh") (:max-height "\"90vh") (:margin-right 0)
+                      :card-style $ {} (:max-width "\"18vw") (:height "\"90vh") (:max-height "\"90vh") (:margin-left 0)
                       :backdrop-style $ {}
                         :background-color $ hsl 0 29 10 0.2
                       :render $ fn (on-close)
                         div
-                          {} $ :style
-                            merge ui/expand $ {} (:padding "\"16px 16px 120px")
-                              :border-top $ str "\"1px solid " (hsl 0 0 94)
+                          {} $ :class-name (str-spaced ui/expand style-jump-modal)
                           comp-nav-tree docs ([])
                             fn (path d!)
                               d! cursor $ next-path state path
                 div
-                  {} $ :class-name (str-spaced "\"calcit-tile" css/fullscreen css/global css/row)
+                  {} $ :class-name (str-spaced "\"calcit-tile" css/preset css/fullscreen css/global css/row)
                   div
                     {} $ :class-name (str-spaced css/column css-layout)
                     div
-                      {}
-                        :style $ {} (:position :absolute) (:right 8) (:top 4) (:z-index 100)
-                        :on-click $ fn (e d!) (.show quick-modal d!)
-                      <> "\"Quick Jump" $ merge
-                        {} (:cursor :pointer) (:font-family ui/font-fancy)
-                    div
                       {} (:class-name css/row-parted)
                         :style $ {} (:margin-top 12)
-                      <> "\"Pages" style-title
+                      div
+                        {} $ :class-name (str-spaced css/row-middle css/gap8)
+                        <> "\"Pages" style-title
+                        div
+                          {}
+                            :style $ {}
+                            :on-click $ fn (e d!) (.show quick-modal d!)
+                          <> "\"☰" $ str-spaced css/font-fancy style-jump
                       a $ {} (:href "\"mdbook.html") (:inner-text "\"mdbook")
                         :style $ {} (:font-size 12) (:font-family ui/font-fancy) (:opacity 0.3)
                     comp-parent-menu selected docs $ fn (path d!)
@@ -153,7 +152,7 @@
                         target $ find-target docs path
                       div
                         {} (:tab-index 0)
-                          :class-name $ str-spaced css-doc-entry css-history-entry
+                          :class-name $ str-spaced style-doc-entry style-history-entry
                           :on-click $ fn (e d!) (on-select path d!)
                         <> $ :title target
         |comp-nav-tree $ %{} :CodeEntry (:doc |)
@@ -165,7 +164,7 @@
                     [] (:key entry)
                       div ({})
                         div
-                          {} (:tab-index 0) (:class-name css-doc-entry)
+                          {} (:tab-index 0) (:class-name style-doc-entry)
                             :style $ {} (:padding "\"0 8px") (:cursor :pointer)
                             :on-click $ fn (e d!)
                               on-select
@@ -198,10 +197,8 @@
                                 conj parent-path $ :key entry
                                 , d!
                           div
-                            {} (:class-name css-doc-entry)
-                              :style $ if selected?
-                                {} $ :border-left
-                                  str "\"10px solid " $ hsl 200 90 70
+                            {} $ :class-name
+                              str-spaced style-doc-entry $ if selected? style-doc-entry-selected
                             <> $ :title entry
                             =< 8 nil
                             if
@@ -230,17 +227,6 @@
                           <> $ str "\"< "
                             or (:title target) "\"NOT FOUND"
                   []
-        |css-child-entries-block $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            defstyle css-child-entries-block $ {}
-              "\"$0" $ {} (:padding "\"8px") (:min-width 320) (:max-width 400) (:background-color :white) (:margin "\"8px 12px") (:border-radius "\"4px")
-                :border $ str "\"1px solid " (hsl 0 0 86)
-        |css-child-entry $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            defstyle css-child-entry $ {}
-              "\"&" $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
-              "\"&:hover" $ {}
-                :background-color $ hsl 190 10 70 0.1
         |css-doc $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-doc $ {}
@@ -251,11 +237,6 @@
                 :padding "\"0 6px"
                 :border-radius "\"3px"
                 :border $ str "\"1px solid " (hsl 0 0 90)
-        |css-doc-entry $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            defstyle css-doc-entry $ {} ("\"$0" style-entry)
-              "\"$0:hover" $ {}
-                :background-color $ hsl 190 10 70 0.1
         |css-doc-page $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-doc-page $ {}
@@ -265,11 +246,6 @@
                   :position :relative
               "\"$0 iframe" $ {}
                 :border $ str "\"1px solid " (hsl 0 0 86)
-        |css-history-entry $ %{} :CodeEntry (:doc |)
-          :code $ quote
-            defstyle css-history-entry $ {}
-              "\"$0" $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
-                :color $ hsl 0 0 60
         |css-layout $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-layout $ {}
@@ -328,15 +304,57 @@
                       butlast xs
                       , xs
                     , path
+        |style-child-entries-block $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defstyle style-child-entries-block $ {}
+              "\"&" $ {} (:padding "\"8px") (:min-width 320) (:max-width 400) (:background-color :white) (:margin "\"8px 12px") (:border-radius "\"4px")
+                :border $ str "\"1px solid " (hsl 0 0 86)
+        |style-child-entry $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defstyle style-child-entry $ {}
+              "\"&" $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
+              "\"&:hover" $ {}
+                :background-color $ hsl 190 10 70 0.1
+        |style-doc-entry $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defstyle style-doc-entry $ {} ("\"&" style-entry)
+              "\"&:hover" $ {}
+                :background-color $ hsl 190 10 70 0.1
+        |style-doc-entry-selected $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defstyle style-doc-entry-selected $ {}
+              "\"&" $ {}
+                :border-left $ str "\"8px solid " (hsl 200 90 70)
+              "\"&:hover" $ {}
+                :border-left $ str "\"10px solid " (hsl 200 90 70)
         |style-entry $ %{} :CodeEntry (:doc |)
           :code $ quote
             def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
               :border-bottom $ str "\"1px solid " (hsl 0 0 92)
               :border-left $ str "\"0px solid " (hsl 200 90 60)
+        |style-history-entry $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defstyle style-history-entry $ {}
+              "\"&" $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
+                :color $ hsl 0 0 60
+        |style-jump $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defstyle style-jump $ {}
+              "\"&" $ {}
+                :color $ hsl 0 0 60
+                :cursor :pointer
+                :opacity 0.6
+              "\"&:hover" $ {} (:opacity 1)
+        |style-jump-modal $ %{} :CodeEntry (:doc |)
+          :code $ quote
+            defstyle style-jump-modal $ {}
+              "\"&" $ {} (:padding "\"16px 16px 120px")
+                :border-top $ str "\"1px solid " (hsl 0 0 94)
         |style-title $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def style-title $ {} (:font-family ui/font-fancy) (:font-size 18) (:font-weight 300)
-              :color $ hsl 0 0 60
+            defstyle style-title $ {}
+              "\"&" $ {} (:font-family ui/font-fancy) (:font-size 18) (:font-weight 300)
+                :color $ hsl 0 0 60
       :ns $ %{} :CodeEntry (:doc |)
         :code $ quote
           ns docs-workflow.comp.container $ :require (respo-ui.core :as ui)
