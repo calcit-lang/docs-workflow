@@ -1,15 +1,15 @@
 {
-  "version": "0.0.18",
+  "version": "0.0.19",
   "name": "@calcit/docs-workflow",
   "dependencies": {
-    "@calcit/procs": "^0.8.0-a5"
+    "@calcit/procs": "^0.8.14"
   },
   "devDependencies": {
     "bottom-tip": "^0.1.5",
-    "cirru-color": "^0.2.3",
-    "github-markdown-css": "^5.2.0",
-    "highlight.js": "^11.8.0",
+    "cirru-color": "^0.2.4",
+    "github-markdown-css": "^5.5.0",
+    "highlight.js": "^11.9.0",
     "remarkable": "^2.0.1",
-    "vite": "^4.4.12"
+    "vite": "^5.0.11"
   }
 }
