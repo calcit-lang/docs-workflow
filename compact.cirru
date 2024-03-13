@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.19)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.20)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -312,7 +312,7 @@
         |style-child-entry $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle style-child-entry $ {}
-              "\"&" $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
+              "\"&" $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height "\"2.4")
               "\"&:hover" $ {}
                 :background-color $ hsl 190 10 70 0.1
         |style-doc-entry $ %{} :CodeEntry (:doc |)
@@ -329,7 +329,7 @@
                 :border-left $ str "\"10px solid " (hsl 200 90 70)
         |style-entry $ %{} :CodeEntry (:doc |)
           :code $ quote
-            def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height 2.4)
+            def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height "\"2.4")
               :border-bottom $ str "\"1px solid " (hsl 0 0 92)
               :border-left $ str "\"0px solid " (hsl 200 90 60)
         |style-history-entry $ %{} :CodeEntry (:doc |)
