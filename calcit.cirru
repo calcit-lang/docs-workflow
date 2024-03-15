@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:port 6001) (:reload-fn |docs-workflow.main/reload!) (:storage-key |calcit.cirru) (:version |0.0.19)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:port 6001) (:reload-fn |docs-workflow.main/reload!) (:storage-key |calcit.cirru) (:version |0.0.20)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -2095,7 +2095,7 @@
                           |o $ %{} :Expr (:at 1691431170240) (:by |rJG4IHzWf)
                             :data $ {}
                               |T $ %{} :Leaf (:at 1691431170240) (:by |rJG4IHzWf) (:text |:line-height)
-                              |b $ %{} :Leaf (:at 1691431170240) (:by |rJG4IHzWf) (:text |2.4)
+                              |b $ %{} :Leaf (:at 1710352981367) (:by |rJG4IHzWf) (:text "|\"2.4")
                   |h $ %{} :Expr (:at 1656033126914) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1691431175370) (:by |rJG4IHzWf) (:text "|\"&:hover")
@@ -2209,7 +2209,7 @@
                   |k $ %{} :Expr (:at 1646494939824) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1646494942135) (:by |rJG4IHzWf) (:text |:line-height)
-                      |b $ %{} :Leaf (:at 1646494948906) (:by |rJG4IHzWf) (:text |2.4)
+                      |b $ %{} :Leaf (:at 1710352962231) (:by |rJG4IHzWf) (:text "|\"2.4")
                   |l $ %{} :Expr (:at 1646494567375) (:by |rJG4IHzWf)
                     :data $ {}
                       |T $ %{} :Leaf (:at 1646494573453) (:by |rJG4IHzWf) (:text |:border-bottom)
