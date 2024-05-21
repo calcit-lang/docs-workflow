@@ -5,6 +5,6 @@
     |Respo/respo.calcit |main
     |Respo/reel.calcit |main
     |Respo/respo-markdown.calcit |main
-    |Respo/respo-ui.calcit |0.5.15
+    |Respo/respo-ui.calcit |main
     |Respo/respo-router.calcit |main
-    |Respo/alerts.calcit |0.9.6
+    |Respo/alerts.calcit |main
