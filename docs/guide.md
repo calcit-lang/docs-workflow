@@ -3,7 +3,7 @@
 show you a demo:
 
 ```
-println "|a demo of code"
+println "|a demo of code" "|longlonglonglonglonglonglonglonglonglonglonglonglonglong"
 ```
 
 ```cirru
