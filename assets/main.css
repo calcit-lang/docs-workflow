@@ -3,24 +3,6 @@
 @import url("github-markdown-css/github-markdown.css");
 @import url("cirru-color/assets/cirru.css");
 
-pre {
-  background-color: hsla(0, 0%, 96%, 0.5);
-  border: 1px solid #eee;
-  padding: 2px 8px;
-  line-height: 1.4;
-  min-width: 400px;
-  border-radius: 4px;
-  overflow: auto;
-}
-
-blockquote {
-  margin: 16px 0;
-  padding: 1px 16px;
-  color: #777;
-  background-color: #eee8e8;
-  border-left: 4px solid #ccc;
-  line-height: 1.5em;
-}
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: #ccc;

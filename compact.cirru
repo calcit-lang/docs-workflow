@@ -1,6 +1,6 @@
 
 {} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.20)
+  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.21)
     :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
   :entries $ {}
   :files $ {}
@@ -230,9 +230,9 @@
         |css-doc $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-doc $ {}
-              "\"$0" $ {} (:font-size 15)
-              "\"$0 p" $ {} (:line-height 1.56)
-              "\"$0 p > code" $ {}
+              "\"&" $ {} (:font-size 15)
+              "\"& p" $ {} (:line-height 1.56)
+              "\"& p > code" $ {}
                 :background-color $ hsl 0 0 97
                 :padding "\"0 6px"
                 :border-radius "\"3px"
@@ -240,11 +240,11 @@
         |css-doc-page $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-doc-page $ {}
-              "\"$0" $ merge ui/expand
+              "\"&" $ merge ui/expand
                 {} (:padding "\"8px 16px")
                   :background-color $ hsl 0 0 100 0.6
                   :position :relative
-              "\"$0 iframe" $ {}
+              "\"& iframe" $ {}
                 :border $ str "\"1px solid " (hsl 0 0 86)
         |css-layout $ %{} :CodeEntry (:doc |)
           :code $ quote
@@ -254,15 +254,17 @@
         |css-markdown $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-markdown $ {}
-              "\"$0 p code" $ {}
+              "\"& p code" $ {}
                 :border $ str "\"1px solid " (hsl 0 0 90)
                 :border-radius "\"4px"
                 :padding "\"2px 2px"
                 :margin "\"-2px 2px"
+              "\"& pre" $ {} (:background-color "|hsla(0, 0%, 96%, 0.5)") (:border "|1px solid #eee") (:padding "|2px 8px") (:line-height |1.4) (:min-width |400px) (:border-radius |4px) (:overflow |auto)
+              "\"& blockquote" $ {} (:margin "|16px 0") (:padding "|1px 16px") (:color |#777) (:background-color |#eee8e8) (:border-left "|4px solid #ccc") (:line-height |1.5em)
         |css-speech-button $ %{} :CodeEntry (:doc |)
           :code $ quote
             defstyle css-speech-button $ {}
-              "\"$0" $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
+              "\"&" $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
         |find-entries $ %{} :CodeEntry (:doc |)
           :code $ quote
             defn find-entries (entries path)
