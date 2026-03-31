@@ -9,3 +9,11 @@ dist/
 book/
 
 .DS_Store
+
+.pnp.cjs
+.pnp.loader.mjs
+.yarn/cache
+.yarn/install-state.gz
+.yarn/unplugged
+
+.yarn/*.gz
