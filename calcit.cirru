@@ -1,20 +1,23 @@
 
-{} (:package |docs-workflow)
-  :configs $ {} (:init-fn |docs-workflow.main/main!) (:reload-fn |docs-workflow.main/reload!) (:version |0.0.21)
-    :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
+{} (:about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `cr query` to inspect and `cr edit`/`cr tree` to modify. Run `cr docs agents --full` first. Manual edits must follow format and schema conventions, then run `cr edit format`.") (:package |docs-workflow) (:version |0.0.21)
   :entries $ {}
+    :default $ {} (:description |) (:init-fn 'docs-workflow.main/main!) (:mode :native) (:reload-fn 'docs-workflow.main/reload!)
+      :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
+      :type-slots $ {}
   :files $ {}
-    |docs-workflow.comp.container $ %{} :FileEntry
+    |docs-workflow.comp.container $ %{} 'FileEntry
       :defs $ {}
-        |*text-content $ %{} :CodeEntry (:doc |)
+        |*text-content $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defatom *text-content $ []
-        |comp-child-entries $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |comp-child-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-child-entries (parent-path entries on-select)
               div
                 {} $ :class-name style-child-entries-block
-                <> "\"Child pages" style-title
+                <> "|Child pages" style-title
                 list-> ({})
                   -> entries $ map-indexed
                     fn (idx entry)
@@ -30,9 +33,11 @@
                           =< 8 nil
                           if
                             not $ empty? (:children entry)
-                            <> "\"☰" $ {}
+                            <> "|☰" $ {}
                               :color $ hsl 180 80 60
-        |comp-container $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-container (reel docs)
               let
@@ -48,7 +53,7 @@
                   history $ :history state
                   quick-modal $ use-modal (>> states :quick)
                     {} (:title "|Quick jump")
-                      :card-style $ {} (:max-width "\"18vw") (:height "\"90vh") (:max-height "\"90vh") (:margin-left 0)
+                      :card-style $ {} (:max-width |18vw) (:height |90vh) (:max-height |90vh) (:margin-left 0)
                       :backdrop-style $ {}
                         :background-color $ hsl 0 29 10 0.2
                       :render $ fn (on-close)
@@ -58,7 +63,7 @@
                             fn (path d!)
                               d! cursor $ next-path state path
                 div
-                  {} $ :class-name (str-spaced "\"calcit-tile" css/preset css/fullscreen css/global css/row)
+                  {} $ :class-name (str-spaced |calcit-tile css/preset css/fullscreen css/global css/row)
                   div
                     {} $ :class-name (str-spaced css/column css-layout)
                     div
@@ -66,13 +71,13 @@
                         :style $ {} (:margin-top 12)
                       div
                         {} $ :class-name (str-spaced css/row-middle css/gap8)
-                        <> "\"Pages" style-title
+                        <> |Pages style-title
                         div
                           {}
                             :style $ {}
                             :on-click $ fn (e d!) (.show quick-modal d!)
-                          <> "\"☰" $ str-spaced css/font-fancy style-jump
-                      a $ {} (:href "\"mdbook.html") (:inner-text "\"mdbook")
+                          <> "|☰" $ str-spaced css/font-fancy style-jump
+                      a $ {} (:href |mdbook.html) (:inner-text |mdbook)
                         :style $ {} (:font-size 12) (:font-family ui/font-fancy) (:opacity 0.3)
                     comp-parent-menu selected docs $ fn (path d!)
                       d! cursor $ next-path state path
@@ -86,7 +91,7 @@
                     div
                       {} $ :style
                         {} $ :margin-top 20
-                      <> "\"Histories" style-title
+                      <> |Histories style-title
                       comp-history-menu history docs $ fn (path d!)
                         d! cursor $ next-path state path
                   let
@@ -101,18 +106,23 @@
                       comp-doc-page target
                       =< nil 120
                   comp-global-keydown
-                    {} $ :disabled-commands (#{} "\"p")
+                    {} $ :disabled-commands (#{} |p)
                     fn (e d!)
                       cond
                           and
-                            = "\"p" $ :key e
-                            or (:meta? e) (:ctrl? e)
+                            = |p $ option:unwrap-or (get e :key) nil
+                            or
+                              option:unwrap-or (get e :meta?) false
+                              option:unwrap-or (get e :ctrl?) false
                           .show quick-modal d!
-                        (= "\"Escape" (:key e))
+                        (= |Escape (option:unwrap-or (get e :key) nil))
                           .close quick-modal d!
+                        true nil
                   .render quick-modal
                   when dev? $ comp-reel (>> states :reel) reel ({})
-        |comp-doc-page $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |comp-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-doc-page (target)
               if (some? target)
@@ -120,7 +130,7 @@
                   {} $ :class-name css-doc-page
                   div $ {} (:class-name css-markdown)
                     :innerHTML $ .!render md (:content target)
-                  ; a $ {} (:inner-text "\"Speech")
+                  ; a $ {} (:inner-text |Speech)
                     :class-name $ str-spaced css/link css-speech-button
                     :on-click $ fn (e d1)
                       do
@@ -128,21 +138,23 @@
                         -> e :event .-target .-parentElement .-firstChild .-children js/Array.from $ .!forEach
                           fn (child idx ? a)
                             if
-                              not= "\"PRE" $ .-tagName child
+                              not= |PRE $ .-tagName child
                               swap! *text-content conj $ .-innerText child
                         if-let
-                          key $ get-env "\"azure-key"
-                          speechOne (.join-str @*text-content &newline) (get-env "\"azure-key") (get-env "\"lang" "\"en-US")
+                          key $ get-env |azure-key
+                          speechOne (.join-str @*text-content &newline) (get-env |azure-key) (get-env |lang |en-US)
                             fn $
                             fn $
-                          nativeSpeechOne (.join-str @*text-content &newline) (get-env "\"lang" "\"en-US")
+                          nativeSpeechOne (.join-str @*text-content &newline) (get-env |lang |en-US)
                 div
                   {} $ :style
-                    merge ui/expand $ {} (:padding "\"20px 16px")
-                  do $ <> "\"Empty"
+                    merge ui/expand $ {} (:padding "|20px 16px")
+                  do $ <> |Empty
                     {} (:font-family ui/font-fancy) (:font-style :italic)
                       :color $ hsl 0 0 80
-        |comp-history-menu $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |comp-history-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-history-menu (history docs on-select)
               list-> ({})
@@ -155,7 +167,9 @@
                           :class-name $ str-spaced style-doc-entry style-history-entry
                           :on-click $ fn (e d!) (on-select path d!)
                         <> $ :title target
-        |comp-nav-tree $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |comp-nav-tree $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-nav-tree (docs base-path on-select)
               list-> ({})
@@ -165,7 +179,7 @@
                       div ({})
                         div
                           {} (:tab-index 0) (:class-name style-doc-entry)
-                            :style $ {} (:padding "\"0 8px") (:cursor :pointer)
+                            :style $ {} (:padding "|0 8px") (:cursor :pointer)
                             :on-click $ fn (e d!)
                               on-select
                                 conj base-path $ :key entry
@@ -179,7 +193,9 @@
                             comp-nav-tree xs
                               conj base-path $ :key entry
                               , on-select
-        |comp-page-entries $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |comp-page-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-page-entries (selected parent-path entries on-select)
               div
@@ -203,9 +219,11 @@
                             =< 8 nil
                             if
                               not $ empty? (:children entry)
-                              <> "\"☰" $ {}
+                              <> "|☰" $ {}
                                 :color $ hsl 180 80 60
-        |comp-parent-menu $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |comp-parent-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-parent-menu (selected docs on-select)
               list->
@@ -224,55 +242,69 @@
                               :color $ hsl 0 0 40
                               :background-color $ hsl 180 90 94
                             :on-click $ fn (e d!) (on-select sub-path d!)
-                          <> $ str "\"< "
-                            or (:title target) "\"NOT FOUND"
+                          <> $ str "|< "
+                            or (:title target) "|NOT FOUND"
                   []
-        |css-doc $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |css-doc $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-doc $ {}
-              "\"&" $ {} (:font-size 15)
-              "\"& p" $ {} (:line-height 1.56)
-              "\"& p > code" $ {}
+              |& $ {} (:font-size 15)
+              "|& p" $ {} (:line-height 1.56)
+              "|& p > code" $ {}
                 :background-color $ hsl 0 0 97
-                :padding "\"0 6px"
-                :border-radius "\"3px"
-                :border $ str "\"1px solid " (hsl 0 0 90)
-        |css-doc-page $ %{} :CodeEntry (:doc |)
+                :padding "|0 6px"
+                :border-radius |3px
+                :border $ str "|1px solid " (hsl 0 0 90)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |css-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-doc-page $ {}
-              "\"&" $ merge ui/expand
-                {} (:padding "\"8px 16px")
+              |& $ merge ui/expand
+                {} (:padding "|8px 16px")
                   :background-color $ hsl 0 0 100 0.6
                   :position :relative
-              "\"& iframe" $ {}
-                :border $ str "\"1px solid " (hsl 0 0 86)
-        |css-layout $ %{} :CodeEntry (:doc |)
+              "|& iframe" $ {}
+                :border $ str "|1px solid " (hsl 0 0 86)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |css-layout $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-layout $ {}
-              "\"&" $ {} (:padding "\"0 8px") (:width "\"20%") (:min-width 266) (:background-color :white)
-                :border-right $ str "\"1px solid " (hsl 0 0 94)
-        |css-markdown $ %{} :CodeEntry (:doc |)
+              |& $ {} (:padding "|0 8px") (:width |20%) (:min-width 266) (:background-color :white)
+                :border-right $ str "|1px solid " (hsl 0 0 94)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |css-markdown $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-markdown $ {}
-              "\"& p code" $ {}
-                :border $ str "\"1px solid " (hsl 0 0 90)
-                :border-radius "\"4px"
-                :padding "\"2px 2px"
-                :margin "\"-2px 2px"
-              "\"& pre" $ {} (:background-color "|hsla(0, 0%, 96%, 0.5)") (:border "|1px solid #eee") (:padding "|2px 8px") (:line-height |1.4) (:min-width |400px) (:border-radius |4px) (:overflow |auto)
-              "\"& blockquote" $ {} (:margin "|16px 0") (:padding "|1px 16px") (:color |#777) (:background-color |#eee8e8) (:border-left "|4px solid #ccc") (:line-height |1.5em)
-        |css-speech-button $ %{} :CodeEntry (:doc |)
+              "|& p code" $ {}
+                :border $ str "|1px solid " (hsl 0 0 90)
+                :border-radius |4px
+                :padding "|2px 2px"
+                :margin "|-2px 2px"
+              "|& pre" $ {} (:background-color "|hsla(0, 0%, 96%, 0.5)") (:border "|1px solid #eee") (:padding "|2px 8px") (:line-height |1.4) (:min-width |400px) (:border-radius |4px) (:overflow |auto)
+              "|& blockquote" $ {} (:margin "|16px 0") (:padding "|1px 16px") (:color |#777) (:background-color |#eee8e8) (:border-left "|4px solid #ccc") (:line-height |1.5em)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |css-speech-button $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-speech-button $ {}
-              "\"&" $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
-        |find-entries $ %{} :CodeEntry (:doc |)
+              |& $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |find-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn find-entries (entries path)
               if (empty? path) entries $ if-let
                 target $ find-target entries path
                 :children target
-                do (js/console.warn "\"no entries found for" entries path) ([])
-        |find-target $ %{} :CodeEntry (:doc |)
+                do (js/console.warn "|no entries found for" entries path) ([])
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |find-target $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn find-target (entries path)
               if (empty? path) nil $ let
@@ -285,17 +317,21 @@
                     = 1 $ count path
                     , target $ recur (:children target) (rest path)
                   , nil
-        |md $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |md $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def md $ let
                 m $ new Remarkable
                   js-object (:html true) (:breaks true)
                     :highlight $ fn (code lang)
-                      if (= lang "\"cirru") (color/generate code)
+                      if (= lang |cirru) (color/generate code)
                         .-value $ .!highlightAuto hljs code (js-array lang)
               .!use m linkify
               , m
-        |next-path $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |next-path $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn next-path (state path)
               -> state (assoc :selected path)
@@ -306,58 +342,78 @@
                       butlast xs
                       , xs
                     , path
-        |style-child-entries-block $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |style-child-entries-block $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-child-entries-block $ {}
-              "\"&" $ {} (:padding "\"8px") (:min-width 320) (:max-width 400) (:background-color :white) (:margin "\"8px 12px") (:border-radius "\"4px")
-                :border $ str "\"1px solid " (hsl 0 0 86)
-        |style-child-entry $ %{} :CodeEntry (:doc |)
+              |& $ {} (:padding |8px) (:min-width 320) (:max-width 400) (:background-color :white) (:margin "|8px 12px") (:border-radius |4px)
+                :border $ str "|1px solid " (hsl 0 0 86)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |style-child-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-child-entry $ {}
-              "\"&" $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height "\"2.4")
-              "\"&:hover" $ {}
+              |& $ {} (:padding "|0 8px") (:cursor :pointer) (:transition-duration |200ms) (:line-height |2.4)
+              |&:hover $ {}
                 :background-color $ hsl 190 10 70 0.1
-        |style-doc-entry $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |style-doc-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote
-            defstyle style-doc-entry $ {} ("\"&" style-entry)
-              "\"&:hover" $ {}
+            defstyle style-doc-entry $ {} (|& style-entry)
+              |&:hover $ {}
                 :background-color $ hsl 190 10 70 0.1
-        |style-doc-entry-selected $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |style-doc-entry-selected $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-doc-entry-selected $ {}
-              "\"&" $ {}
-                :border-left $ str "\"8px solid " (hsl 200 90 70)
-              "\"&:hover" $ {}
-                :border-left $ str "\"10px solid " (hsl 200 90 70)
-        |style-entry $ %{} :CodeEntry (:doc |)
+              |& $ {}
+                :border-left $ str "|8px solid " (hsl 200 90 70)
+              |&:hover $ {}
+                :border-left $ str "|10px solid " (hsl 200 90 70)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |style-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote
-            def style-entry $ {} (:padding "\"0 8px") (:cursor :pointer) (:transition-duration "\"200ms") (:line-height "\"2.4")
-              :border-bottom $ str "\"1px solid " (hsl 0 0 92)
-              :border-left $ str "\"0px solid " (hsl 200 90 60)
-        |style-history-entry $ %{} :CodeEntry (:doc |)
+            def style-entry $ {} (:padding "|0 8px") (:cursor :pointer) (:transition-duration |200ms) (:line-height |2.4)
+              :border-bottom $ str "|1px solid " (hsl 0 0 92)
+              :border-left $ str "|0px solid " (hsl 200 90 60)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |style-history-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-history-entry $ {}
-              "\"&" $ {} (:cursor :pointer) (:padding "\"0 8px") (:font-size 12)
+              |& $ {} (:cursor :pointer) (:padding "|0 8px") (:font-size 12)
                 :color $ hsl 0 0 60
-        |style-jump $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |style-jump $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-jump $ {}
-              "\"&" $ {}
+              |& $ {}
                 :color $ hsl 0 0 60
                 :cursor :pointer
                 :opacity 0.6
-              "\"&:hover" $ {} (:opacity 1)
-        |style-jump-modal $ %{} :CodeEntry (:doc |)
+              |&:hover $ {} (:opacity 1)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |style-jump-modal $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-jump-modal $ {}
-              "\"&" $ {} (:padding "\"16px 16px 120px")
-                :border-top $ str "\"1px solid " (hsl 0 0 94)
-        |style-title $ %{} :CodeEntry (:doc |)
+              |& $ {} (:padding "|16px 16px 120px")
+                :border-top $ str "|1px solid " (hsl 0 0 94)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |style-title $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-title $ {}
-              "\"&" $ {} (:font-family ui/font-fancy) (:font-size 18) (:font-weight 300)
+              |& $ {} (:font-family ui/font-fancy) (:font-size 18) (:font-weight 300)
                 :color $ hsl 0 0 60
-      :ns $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns docs-workflow.comp.container $ :require (respo-ui.core :as ui)
             respo-ui.core :refer $ hsl
@@ -366,42 +422,52 @@
             reel.comp.reel :refer $ comp-reel
             respo-md.comp.md :refer $ comp-md
             docs-workflow.config :refer $ dev?
-            "\"remarkable" :refer $ Remarkable
-            "\"remarkable/linkify" :refer $ linkify
-            "\"highlight.js" :default hljs
-            "\"cirru-color" :as color
+            |remarkable :refer $ Remarkable
+            |remarkable/linkify :refer $ linkify
+            |highlight.js :default hljs
+            |cirru-color :as color
             respo-alerts.core :refer $ use-modal
             respo.css :refer $ defstyle
             respo-ui.css :as css
             respo.comp.global-keydown :refer $ comp-global-keydown
-    |docs-workflow.config $ %{} :FileEntry
+    |docs-workflow.config $ %{} 'FileEntry
       :defs $ {}
-        |dev? $ %{} :CodeEntry (:doc |)
+        |dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote
-            def dev? $ = "\"dev" (get-env "\"mode" "\"release")
-        |register-languages! $ %{} :CodeEntry (:doc |)
+            def dev? $ = |dev (get-env |mode |release)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |register-languages! $ %{} 'CodeEntry (:doc |)
           :code $ quote
-            defn register-languages! () (.!registerLanguage hljs "\"clojure" clojure-lang) (.!registerLanguage hljs "\"bash" bash-lang) (.!registerLanguage hljs "\"rust" rust-lang) (.!registerLanguage hljs "\"glsl" glsl-lang)
-        |site $ %{} :CodeEntry (:doc |)
+            defn register-languages! () (.!registerLanguage hljs |clojure clojure-lang) (.!registerLanguage hljs |bash bash-lang) (.!registerLanguage hljs |rust rust-lang) (.!registerLanguage hljs |glsl glsl-lang)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |site $ %{} 'CodeEntry (:doc |)
           :code $ quote
-            def site $ {} (:storage-key "\"workflow")
-      :ns $ %{} :CodeEntry (:doc |)
+            def site $ {} (:storage-key |workflow)
+          :examples $ []
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
-          ns docs-workflow.config $ :require ("\"highlight.js/lib/languages/rust" :default rust-lang) ("\"highlight.js/lib/languages/clojure" :default clojure-lang) ("\"highlight.js/lib/languages/bash" :default bash-lang) ("\"highlight.js/lib/languages/glsl" :default glsl-lang) ("\"highlight.js" :default hljs)
-    |docs-workflow.main $ %{} :FileEntry
+          ns docs-workflow.config $ :require (|highlight.js/lib/languages/rust :default rust-lang) (|highlight.js/lib/languages/clojure :default clojure-lang) (|highlight.js/lib/languages/bash :default bash-lang) (|highlight.js/lib/languages/glsl :default glsl-lang) (|highlight.js :default hljs)
+    |docs-workflow.main $ %{} 'FileEntry
       :defs $ {}
-        |*reel $ %{} :CodeEntry (:doc |)
+        |*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
-        |dispatch! $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn dispatch! (op)
-              when config/dev? $ println "\"Dispatch:" op
+              when config/dev? $ println |Dispatch: op
               reset! *reel $ reel-updater updater @*reel op
-        |main! $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |main! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn main! () (config/register-languages!)
-              println "\"Running mode:" $ if config/dev? "\"dev" "\"release"
+              println "|Running mode:" $ if config/dev? |dev |release
               if config/dev? $ load-console-formatter!
               render-app!
               add-watch *reel :changes $ fn (reel prev) (render-app!)
@@ -409,30 +475,40 @@
               js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
               flipped js/setInterval 60000 persist-storage!
               ; let
-                  raw $ js/localStorage.getItem (:storage-key config/site)
+                (raw (js/localStorage.getItem (:storage-key config/site)))
                 when (some? raw)
                   dispatch! $ :: :hydrate-storage (parse-cirru-edn raw)
               println "|App started."
-        |mount-target $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def mount-target $ .!querySelector js/document |.app
-        |persist-storage! $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote
-            defn persist-storage! () (js/console.log "\"persist")
+            defn persist-storage! () (js/console.log |persist)
               js/localStorage.setItem (:storage-key config/site)
                 format-cirru-edn $ :store @*reel
-        |reload! $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn reload! () $ if (nil? build-errors)
               do (remove-watch *reel :changes) (clear-cache!)
                 add-watch *reel :changes $ fn (reel prev) (render-app!)
                 reset! *reel $ refresh-reel @*reel schema/store updater
-                hud! "\"ok~" "\"Ok"
-              hud! "\"error" build-errors
-        |render-app! $ %{} :CodeEntry (:doc |)
+                hud! |ok~ |Ok
+              hud! |error build-errors
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn render-app! () $ render! mount-target (comp-container @*reel schema/docs) dispatch!
-      :ns $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns docs-workflow.main $ :require
             respo.core :refer $ render! clear-cache!
@@ -443,53 +519,60 @@
             reel.core :refer $ reel-updater refresh-reel
             reel.schema :as reel-schema
             docs-workflow.config :as config
-            "\"./calcit.build-errors" :default build-errors
-            "\"bottom-tip" :default hud!
-    |docs-workflow.schema $ %{} :FileEntry
+            |./calcit.build-errors :default build-errors
+            |bottom-tip :default hud!
+    |docs-workflow.schema $ %{} 'FileEntry
       :defs $ {}
-        |docs $ %{} :CodeEntry (:doc |)
+        |docs $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def docs $ []
-              {} (:title "\"Guide") (:key :guide)
-                :content $ load-doc "\"guide.md"
-              {} (:title "\"Design") (:key :design)
-                :content $ load-doc "\"design.md"
+              {} (:title |Guide) (:key :guide)
+                :content $ load-doc |guide.md
+              {} (:title |Design) (:key :design)
+                :content $ load-doc |design.md
                 :children $ []
-                  {} (:title "\"Guide") (:key :guide)
-                    :content $ load-doc "\"guide.md"
-                  {} (:title "\"Design") (:key :design)
-                    :content $ load-doc "\"design.md"
-                  {} (:title "\"Overview") (:key :overview)
-                    :content $ load-doc "\"overview.md"
+                  {} (:title |Guide) (:key :guide)
+                    :content $ load-doc |guide.md
+                  {} (:title |Design) (:key :design)
+                    :content $ load-doc |design.md
+                  {} (:title |Overview) (:key :overview)
+                    :content $ load-doc |overview.md
                     :children $ []
-                      {} (:title "\"Cirru") (:key :cirru)
-                        :content $ load-doc "\"cirru.md"
-              {} (:title "\"About") (:key :about)
-                :content $ load-doc "\"about.md"
-              {} (:title "\"Cirru") (:key :cirru)
-                :content $ load-doc "\"cirru.md"
-        |load-doc $ %{} :CodeEntry (:doc |)
+                      {} (:title |Cirru) (:key :cirru)
+                        :content $ load-doc |cirru.md
+              {} (:title |About) (:key :about)
+                :content $ load-doc |about.md
+              {} (:title |Cirru) (:key :cirru)
+                :content $ load-doc |cirru.md
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |load-doc $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defmacro load-doc (filename)
-              read-file $ str "\"docs/" filename
-        |store $ %{} :CodeEntry (:doc |)
+              read-file $ str |docs/ filename
+          :examples $ []
+          :schema $ :: 'Dynamic
+        |store $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def store $ {}
               :states $ {}
                 :cursor $ []
-      :ns $ %{} :CodeEntry (:doc |)
+          :examples $ []
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote (ns docs-workflow.schema)
-    |docs-workflow.updater $ %{} :FileEntry
+    |docs-workflow.updater $ %{} 'FileEntry
       :defs $ {}
-        |updater $ %{} :CodeEntry (:doc |)
+        |updater $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn updater (store op op-id op-time)
               tag-match op
-                  :states cursor s
-                  update-states store cursor s
+                (:states cursor s) (update-states store cursor s)
                 (:hydrate-storage d) d
-                _ $ do (eprintln "\"unknown op:" op) store
-      :ns $ %{} :CodeEntry (:doc |)
+                _ $ do (eprintln "|unknown op:" op) store
+          :examples $ []
+          :schema $ :: 'Dynamic
+      :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns docs-workflow.updater $ :require
             respo.cursor :refer $ update-states
