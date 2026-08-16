@@ -593,28 +593,28 @@
         |docs $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def docs $ []
-              %{} docs-workflow.schema/DocNode (:title |Guide) (:key :guide)
+              %{} DocNode (:title |Guide) (:key :guide)
                 :content $ load-doc |guide.md
                 :children $ []
-              %{} docs-workflow.schema/DocNode (:title |Design) (:key :design)
+              %{} DocNode (:title |Design) (:key :design)
                 :content $ load-doc |design.md
                 :children $ []
-                  %{} docs-workflow.schema/DocNode (:title |Guide) (:key :guide)
+                  %{} DocNode (:title |Guide) (:key :guide)
                     :content $ load-doc |guide.md
                     :children $ []
-                  %{} docs-workflow.schema/DocNode (:title |Design) (:key :design)
+                  %{} DocNode (:title |Design) (:key :design)
                     :content $ load-doc |design.md
                     :children $ []
-                  %{} docs-workflow.schema/DocNode (:title |Overview) (:key :overview)
+                  %{} DocNode (:title |Overview) (:key :overview)
                     :content $ load-doc |overview.md
                     :children $ []
-                      %{} docs-workflow.schema/DocNode (:title |Cirru) (:key :cirru)
+                      %{} DocNode (:title |Cirru) (:key :cirru)
                         :content $ load-doc |cirru.md
                         :children $ []
-              %{} docs-workflow.schema/DocNode (:title |About) (:key :about)
+              %{} DocNode (:title |About) (:key :about)
                 :content $ load-doc |about.md
                 :children $ []
-              %{} docs-workflow.schema/DocNode (:title |Cirru) (:key :cirru)
+              %{} DocNode (:title |Cirru) (:key :cirru)
                 :content $ load-doc |cirru.md
                 :children $ []
           :examples $ []
@@ -627,7 +627,7 @@
           :schema $ :: 'Dynamic
         |store $ %{} 'CodeEntry (:doc |)
           :code $ quote
-            def store $ %{} docs-workflow.schema/Store
+            def store $ %{} Store
               :states $ {}
           :examples $ []
           :schema $ :: 'docs-workflow.schema/Store
