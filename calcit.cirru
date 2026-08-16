@@ -103,7 +103,9 @@
                     div
                       {} $ :class-name css/expand
                       let
-                          children $ or (&map:get target :children) ([])
+                          children $ if (option:some? target)
+                            &struct:get (unsafe-coerce target 'docs-workflow.schema/DocNode) :children
+                            , []
                         if (empty? children) nil $ comp-child-entries (&struct:get state :selected) children
                           fn (xs d!)
                             d! cursor $ next-path state xs
@@ -141,8 +143,7 @@
                 div
                   {} $ :class-name css-doc-page
                   div $ {} (:class-name css-markdown)
-                    :innerHTML $ .!render md
-                      &struct:get (unsafe-coerce target 'docs-workflow.schema/DocNode) :content
+                    :innerHTML $ .!render md |C
                   ; a $ {} (:inner-text |Speech)
                     :class-name $ str-spaced css/link css-speech-button
                     :on-click $ fn (e d1)
