@@ -25,15 +25,15 @@
                         {} (:tab-index 0)
                           :on-click $ fn (e d!)
                             on-select
-                              conj parent-path $ &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :key
+                              conj parent-path $ :key (unsafe-coerce entry 'docs-workflow.schema/DocNode)
                               , d!
                         div
                           {} $ :class-name style-child-entry
-                          <> $ &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :title
+                          <> $ :title (unsafe-coerce entry 'docs-workflow.schema/DocNode)
                           =< 8 nil
                           if
                             not $ empty?
-                              &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :children
+                              :children $ unsafe-coerce entry 'docs-workflow.schema/DocNode
                             <> "|☰" $ {}
                               :color $ hsl 180 80 60
           :examples $ []
@@ -45,7 +45,7 @@
             defcomp comp-container (reel docs)
               let
                   store $ unsafe-coerce (reel.schema/read-field reel :store) 'docs-workflow.schema/Store
-                  states $ &struct:get store :states
+                  states $ :states store
                   cursor $ or (&map:get states :cursor) ([])
                   state $ unsafe-coerce
                     or (&map:get states :data)
@@ -53,8 +53,8 @@
                         :selected $ [] (:key :guide)
                         :history $ []
                     , 'docs-workflow.schema/State
-                  selected $ &struct:get state :selected
-                  history $ &struct:get state :history
+                  selected $ :selected state
+                  history $ :history state
                   quick-modal $ use-modal (>> states :quick)
                     {} (:title "|Quick jump")
                       :card-style $ {} (:max-width |18vw) (:height |90vh) (:max-height |90vh) (:margin-left 0)
@@ -99,14 +99,14 @@
                       comp-history-menu history docs $ fn (path d!)
                         d! cursor $ next-path state path
                   let
-                      target $ find-target docs (&struct:get state :selected)
+                      target $ find-target docs (:selected state)
                     div
                       {} $ :class-name css/expand
                       let
                           children $ if (option:some? target)
-                            &struct:get (unsafe-coerce target 'docs-workflow.schema/DocNode) :children
+                            :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
                             , []
-                        if (empty? children) nil $ comp-child-entries (&struct:get state :selected) children
+                        if (empty? children) nil $ comp-child-entries (:selected state) children
                           fn (xs d!)
                             d! cursor $ next-path state xs
                       comp-doc-page target
@@ -175,7 +175,7 @@
                           :class-name $ str-spaced style-doc-entry style-history-entry
                           :on-click $ fn (e d!) (on-select path d!)
                         <> $ if (option:some? target)
-                          &struct:get (unsafe-coerce target 'docs-workflow.schema/DocNode) :title
+                          :title $ unsafe-coerce target 'docs-workflow.schema/DocNode
                           , |
           :examples $ []
           :schema $ :: 'Fn
@@ -188,25 +188,25 @@
                 -> docs $ map
                   fn (entry)
                     []
-                      &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :key
+                      :key $ unsafe-coerce entry 'docs-workflow.schema/DocNode
                       div ({})
                         div
                           {} (:tab-index 0) (:class-name style-doc-entry)
                             :style $ {} (:padding "|0 8px") (:cursor :pointer)
                             :on-click $ fn (e d!)
                               on-select
-                                conj base-path $ &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :key
+                                conj base-path $ :key (unsafe-coerce entry 'docs-workflow.schema/DocNode)
                                 , d!
-                          <> $ &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :title
+                          <> $ :title (unsafe-coerce entry 'docs-workflow.schema/DocNode)
                         let
-                            xs $ &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :children
+                            xs $ :children (unsafe-coerce entry 'docs-workflow.schema/DocNode)
                           if
                             not $ empty? xs
                             div
                               {} $ :style
                                 {} $ :padding-left 16
                               comp-nav-tree xs
-                                conj base-path $ &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :key
+                                conj base-path $ :key (unsafe-coerce entry 'docs-workflow.schema/DocNode)
                                 , on-select
                             %none
           :examples $ []
@@ -224,21 +224,21 @@
                     fn (idx entry)
                       [] idx $ let
                           selected? $ = selected
-                            &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :key
+                            :key $ unsafe-coerce entry 'docs-workflow.schema/DocNode
                         div
                           {} (:tab-index 0)
                             :on-click $ fn (e d!)
                               on-select
-                                conj parent-path $ &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :key
+                                conj parent-path $ :key (unsafe-coerce entry 'docs-workflow.schema/DocNode)
                                 , d!
                           div
                             {} $ :class-name
                               str-spaced style-doc-entry $ if selected? style-doc-entry-selected
-                            <> $ &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :title
+                            <> $ :title (unsafe-coerce entry 'docs-workflow.schema/DocNode)
                             =< 8 nil
                             if
                               not $ empty?
-                                &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :children
+                                :children $ unsafe-coerce entry 'docs-workflow.schema/DocNode
                               <> "|☰" $ {}
                                 :color $ hsl 180 80 60
           :examples $ []
@@ -266,7 +266,7 @@
                             :on-click $ fn (e d!) (on-select sub-path d!)
                           <> $ str "|< "
                             if (option:some? target)
-                              &struct:get (unsafe-coerce target 'docs-workflow.schema/DocNode) :title
+                              :title $ unsafe-coerce target 'docs-workflow.schema/DocNode
                               , "|NOT FOUND"
           :examples $ []
           :schema $ :: 'Fn
@@ -325,7 +325,7 @@
             defn find-entries (entries path)
               if (empty? path) entries $ if-let
                 target $ find-target entries path
-                &struct:get target :children
+                :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
                 do (js/console.warn "|no entries found for" entries path) ([])
           :examples $ []
           :schema $ :: 'Fn
@@ -340,10 +340,12 @@
                 if-let
                   target $ find entries
                     fn (entry)
-                      = p0 $ &struct:get (unsafe-coerce entry 'docs-workflow.schema/DocNode) :key
+                      = p0 $ :key (unsafe-coerce entry 'docs-workflow.schema/DocNode)
                   if
                     = 1 $ count path
-                    , target $ find-target (&struct:get target :children) (rest path)
+                    , target $ find-target
+                      :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
+                      rest path
                   , nil
           :examples $ []
           :schema $ :: 'Fn
@@ -511,7 +513,9 @@
               js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
               flipped js/setInterval 60000 persist-storage!
               ; let
-                raw $ js/localStorage.getItem (&struct:get config/site :storage-key)
+                raw $ js/localStorage.getItem
+                  js/localStorage.getItem $
+                    :storage-key config/site
                 when (some? raw)
                   dispatch! $ :: :hydrate-storage (parse-cirru-edn raw)
               println "|App started."
@@ -528,8 +532,12 @@
         |persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn persist-storage! () (js/console.log |persist)
-              js/localStorage.setItem (&struct:get config/site :storage-key)
-                format-cirru-edn $ &struct:get @*reel :store
+              js/localStorage.setItem
+                js/localStorage.setItem (:storage-key config/site)
+                  format-cirru-edn $
+                    :store @*reel
+                format-cirru-edn $ format-cirru-edn
+                    :store @*reel
           :examples $ []
           :schema $ :: 'Dynamic
         |reload! $ %{} 'CodeEntry (:doc |)
