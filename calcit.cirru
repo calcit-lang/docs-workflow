@@ -1,8 +1,9 @@
 
-{} (:about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `cr query` to inspect and `cr edit`/`cr tree` to modify. Run `cr docs agents --full` first. Manual edits must follow format and schema conventions, then run `cr edit format`.") (:package |docs-workflow) (:version |0.0.21)
+{} (:about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `cr query` to inspect and `cr edit`/`cr tree` to modify. Run `cr docs agents --full` first. Manual edits must follow format and schema conventions, then run `cr edit format`.") (:package |docs-workflow)
   :entries $ {}
     :default $ {} (:description |) (:init-fn 'docs-workflow.main/main!) (:mode :native) (:reload-fn 'docs-workflow.main/reload!)
-      :modules $ [] |respo.calcit/ |lilac/ |memof/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/
+      :feature-policy $ {}
+      :modules $ [] |respo.calcit/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/ |js-ffi/
       :type-slots $ {}
   :files $ {}
     |docs-workflow.comp.container $ %{} 'FileEntry
@@ -574,22 +575,22 @@
           :code $ quote
             defstruct DocNode (:title 'String) (:key 'Dynamic) (:content 'Dynamic) (:children 'List)
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Enum
         |SiteConfig $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstruct SiteConfig $ :storage-key 'String
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Enum
         |State $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstruct State (:selected 'List) (:history 'List)
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Enum
         |Store $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstruct Store $ :states 'Map
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Enum
         |docs $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def docs $ []
