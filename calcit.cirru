@@ -126,10 +126,10 @@
                             ctrl? $ option:unwrap-or
                               js-nullish->option $ .-ctrlKey e
                               , false
-                          cond
-                              and (= |p key) (or meta? ctrl?)
-                              .show quick-modal d!
-                            true $ if (= |Escape key) (.close quick-modal d!) %none
+                          if
+                            and (= |p key) (or meta? ctrl?)
+                            .show quick-modal d!
+                            if (= |Escape key) (.close quick-modal d!) %none
                         %none
                   .render quick-modal
                   when dev? $ comp-reel (>> states :reel) reel ({})
@@ -157,10 +157,12 @@
                               swap! *text-content conj $ .-innerText child
                         if-let
                           key $ get-env |azure-key
-                          speechOne (.join-str @*text-content &newline) (get-env |azure-key) (get-env |lang |en-US)
+                          speechOne (.join-str @*text-content &newline) (get-env |azure-key)
+                            option:unwrap-or (get-env |lang) |en-US
                             fn $
                             fn $
-                          nativeSpeechOne (.join-str @*text-content &newline) (get-env |lang |en-US)
+                          nativeSpeechOne (.join-str @*text-content &newline)
+                            option:unwrap-or (get-env |lang) |en-US
           :examples $ []
           :schema $ :: 'Dynamic
         |comp-history-menu $ %{} 'CodeEntry (:doc |)
