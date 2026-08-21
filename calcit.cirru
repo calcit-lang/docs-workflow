@@ -157,10 +157,12 @@
                               swap! *text-content conj $ .-innerText child
                         if-let
                           key $ get-env |azure-key
-                          speechOne (.join-str @*text-content &newline) (get-env |azure-key) (option:unwrap-or (get-env |lang) |en-US)
+                          speechOne (.join-str @*text-content &newline) (get-env |azure-key)
+                            option:unwrap-or (get-env |lang) |en-US
                             fn $
                             fn $
-                          nativeSpeechOne (.join-str @*text-content &newline) (option:unwrap-or (get-env |lang) |en-US)
+                          nativeSpeechOne (.join-str @*text-content &newline)
+                            option:unwrap-or (get-env |lang) |en-US
           :examples $ []
           :schema $ :: 'Dynamic
         |comp-history-menu $ %{} 'CodeEntry (:doc |)
