@@ -15,11 +15,13 @@ docs-workflow.comp.container/comp-container reel docs
 To develop:
 
 ```bash
-cr --emit-js # watching
+calcit calcit.cirru js
 
 yarn # to install vite
 yarn vite # watching and running on localhost:3000
 ```
+
+For Calcit syntax and upgrade guidance, use `calcit docs read upgrade --full` and the current CLI docs.
 
 calcit-js is using [Calcit Editor](https://github.com/calcit-lang/editor).
 
