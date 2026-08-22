@@ -1,9 +1,9 @@
 {
-  "version": "0.0.23",
+  "version": "0.0.24",
   "name": "@calcit/docs-workflow",
   "packageManager": "yarn@4.12.0",
   "dependencies": {
-    "@calcit/procs": "^0.13.31"
+    "@calcit/procs": "^0.13.32"
   },
   "devDependencies": {
     "bottom-tip": "^0.1.5",
