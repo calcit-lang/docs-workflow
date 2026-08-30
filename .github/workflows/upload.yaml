@@ -10,7 +10,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - uses: actions/setup-node@v6
       with:
@@ -22,10 +22,10 @@ jobs:
         corepack prepare yarn@4.12.0 --activate
         yarn --version
 
-    - uses: calcit-lang/setup-calcit@3b5843cb725963bb4ee158cfe49dad877134963e
+    - uses: calcit-lang/setup-calcit@v1
 
     - name: "install modules"
-      run: caps --ci
+      run: caps --strict --ci
 
     - name: "validate snapshot and compile"
       run: |
