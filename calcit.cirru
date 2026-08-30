@@ -6,14 +6,14 @@
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/ |js-ffi/
       :type-slots $ {}
   :files $ {}
-    |docs-workflow.comp.container $ %{} 'FileEntry
+    'docs-workflow.comp.container $ %{} 'FileEntry
       :defs $ {}
-        |*text-content $ %{} 'CodeEntry (:doc |)
+        '*text-content $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defatom *text-content $ []
           :examples $ []
           :schema $ :: 'Dynamic
-        |comp-child-entries $ %{} 'CodeEntry (:doc |)
+        'comp-child-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-child-entries (parent-path entries on-select)
               div
@@ -41,7 +41,7 @@
           :schema $ :: 'Fn
             {} (:return 'respo.schema/Component)
               :args $ [] 'Dynamic (:: 'List 'docs-workflow.schema/DocNode) 'Fn
-        |comp-container $ %{} 'CodeEntry (:doc |)
+        'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-container (reel docs)
               let
@@ -137,7 +137,7 @@
           :schema $ :: 'Fn
             {} (:return 'respo.schema/Component)
               :args $ [] 'Dynamic (:: 'List 'docs-workflow.schema/DocNode)
-        |comp-doc-page $ %{} 'CodeEntry (:doc |)
+        'comp-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-doc-page (target)
               if (option:some? target)
@@ -165,7 +165,7 @@
                             option:unwrap-or (get-env |lang) |en-US
           :examples $ []
           :schema $ :: 'Dynamic
-        |comp-history-menu $ %{} 'CodeEntry (:doc |)
+        'comp-history-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-history-menu (history docs on-select)
               list-> ({})
@@ -184,7 +184,7 @@
           :schema $ :: 'Fn
             {} (:return 'respo.schema/Component)
               :args $ [] 'List (:: 'List 'docs-workflow.schema/DocNode) 'Fn
-        |comp-nav-tree $ %{} 'CodeEntry (:doc |)
+        'comp-nav-tree $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-nav-tree (docs base-path on-select)
               list-> ({})
@@ -216,7 +216,7 @@
           :schema $ :: 'Fn
             {} (:return 'respo.schema/Component)
               :args $ [] (:: 'List 'docs-workflow.schema/DocNode) 'Dynamic 'Fn
-        |comp-page-entries $ %{} 'CodeEntry (:doc |)
+        'comp-page-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-page-entries (selected parent-path entries on-select)
               div
@@ -248,7 +248,7 @@
           :schema $ :: 'Fn
             {} (:return 'respo.schema/Component)
               :args $ [] 'Dynamic 'Dynamic (:: 'List 'docs-workflow.schema/DocNode) 'Fn
-        |comp-parent-menu $ %{} 'CodeEntry (:doc |)
+        'comp-parent-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-parent-menu (selected docs on-select)
               list->
@@ -275,7 +275,7 @@
           :schema $ :: 'Fn
             {} (:return 'respo.schema/Component)
               :args $ [] 'List (:: 'List 'docs-workflow.schema/DocNode) 'Fn
-        |css-doc $ %{} 'CodeEntry (:doc |)
+        'css-doc $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-doc $ {}
               |& $ {} (:font-size 15)
@@ -287,7 +287,7 @@
                 :border $ str "|1px solid " (hsl 0 0 90)
           :examples $ []
           :schema $ :: 'Dynamic
-        |css-doc-page $ %{} 'CodeEntry (:doc |)
+        'css-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-doc-page $ {}
               |& $ merge ui/expand
@@ -298,14 +298,14 @@
                 :border $ str "|1px solid " (hsl 0 0 86)
           :examples $ []
           :schema $ :: 'Dynamic
-        |css-layout $ %{} 'CodeEntry (:doc |)
+        'css-layout $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-layout $ {}
               |& $ {} (:padding "|0 8px") (:width |20%) (:min-width 266) (:background-color :white)
                 :border-right $ str "|1px solid " (hsl 0 0 94)
           :examples $ []
           :schema $ :: 'Dynamic
-        |css-markdown $ %{} 'CodeEntry (:doc |)
+        'css-markdown $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-markdown $ {}
               "|& p code" $ {}
@@ -317,13 +317,13 @@
               "|& blockquote" $ {} (:margin "|16px 0") (:padding "|1px 16px") (:color |#777) (:background-color |#eee8e8) (:border-left "|4px solid #ccc") (:line-height |1.5em)
           :examples $ []
           :schema $ :: 'Dynamic
-        |css-speech-button $ %{} 'CodeEntry (:doc |)
+        'css-speech-button $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle css-speech-button $ {}
               |& $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
           :examples $ []
           :schema $ :: 'Dynamic
-        |find-entries $ %{} 'CodeEntry (:doc |)
+        'find-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn find-entries (entries path)
               if (empty? path) entries $ if-let
@@ -335,7 +335,7 @@
             {}
               :args $ [] (:: 'List 'docs-workflow.schema/DocNode) 'Dynamic
               :return $ :: 'List 'docs-workflow.schema/DocNode
-        |find-target $ %{} 'CodeEntry (:doc |)
+        'find-target $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn find-target (entries path)
               if (empty? path) nil $ let
@@ -355,7 +355,7 @@
             {}
               :args $ [] (:: 'List 'docs-workflow.schema/DocNode) 'Dynamic
               :return $ :: 'calcit.core/Option 'docs-workflow.schema/DocNode
-        |md $ %{} 'CodeEntry (:doc |)
+        'md $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def md $ hint-fn
               {} $ :features (#{} :js-ffi)
@@ -371,7 +371,7 @@
                 , m
           :examples $ []
           :schema $ :: 'Dynamic
-        |next-path $ %{} 'CodeEntry (:doc |)
+        'next-path $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn next-path (state path)
               -> state (assoc :selected path)
@@ -384,14 +384,14 @@
                     , path
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-child-entries-block $ %{} 'CodeEntry (:doc |)
+        'style-child-entries-block $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-child-entries-block $ {}
               |& $ {} (:padding |8px) (:min-width 320) (:max-width 400) (:background-color :white) (:margin "|8px 12px") (:border-radius |4px)
                 :border $ str "|1px solid " (hsl 0 0 86)
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-child-entry $ %{} 'CodeEntry (:doc |)
+        'style-child-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-child-entry $ {}
               |& $ {} (:padding "|0 8px") (:cursor :pointer) (:transition-duration |200ms) (:line-height |2.4)
@@ -399,14 +399,14 @@
                 :background-color $ hsl 190 10 70 0.1
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-doc-entry $ %{} 'CodeEntry (:doc |)
+        'style-doc-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-doc-entry $ {} (|& style-entry)
               |&:hover $ {}
                 :background-color $ hsl 190 10 70 0.1
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-doc-entry-selected $ %{} 'CodeEntry (:doc |)
+        'style-doc-entry-selected $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-doc-entry-selected $ {}
               |& $ {}
@@ -415,21 +415,21 @@
                 :border-left $ str "|10px solid " (hsl 200 90 70)
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-entry $ %{} 'CodeEntry (:doc |)
+        'style-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def style-entry $ {} (:padding "|0 8px") (:cursor :pointer) (:transition-duration |200ms) (:line-height |2.4)
               :border-bottom $ str "|1px solid " (hsl 0 0 92)
               :border-left $ str "|0px solid " (hsl 200 90 60)
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-history-entry $ %{} 'CodeEntry (:doc |)
+        'style-history-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-history-entry $ {}
               |& $ {} (:cursor :pointer) (:padding "|0 8px") (:font-size 12)
                 :color $ hsl 0 0 60
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-jump $ %{} 'CodeEntry (:doc |)
+        'style-jump $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-jump $ {}
               |& $ {}
@@ -439,14 +439,14 @@
               |&:hover $ {} (:opacity 1)
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-jump-modal $ %{} 'CodeEntry (:doc |)
+        'style-jump-modal $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-jump-modal $ {}
               |& $ {} (:padding "|16px 16px 120px")
                 :border-top $ str "|1px solid " (hsl 0 0 94)
           :examples $ []
           :schema $ :: 'Dynamic
-        |style-title $ %{} 'CodeEntry (:doc |)
+        'style-title $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-title $ {}
               |& $ {} (:font-family ui/font-fancy) (:font-size 18) (:font-weight 300)
@@ -470,20 +470,20 @@
             respo.css :refer $ defstyle
             respo-ui.css :as css
             respo.comp.global-keydown :refer $ comp-global-keydown
-    |docs-workflow.config $ %{} 'FileEntry
+    'docs-workflow.config $ %{} 'FileEntry
       :defs $ {}
-        |dev? $ %{} 'CodeEntry (:doc |)
+        'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def dev? $ = |dev
               option:unwrap-or (get-env |mode) |release
           :examples $ []
           :schema $ :: 'Dynamic
-        |register-languages! $ %{} 'CodeEntry (:doc |)
+        'register-languages! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn register-languages! () (.!registerLanguage hljs |clojure clojure-lang) (.!registerLanguage hljs |bash bash-lang) (.!registerLanguage hljs |rust rust-lang) (.!registerLanguage hljs |glsl glsl-lang)
           :examples $ []
           :schema $ :: 'Dynamic
-        |site $ %{} 'CodeEntry (:doc |)
+        'site $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def site $ %{} docs-workflow.schema/SiteConfig (:storage-key |workflow)
           :examples $ []
@@ -491,21 +491,21 @@
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote
           ns docs-workflow.config $ :require (|highlight.js/lib/languages/rust :default rust-lang) (|highlight.js/lib/languages/clojure :default clojure-lang) (|highlight.js/lib/languages/bash :default bash-lang) (|highlight.js/lib/languages/glsl :default glsl-lang) (|highlight.js :default hljs)
-    |docs-workflow.main $ %{} 'FileEntry
+    'docs-workflow.main $ %{} 'FileEntry
       :defs $ {}
-        |*reel $ %{} 'CodeEntry (:doc |)
+        '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defatom *reel $ -> reel-schema/reel (assoc :base schema/store) (assoc :store schema/store)
           :examples $ []
           :schema $ :: 'Dynamic
-        |dispatch! $ %{} 'CodeEntry (:doc |)
+        'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn dispatch! (op)
               when config/dev? $ println |Dispatch: op
               reset! *reel $ reel-updater updater @*reel op
           :examples $ []
           :schema $ :: 'Dynamic
-        |main! $ %{} 'CodeEntry (:doc |)
+        'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn main! () (config/register-languages!)
               println "|Running mode:" $ if config/dev? |dev |release
@@ -527,12 +527,12 @@
             {} (:return 'Unit)
               :args $ []
               :features $ #{} :js-ffi
-        |mount-target $ %{} 'CodeEntry (:doc |)
+        'mount-target $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def mount-target $ js/document.querySelector |.app
           :examples $ []
           :schema $ :: 'Dynamic
-        |persist-storage! $ %{} 'CodeEntry (:doc |)
+        'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn persist-storage! () (js/console.log |persist)
               js/localStorage.setItem
@@ -543,7 +543,7 @@
                     :store @*reel
           :examples $ []
           :schema $ :: 'Dynamic
-        |reload! $ %{} 'CodeEntry (:doc |)
+        'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn reload! () $ if (nil? build-errors)
               do (remove-watch *reel :changes) (clear-cache!)
@@ -553,7 +553,7 @@
               hud! |error build-errors
           :examples $ []
           :schema $ :: 'Dynamic
-        |render-app! $ %{} 'CodeEntry (:doc |)
+        'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn render-app! () $ render! mount-target (comp-container @*reel schema/docs) dispatch!
           :examples $ []
@@ -571,29 +571,29 @@
             docs-workflow.config :as config
             |./calcit.build-errors :default build-errors
             |bottom-tip :default hud!
-    |docs-workflow.schema $ %{} 'FileEntry
+    'docs-workflow.schema $ %{} 'FileEntry
       :defs $ {}
-        |DocNode $ %{} 'CodeEntry (:doc |)
+        'DocNode $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstruct DocNode (:title 'String) (:key 'Dynamic) (:content 'Dynamic) (:children 'List)
           :examples $ []
           :schema $ :: 'Enum
-        |SiteConfig $ %{} 'CodeEntry (:doc |)
+        'SiteConfig $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstruct SiteConfig $ :storage-key 'String
           :examples $ []
           :schema $ :: 'Enum
-        |State $ %{} 'CodeEntry (:doc |)
+        'State $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstruct State (:selected 'List) (:history 'List)
           :examples $ []
           :schema $ :: 'Enum
-        |Store $ %{} 'CodeEntry (:doc |)
+        'Store $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstruct Store $ :states 'Map
           :examples $ []
           :schema $ :: 'Enum
-        |docs $ %{} 'CodeEntry (:doc |)
+        'docs $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def docs $ []
               %{} DocNode (:title |Guide) (:key :guide)
@@ -622,13 +622,17 @@
                 :children $ []
           :examples $ []
           :schema $ :: 'Dynamic
-        |load-doc $ %{} 'CodeEntry (:doc |)
+        'load-doc $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defmacro load-doc (filename)
               read-file $ str |docs/ filename
           :examples $ []
-          :schema $ :: 'Dynamic
-        |store $ %{} 'CodeEntry (:doc |)
+          :schema $ :: 'Macro
+            {}
+              :capabilities $ #{} :fs-read
+              :expansion $ :: 'Expr 'String
+              :required $ [] (:: 'Expr 'String)
+        'store $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def store $ %{} Store
               :states $ {}
@@ -636,12 +640,12 @@
           :schema $ :: 'docs-workflow.schema/Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote (ns docs-workflow.schema)
-    |docs-workflow.updater $ %{} 'FileEntry
+    'docs-workflow.updater $ %{} 'FileEntry
       :defs $ {}
-        |updater $ %{} 'CodeEntry (:doc |)
+        'updater $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn updater (store op op-id op-time)
-              tag-match op
+              match op
                 (:states cursor s) (update-states store cursor s)
                 (:hydrate-storage d) d
                 _ $ do (eprintln "|unknown op:" op) store
