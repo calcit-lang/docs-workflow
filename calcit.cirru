@@ -117,15 +117,9 @@
                     fn (e d!)
                       if (js-present? e)
                         let
-                            key $ option:unwrap-or
-                              js-nullish->option $ .-key e
-                              , |
-                            meta? $ option:unwrap-or
-                              js-nullish->option $ .-metaKey e
-                              , false
-                            ctrl? $ option:unwrap-or
-                              js-nullish->option $ .-ctrlKey e
-                              , false
+                            key $ unsafe-coerce (.-key e) 'String
+                            meta? $ unsafe-coerce (.-metaKey e) 'Bool
+                            ctrl? $ unsafe-coerce (.-ctrlKey e) 'Bool
                           if
                             and (= |p key) (or meta? ctrl?)
                             .show quick-modal d!
@@ -338,18 +332,20 @@
         'find-target $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn find-target (entries path)
-              if (empty? path) nil $ let
-                  p0 $ option:unwrap-or (first path) nil
-                if-let
-                  target $ find entries
-                    fn (entry)
-                      = p0 $ :key (unsafe-coerce entry 'docs-workflow.schema/DocNode)
-                  if
-                    = 1 $ count path
-                    , target $ find-target
-                      :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                      rest path
-                  , nil
+              if (empty? path) (%none)
+                let
+                    p0 $ option:unwrap-or (first path) nil
+                  if-let
+                    target $ find entries
+                      fn (entry)
+                        = p0 $ :key (unsafe-coerce entry 'docs-workflow.schema/DocNode)
+                    if
+                      = 1 $ count path
+                      %some target
+                      find-target
+                        :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
+                        rest path
+                    %none
           :examples $ []
           :schema $ :: 'Fn
             {}
@@ -376,14 +372,16 @@
             defn next-path (state path)
               -> state (assoc :selected path)
                 update :history $ fn (xs)
-                  if (.includes? xs path) xs $ prepend
+                  if (includes? xs path) xs $ prepend
                     if
                       > (count xs) 4
                       butlast xs
                       , xs
                     , path
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn
+            {} (:return 'docs-workflow.schema/State)
+              :args $ [] 'docs-workflow.schema/State 'List
         'style-child-entries-block $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-child-entries-block $ {}
@@ -466,7 +464,7 @@
             |remarkable/linkify :refer $ linkify
             |highlight.js :default hljs
             |cirru-color :as color
-            respo-alerts.core :refer $ use-modal
+            respo-alerts.core :refer $ [] use-modal ModalActions
             respo.css :refer $ defstyle
             respo-ui.css :as css
             respo.comp.global-keydown :refer $ comp-global-keydown
@@ -535,12 +533,8 @@
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn persist-storage! () (js/console.log |persist)
-              js/localStorage.setItem
-                js/localStorage.setItem (:storage-key config/site)
-                  format-cirru-edn $
-                    :store @*reel
-                format-cirru-edn $ format-cirru-edn
-                    :store @*reel
+              js/localStorage.setItem (:storage-key config/site)
+                format-cirru-edn $ reel-schema/read-field @*reel :store
           :examples $ []
           :schema $ :: 'Dynamic
         'reload! $ %{} 'CodeEntry (:doc |)
