@@ -104,9 +104,9 @@
                     div
                       {} $ :class-name css/expand
                       let
-                          children $ if (option:some? target)
-                            :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                            , []
+                          children $ match target
+                            (:some target-value) (:children target-value)
+                            (:none) ([])
                         if (empty? children) nil $ comp-child-entries (:selected state) children
                           fn (xs d!)
                             d! cursor $ next-path state xs
@@ -117,15 +117,9 @@
                     fn (e d!)
                       if (js-present? e)
                         let
-                            key $ option:unwrap-or
-                              js-nullish->option $ .-key e
-                              , |
-                            meta? $ option:unwrap-or
-                              js-nullish->option $ .-metaKey e
-                              , false
-                            ctrl? $ option:unwrap-or
-                              js-nullish->option $ .-ctrlKey e
-                              , false
+                            key $ unsafe-coerce (.-key e) 'String
+                            meta? $ unsafe-coerce (.-metaKey e) 'Bool
+                            ctrl? $ unsafe-coerce (.-ctrlKey e) 'Bool
                           if
                             and (= |p key) (or meta? ctrl?)
                             .show quick-modal d!
@@ -140,31 +134,35 @@
         'comp-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-doc-page (target)
-              if (option:some? target)
-                div
-                  {} $ :class-name css-doc-page
-                  div $ {} (:class-name css-markdown)
-                    :innerHTML $ .!render md |C
-                  ; a $ {} (:inner-text |Speech)
-                    :class-name $ str-spaced css/link css-speech-button
-                    :on-click $ fn (e d1)
-                      do
-                        reset! *text-content $ []
-                        -> e :event .-target .-parentElement .-firstChild .-children js/Array.from $ .!forEach
-                          fn (child idx ? a)
-                            if
-                              not= |PRE $ .-tagName child
-                              swap! *text-content conj $ .-innerText child
-                        if-let
-                          key $ get-env |azure-key
-                          speechOne (.join-str @*text-content &newline) (get-env |azure-key)
-                            option:unwrap-or (get-env |lang) |en-US
-                            fn $
-                            fn $
-                          nativeSpeechOne (.join-str @*text-content &newline)
-                            option:unwrap-or (get-env |lang) |en-US
+              match target
+                (:some target-value)
+                  div
+                    {} $ :class-name css-doc-page
+                    div $ {} (:class-name css-markdown)
+                      :innerHTML $ .!render md (:content target-value)
+                    ; a $ {} (:inner-text |Speech)
+                      :class-name $ str-spaced css/link css-speech-button
+                      :on-click $ fn (e d1)
+                        do
+                          reset! *text-content $ []
+                          -> e :event .-target .-parentElement .-firstChild .-children js/Array.from $ .!forEach
+                            fn (child idx ? a)
+                              if
+                                not= |PRE $ .-tagName child
+                                swap! *text-content conj $ .-innerText child
+                          if-let
+                            key $ get-env |azure-key
+                            speechOne (.join-str @*text-content &newline) (get-env |azure-key)
+                              option:unwrap-or (get-env |lang) |en-US
+                              fn $
+                              fn $
+                            nativeSpeechOne (.join-str @*text-content &newline)
+                              option:unwrap-or (get-env |lang) |en-US
+                (:none) (<> |)
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn
+            {} (:return 'respo.schema/Component)
+              :args $ [] (:: 'Option 'docs-workflow.schema/DocNode)
         'comp-history-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-history-menu (history docs on-select)
@@ -177,9 +175,9 @@
                         {} (:tab-index 0)
                           :class-name $ str-spaced style-doc-entry style-history-entry
                           :on-click $ fn (e d!) (on-select path d!)
-                        <> $ if (option:some? target)
-                          :title $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                          , |
+                        <> $ match target
+                          (:some target-value) (:title target-value)
+                          (:none) |
           :examples $ []
           :schema $ :: 'Fn
             {} (:return 'respo.schema/Component)
@@ -268,9 +266,9 @@
                               :background-color $ hsl 180 90 94
                             :on-click $ fn (e d!) (on-select sub-path d!)
                           <> $ str "|< "
-                            if (option:some? target)
-                              :title $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                              , "|NOT FOUND"
+                            match target
+                              (:some target-value) (:title target-value)
+                              (:none) "|NOT FOUND"
           :examples $ []
           :schema $ :: 'Fn
             {} (:return 'respo.schema/Component)
@@ -326,10 +324,10 @@
         'find-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn find-entries (entries path)
-              if (empty? path) entries $ if-let
-                target $ find-target entries path
-                :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                do (js/console.warn "|no entries found for" entries path) ([])
+              if (empty? path) entries $ match (find-target entries path)
+                (:some target) (:children target)
+                (:none)
+                  do (js/console.warn "|no entries found for" entries path) ([])
           :examples $ []
           :schema $ :: 'Fn
             {}
@@ -338,23 +336,37 @@
         'find-target $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn find-target (entries path)
-              if (empty? path) nil $ let
-                  p0 $ option:unwrap-or (first path) nil
-                if-let
-                  target $ find entries
-                    fn (entry)
-                      = p0 $ :key (unsafe-coerce entry 'docs-workflow.schema/DocNode)
-                  if
-                    = 1 $ count path
-                    , target $ find-target
-                      :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                      rest path
-                  , nil
+              if (empty? path) (%none)
+                let
+                    p0 $ option:unwrap-or (first path) nil
+                  if-let
+                    target $ find entries
+                      fn (entry)
+                        = p0 $ :key (unsafe-coerce entry 'docs-workflow.schema/DocNode)
+                    if
+                      = 1 $ count path
+                      %some target
+                      find-target
+                        :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
+                        rest path
+                    %none
           :examples $ []
           :schema $ :: 'Fn
             {}
               :args $ [] (:: 'List 'docs-workflow.schema/DocNode) 'Dynamic
               :return $ :: 'calcit.core/Option 'docs-workflow.schema/DocNode
+          :tests $ []
+            %{} 'TestEntry (:name |finds-existing-and-missing-paths)
+              :code $ quote
+                do
+                  assert= (%some |Overview)
+                    .map
+                      find-target docs-workflow.schema/docs $ [] :design :overview
+                      fn (target)
+                        :title $ unsafe-coerce target 'docs-workflow.schema/DocNode
+                  assert= (%none)
+                    find-target docs-workflow.schema/docs $ [] :design :missing
+              :tags $ #{} :unit
         'md $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def md $ hint-fn
@@ -376,14 +388,16 @@
             defn next-path (state path)
               -> state (assoc :selected path)
                 update :history $ fn (xs)
-                  if (.includes? xs path) xs $ prepend
+                  if (includes? xs path) xs $ prepend
                     if
                       > (count xs) 4
                       butlast xs
                       , xs
                     , path
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn
+            {} (:return 'docs-workflow.schema/State)
+              :args $ [] 'docs-workflow.schema/State 'List
         'style-child-entries-block $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defstyle style-child-entries-block $ {}
@@ -466,7 +480,7 @@
             |remarkable/linkify :refer $ linkify
             |highlight.js :default hljs
             |cirru-color :as color
-            respo-alerts.core :refer $ use-modal
+            respo-alerts.core :refer $ [] use-modal ModalActions
             respo.css :refer $ defstyle
             respo-ui.css :as css
             respo.comp.global-keydown :refer $ comp-global-keydown
@@ -535,12 +549,8 @@
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn persist-storage! () (js/console.log |persist)
-              js/localStorage.setItem
-                js/localStorage.setItem (:storage-key config/site)
-                  format-cirru-edn $
-                    :store @*reel
-                format-cirru-edn $ format-cirru-edn
-                    :store @*reel
+              js/localStorage.setItem (:storage-key config/site)
+                format-cirru-edn $ reel-schema/read-field @*reel :store
           :examples $ []
           :schema $ :: 'Dynamic
         'reload! $ %{} 'CodeEntry (:doc |)
