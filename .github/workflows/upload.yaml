@@ -10,7 +10,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.0
+      with:
+        persist-credentials: false
 
     - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
       with:
@@ -22,10 +24,12 @@ jobs:
         corepack prepare yarn@4.12.0 --activate
         yarn --version
 
-    - uses: calcit-lang/setup-calcit@v1
+    - uses: calcit-lang/setup-calcit@704b3f5cd6f9ce3bd1e0c926dbdd1d181adb8180 # v1
 
     - name: "install modules"
-      run: caps --strict --ci
+      run: |
+        caps --strict --ci
+        caps verify --toolchain
 
     - name: "validate snapshot and compile"
       run: |
@@ -35,6 +39,8 @@ jobs:
         calcit calcit.cirru analyze check-types --summary-only --format json
         calcit calcit.cirru analyze weak-types --only schema-dynamic,code-dynamic --intent unresolved --summary-only --format json
         calcit calcit.cirru analyze deprecated --summary-only --format json
+        calcit calcit.cirru analyze dynamic-methods --max 0
+        calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru
         calcit calcit.cirru js
         yarn install --immutable
         yarn vite build --base=./
@@ -42,7 +48,7 @@ jobs:
     - name: Deploy to server
       id: deploy
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: Pendect/action-rsyncer@v2.0.0
+      uses: Pendect/action-rsyncer@8e05ffa5c93e5d9c9b167796b26044d2c616b2b9 # v2.0.0
       env:
         DEPLOY_KEY: ${{secrets.rsync_private_key}}
       with:
@@ -58,13 +64,13 @@ jobs:
 
     # also need to upload mddook
 
-    - uses: supplypike/setup-bin@v3
+    - uses: supplypike/setup-bin@9898cf2387884b01db29fd4849759f2d391ef7d0 # v3
       with:
         uri: 'https://github.com/rust-lang/mdBook/releases/download/v0.4.14/mdbook-v0.4.14-x86_64-unknown-linux-gnu.tar.gz'
         name: 'mdbook'
         version: '0.4.14'
 
-    - uses: supplypike/setup-bin@v3
+    - uses: supplypike/setup-bin@9898cf2387884b01db29fd4849759f2d391ef7d0 # v3
       with:
         uri: 'https://github.com/Michael-F-Bryan/mdbook-linkcheck/releases/download/v0.7.6/mdbook-linkcheck.x86_64-unknown-linux-gnu.zip'
         name: 'mdbook-linkcheck'
@@ -76,7 +82,7 @@ jobs:
     - name: Deploy to server
       id: deploy-mdbook
       if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      uses: Pendect/action-rsyncer@v2.0.0
+      uses: Pendect/action-rsyncer@8e05ffa5c93e5d9c9b167796b26044d2c616b2b9 # v2.0.0
       env:
         DEPLOY_KEY: ${{secrets.rsync_private_key}}
       with:
