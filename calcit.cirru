@@ -104,9 +104,9 @@
                     div
                       {} $ :class-name css/expand
                       let
-                          children $ if (option:some? target)
-                            :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                            , []
+                          children $ match target
+                            (:some target-value) (:children target-value)
+                            (:none) ([])
                         if (empty? children) nil $ comp-child-entries (:selected state) children
                           fn (xs d!)
                             d! cursor $ next-path state xs
@@ -134,31 +134,35 @@
         'comp-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-doc-page (target)
-              if (option:some? target)
-                div
-                  {} $ :class-name css-doc-page
-                  div $ {} (:class-name css-markdown)
-                    :innerHTML $ .!render md |C
-                  ; a $ {} (:inner-text |Speech)
-                    :class-name $ str-spaced css/link css-speech-button
-                    :on-click $ fn (e d1)
-                      do
-                        reset! *text-content $ []
-                        -> e :event .-target .-parentElement .-firstChild .-children js/Array.from $ .!forEach
-                          fn (child idx ? a)
-                            if
-                              not= |PRE $ .-tagName child
-                              swap! *text-content conj $ .-innerText child
-                        if-let
-                          key $ get-env |azure-key
-                          speechOne (.join-str @*text-content &newline) (get-env |azure-key)
-                            option:unwrap-or (get-env |lang) |en-US
-                            fn $
-                            fn $
-                          nativeSpeechOne (.join-str @*text-content &newline)
-                            option:unwrap-or (get-env |lang) |en-US
+              match target
+                (:some target-value)
+                  div
+                    {} $ :class-name css-doc-page
+                    div $ {} (:class-name css-markdown)
+                      :innerHTML $ .!render md (:content target-value)
+                    ; a $ {} (:inner-text |Speech)
+                      :class-name $ str-spaced css/link css-speech-button
+                      :on-click $ fn (e d1)
+                        do
+                          reset! *text-content $ []
+                          -> e :event .-target .-parentElement .-firstChild .-children js/Array.from $ .!forEach
+                            fn (child idx ? a)
+                              if
+                                not= |PRE $ .-tagName child
+                                swap! *text-content conj $ .-innerText child
+                          if-let
+                            key $ get-env |azure-key
+                            speechOne (.join-str @*text-content &newline) (get-env |azure-key)
+                              option:unwrap-or (get-env |lang) |en-US
+                              fn $
+                              fn $
+                            nativeSpeechOne (.join-str @*text-content &newline)
+                              option:unwrap-or (get-env |lang) |en-US
+                (:none) (<> |)
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn
+            {} (:return 'respo.schema/Component)
+              :args $ [] (:: 'Option 'docs-workflow.schema/DocNode)
         'comp-history-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defcomp comp-history-menu (history docs on-select)
@@ -171,9 +175,9 @@
                         {} (:tab-index 0)
                           :class-name $ str-spaced style-doc-entry style-history-entry
                           :on-click $ fn (e d!) (on-select path d!)
-                        <> $ if (option:some? target)
-                          :title $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                          , |
+                        <> $ match target
+                          (:some target-value) (:title target-value)
+                          (:none) |
           :examples $ []
           :schema $ :: 'Fn
             {} (:return 'respo.schema/Component)
@@ -262,9 +266,9 @@
                               :background-color $ hsl 180 90 94
                             :on-click $ fn (e d!) (on-select sub-path d!)
                           <> $ str "|< "
-                            if (option:some? target)
-                              :title $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                              , "|NOT FOUND"
+                            match target
+                              (:some target-value) (:title target-value)
+                              (:none) "|NOT FOUND"
           :examples $ []
           :schema $ :: 'Fn
             {} (:return 'respo.schema/Component)
@@ -320,10 +324,10 @@
         'find-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote
             defn find-entries (entries path)
-              if (empty? path) entries $ if-let
-                target $ find-target entries path
-                :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                do (js/console.warn "|no entries found for" entries path) ([])
+              if (empty? path) entries $ match (find-target entries path)
+                (:some target) (:children target)
+                (:none)
+                  do (js/console.warn "|no entries found for" entries path) ([])
           :examples $ []
           :schema $ :: 'Fn
             {}
@@ -351,6 +355,18 @@
             {}
               :args $ [] (:: 'List 'docs-workflow.schema/DocNode) 'Dynamic
               :return $ :: 'calcit.core/Option 'docs-workflow.schema/DocNode
+          :tests $ []
+            %{} 'TestEntry (:name |finds-existing-and-missing-paths)
+              :code $ quote
+                do
+                  assert= (%some |Overview)
+                    .map
+                      find-target docs-workflow.schema/docs $ [] :design :overview
+                      fn (target)
+                        :title $ unsafe-coerce target 'docs-workflow.schema/DocNode
+                  assert= (%none)
+                    find-target docs-workflow.schema/docs $ [] :design :missing
+              :tags $ #{} :unit
         'md $ %{} 'CodeEntry (:doc |)
           :code $ quote
             def md $ hint-fn
