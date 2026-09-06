@@ -29,6 +29,7 @@ jobs:
     - name: "install modules"
       run: |
         caps --strict --ci
+        yarn install --immutable
         caps verify --toolchain
 
     - name: "validate snapshot and compile"
@@ -42,7 +43,6 @@ jobs:
         calcit calcit.cirru analyze dynamic-methods --max 0
         calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru
         calcit calcit.cirru js
-        yarn install --immutable
         yarn vite build --base=./
 
     - name: Deploy to server
