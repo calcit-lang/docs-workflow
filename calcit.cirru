@@ -41,9 +41,8 @@
           :examples $ []
           :schema $ :: 'Fn $ {}
             :return 'respo.schema/Component
-            :args $ [] 'Dynamic
-              :: 'List 'docs-workflow.schema/DocNode
-              , 'Fn
+            :args $ [] (:: 'List 'Tag) (:: 'List 'Dynamic) 'Dynamic
+            :features $ #{} :js-ffi
         'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-container (reel docs)
             let
@@ -55,7 +54,7 @@
                 state $ unsafe-coerce
                   or (&map:get states :data)
                     %{} docs-workflow.schema/State
-                      :selected $ [] $ :key :guide
+                      :selected $ [] :key :guide
                       :history $ []
                   , 'docs-workflow.schema/State
                 selected $ :selected state
@@ -63,7 +62,8 @@
                 quick-modal $ use-modal (>> states :quick)
                   {} (:title "|Quick jump")
                     :card-style $ {} (:max-width |18vw) (:height |90vh) (:max-height |90vh) (:margin-left 0)
-                    :backdrop-style $ {} $ :background-color (hsl 0 29 10 0.2)
+                    :backdrop-style $ {} $ :background-color
+                      hsl 0 29 10 $ %some 0.2
                     :render $ fn (on-close)
                       div
                         {} $ :class-name $ str-spaced ui/expand style-jump-modal
@@ -94,8 +94,10 @@
                       entries $ find-entries docs parent-path
                     div
                       {} $ :class-name css/expand
-                      comp-page-entries (last selected) parent-path entries $ fn (xs d!)
-                        d! cursor $ next-path state xs
+                      comp-page-entries
+                        option:unwrap $ last selected
+                        , parent-path entries $ fn (xs d!)
+                          d! cursor $ next-path state xs
                   div
                     {} $ :style $ {} (:margin-top 20)
                     <> |Histories style-title
@@ -116,22 +118,24 @@
                 comp-global-keydown
                   {} $ :disabled-commands $ #{} |p
                   fn (e d!)
-                    if (js-present? e)
-                      let
-                          key $ unsafe-coerce (.-key e) 'String
-                          meta? $ unsafe-coerce (.-metaKey e) 'Bool
-                          ctrl? $ unsafe-coerce (.-ctrlKey e) 'Bool
-                        if
-                          and (= |p key) (or meta? ctrl?)
-                          .show quick-modal d!
-                          if (= |Escape key) (.close quick-modal d!) %none
-                      %none
+                    hint-fn $ {}
+                      :args $ [] 'js-ffi.browser/KeyboardEventHost 'Dynamic
+                      :return 'Unit
+                    let
+                        key $ .-key e
+                        meta? $ .-meta-key? e
+                        ctrl? $ .-ctrl-key? e
+                      if
+                        and (= |p key) (or meta? ctrl?)
+                        .show quick-modal d!
+                        if (= |Escape key) (.close quick-modal d!) %none
                 .render quick-modal
                 when dev? $ comp-reel (>> states :reel) reel $ {}
           :examples $ []
           :schema $ :: 'Fn $ {}
             :return 'respo.schema/Component
             :args $ [] 'Dynamic $ :: 'List 'docs-workflow.schema/DocNode
+            :features $ #{} :js-ffi
         'comp-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-doc-page (target)
             match target
@@ -162,6 +166,7 @@
           :schema $ :: 'Fn $ {}
             :return 'respo.schema/Component
             :args $ [] $ :: 'Option 'docs-workflow.schema/DocNode
+            :features $ #{} :js-ffi
         'comp-history-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-history-menu (history docs on-select)
             list-> ({})
@@ -178,9 +183,11 @@
           :examples $ []
           :schema $ :: 'Fn $ {}
             :return 'respo.schema/Component
-            :args $ [] 'List
+            :args $ []
+              :: 'List $ :: 'List 'Tag
               :: 'List 'docs-workflow.schema/DocNode
-              , 'Fn
+              , 'Dynamic
+            :features $ #{} :js-ffi
         'comp-nav-tree $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-nav-tree (docs base-path on-select)
             list-> ({})
@@ -211,7 +218,9 @@
             :return 'respo.schema/Component
             :args $ []
               :: 'List 'docs-workflow.schema/DocNode
-              , 'Dynamic 'Fn
+              :: 'List 'Tag
+              , 'Dynamic
+            :features $ #{} :js-ffi
         'comp-page-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-page-entries (selected parent-path entries on-select)
             div
@@ -239,9 +248,10 @@
           :examples $ []
           :schema $ :: 'Fn $ {}
             :return 'respo.schema/Component
-            :args $ [] 'Dynamic 'Dynamic
+            :args $ [] 'Tag (:: 'List 'Tag)
               :: 'List 'docs-workflow.schema/DocNode
-              , 'Fn
+              , 'Dynamic
+            :features $ #{} :js-ffi
         'comp-parent-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-parent-menu (selected docs on-select)
             list->
@@ -263,10 +273,11 @@
                         <> $ str "|< " $ match target
                           (:some target-value) (:title target-value)
                           (:none) "|NOT FOUND"
+                []
           :examples $ []
           :schema $ :: 'Fn $ {}
             :return 'respo.schema/Component
-            :args $ [] 'List
+            :args $ [] (:: 'List 'Tag)
               :: 'List 'docs-workflow.schema/DocNode
               , 'Fn
         'css-doc $ %{} 'CodeEntry (:doc |)
@@ -285,7 +296,7 @@
           :code $ quote $ defstyle css-doc-page
             {}
               |& $ merge ui/expand $ {} (:padding "|8px 16px")
-                :background-color $ hsl 0 0 100 0.6
+                :background-color $ hsl 0 0 100 $ %some 0.6
                 :position :relative
               "|& iframe" $ {} $ :border
                 str "|1px solid " $ hsl 0 0 86
@@ -338,28 +349,32 @@
             :args $ []
               :: 'List 'docs-workflow.schema/DocNode
               , 'Dynamic
+            :features $ #{} :js-ffi
             :return $ :: 'List 'docs-workflow.schema/DocNode
         'find-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn find-target (entries path)
             if (empty? path) (%none)
               let
                   p0 $ option:unwrap-or (first path) nil
-                if-let
-                  target $ find entries $ fn (entry)
+                match
+                  find entries $ fn (entry)
+                    hint-fn $ {}
+                      :args $ [] 'docs-workflow.schema/DocNode
+                      :return 'Bool
                     = p0 $ :key $ unsafe-coerce entry 'docs-workflow.schema/DocNode
-                  if
-                    = 1 $ count path
-                    %some target
-                    find-target
-                      :children $ unsafe-coerce target 'docs-workflow.schema/DocNode
-                      rest path
-                  %none
+                  (:some target)
+                    if
+                      = 1 $ count path
+                      %some target
+                      find-target (:children target) (rest path)
+                  (:none) (%none)
           :examples $ []
           :schema $ :: 'Fn $ {}
             :args $ []
               :: 'List 'docs-workflow.schema/DocNode
-              , 'Dynamic
-            :return $ :: 'calcit.core/Option 'docs-workflow.schema/DocNode
+              :: 'List 'Tag
+            :features $ #{} :js-ffi
+            :return $ :: 'Option 'docs-workflow.schema/DocNode
           :tests $ [] $ %{} 'TestEntry
             :name |finds-existing-and-missing-paths
             :code $ quote $ do
@@ -390,6 +405,9 @@
           :code $ quote $ defn next-path (state path)
             -> state (assoc :selected path)
               update :history $ fn (xs)
+                hint-fn $ {}
+                  :args $ [] $ :: 'List (:: 'List 'Tag)
+                  :return $ :: 'List $ :: 'List 'Tag
                 if (includes? xs path) xs $ prepend
                   if
                     > (count xs) 4
@@ -399,7 +417,7 @@
           :examples $ []
           :schema $ :: 'Fn $ {}
             :return 'docs-workflow.schema/State
-            :args $ [] 'docs-workflow.schema/State 'List
+            :args $ [] 'docs-workflow.schema/State $ :: 'List 'Tag
         'style-child-entries-block $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-child-entries-block
             {} $ |& $ {} (:padding |8px) (:min-width 320) (:max-width 400)
@@ -415,13 +433,15 @@
               |& $ {} (:padding "|0 8px") (:cursor :pointer)
                 :transition-duration |200ms
                 :line-height |2.4
-              |&:hover $ {} $ :background-color (hsl 190 10 70 0.1)
+              |&:hover $ {} $ :background-color
+                hsl 190 10 70 $ %some 0.1
           :examples $ []
           :schema $ :: 'Dynamic
         'style-doc-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-doc-entry
             {} (|& style-entry)
-              |&:hover $ {} $ :background-color (hsl 190 10 70 0.1)
+              |&:hover $ {} $ :background-color
+                hsl 190 10 70 $ %some 0.1
           :examples $ []
           :schema $ :: 'Dynamic
         'style-doc-entry-selected $ %{} 'CodeEntry (:doc |)
@@ -496,12 +516,22 @@
           :schema $ :: 'Dynamic
         'register-languages! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn register-languages! ()
-            .!registerLanguage hljs |clojure clojure-lang
-            .!registerLanguage hljs |bash bash-lang
-            .!registerLanguage hljs |rust rust-lang
-            .!registerLanguage hljs |glsl glsl-lang
+            .register-language
+              unsafe-coerce hljs 'docs-workflow.schema/HighlightJsHost
+              , |clojure clojure-lang
+            .register-language
+              unsafe-coerce hljs 'docs-workflow.schema/HighlightJsHost
+              , |bash bash-lang
+            .register-language
+              unsafe-coerce hljs 'docs-workflow.schema/HighlightJsHost
+              , |rust rust-lang
+            .register-language
+              unsafe-coerce hljs 'docs-workflow.schema/HighlightJsHost
+              , |glsl glsl-lang
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+            :args $ []
+            :features $ #{} :js-ffi
         'site $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site
             %{} docs-workflow.schema/SiteConfig $ :storage-key |workflow
@@ -527,7 +557,8 @@
             when config/dev? $ println |Dispatch: op
             reset! *reel $ reel-updater updater @*reel op
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+            :args $ [] 'Dynamic
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! ()
             config/register-languages!
@@ -549,31 +580,37 @@
             :args $ []
             :features $ #{} :js-ffi
         'mount-target $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def mount-target
+          :code $ quote $ defn mount-target ()
             js/document.querySelector |.app
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+            :args $ []
+            :features $ #{} :js-ffi
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn persist-storage! () (js/console.log |persist)
             js/localStorage.setItem (:storage-key config/site)
               format-cirru-edn $ reel-schema/read-field @*reel :store
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+            :args $ []
+            :features $ #{} :js-ffi
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (nil? build-errors)
               do (remove-watch *reel :changes) (clear-cache!)
                 add-watch *reel :changes $ fn (reel prev) (render-app!)
-                reset! *reel $ refresh-reel @*reel schema/store updater
+                reset! *reel $ assert-type (refresh-reel @*reel schema/store updater) (:: 'Map 'Tag 'Dynamic)
                 hud! |ok~ |Ok
               hud! |error build-errors
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+            :args $ []
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            render! mount-target (comp-container @*reel schema/docs) dispatch!
+            render! (mount-target) (comp-container @*reel schema/docs) dispatch!
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+            :args $ []
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.main
           :require
@@ -590,9 +627,19 @@
     'docs-workflow.schema $ %{} 'FileEntry
       :defs $ {}
         'DocNode $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defstruct DocNode (:title 'String) (:key 'Dynamic) (:content 'Dynamic) (:children 'List)
+          :code $ quote $ defstruct DocNode (:title 'String) (:key 'Dynamic) (:content 'Dynamic)
+            :children $ :: 'List 'docs-workflow.schema/DocNode
           :examples $ []
           :schema $ :: 'Enum
+        'HighlightJsHost $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ deftrait HighlightJsHost
+            .register-language $ :: 'Fn $ {}
+              :args $ [] 'docs-workflow.schema/HighlightJsHost 'String 'Dynamic
+              :return 'Unit
+          :examples $ []
+          :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
+            :names $ {} $ :register-language |registerLanguage
+          :schema $ :: 'Trait
         'SiteConfig $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct SiteConfig (:storage-key 'String)
           :examples $ []
@@ -657,7 +704,8 @@
               (:hydrate-storage d) d
               _ $ do (eprintln "|unknown op:" op) store
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+            :args $ [] 'Dynamic 'Dynamic 'Dynamic 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.updater
           :require $ respo.cursor :refer $ update-states
