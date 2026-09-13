@@ -13,65 +13,47 @@
       :codeNil 1
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
+      :schemaDynamic 0
       :typeNone 0
       :typeNotFull 1
-      :unresolved 2
+      :unresolved 1
       :unsafeCoerce 3
     |docs-workflow.comp.container/comp-container $ {} (:codeDynamic 0)
       :codeNil 2
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
+      :schemaDynamic 0
       :typeNone 0
       :typeNotFull 1
-      :unresolved 3
-      :unsafeCoerce 6
-    |docs-workflow.comp.container/comp-doc-page $ {} (:codeDynamic 0)
-      :codeNil 0
-      :declaredOptional 0
-      :deprecatedCalls 0
-      :schemaDynamic 1
-      :typeNone 1
-      :typeNotFull 1
-      :unresolved 1
-      :unsafeCoerce 0
+      :unresolved 2
+      :unsafeCoerce 2
     |docs-workflow.comp.container/comp-history-menu $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
+      :schemaDynamic 0
       :typeNone 0
       :typeNotFull 1
-      :unresolved 1
-      :unsafeCoerce 1
+      :unresolved 0
+      :unsafeCoerce 0
     |docs-workflow.comp.container/comp-nav-tree $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
+      :schemaDynamic 0
       :typeNone 0
       :typeNotFull 1
-      :unresolved 1
+      :unresolved 0
       :unsafeCoerce 5
     |docs-workflow.comp.container/comp-page-entries $ {} (:codeDynamic 0)
       :codeNil 1
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 2
-      :typeNone 0
-      :typeNotFull 1
-      :unresolved 3
-      :unsafeCoerce 4
-    |docs-workflow.comp.container/comp-parent-menu $ {} (:codeDynamic 0)
-      :codeNil 0
-      :declaredOptional 0
-      :deprecatedCalls 0
-      :schemaDynamic 1
+      :schemaDynamic 0
       :typeNone 0
       :typeNotFull 1
       :unresolved 1
-      :unsafeCoerce 1
+      :unsafeCoerce 4
     |docs-workflow.comp.container/css-doc $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
@@ -121,20 +103,20 @@
       :codeNil 0
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
+      :schemaDynamic 0
       :typeNone 0
       :typeNotFull 1
-      :unresolved 1
-      :unsafeCoerce 1
+      :unresolved 0
+      :unsafeCoerce 0
     |docs-workflow.comp.container/find-target $ {} (:codeDynamic 0)
       :codeNil 1
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
+      :schemaDynamic 0
       :typeNone 0
-      :typeNotFull 1
-      :unresolved 2
-      :unsafeCoerce 2
+      :typeNotFull 0
+      :unresolved 1
+      :unsafeCoerce 1
     |docs-workflow.comp.container/md $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
@@ -144,15 +126,6 @@
       :typeNotFull 1
       :unresolved 1
       :unsafeCoerce 1
-    |docs-workflow.comp.container/next-path $ {} (:codeDynamic 0)
-      :codeNil 0
-      :declaredOptional 0
-      :deprecatedCalls 0
-      :schemaDynamic 1
-      :typeNone 0
-      :typeNotFull 1
-      :unresolved 1
-      :unsafeCoerce 0
     |docs-workflow.comp.container/style-child-entries-block $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
@@ -247,11 +220,11 @@
       :codeNil 0
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
-      :typeNone 1
+      :schemaDynamic 0
+      :typeNone 0
       :typeNotFull 1
-      :unresolved 1
-      :unsafeCoerce 0
+      :unresolved 0
+      :unsafeCoerce 4
     |docs-workflow.config/site $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
@@ -274,35 +247,35 @@
       :codeNil 0
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
-      :typeNone 1
+      :schemaDynamic 2
+      :typeNone 0
       :typeNotFull 1
-      :unresolved 1
+      :unresolved 2
       :unsafeCoerce 0
     |docs-workflow.main/mount-target $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
-      :typeNone 1
+      :schemaDynamic 0
+      :typeNone 0
       :typeNotFull 1
-      :unresolved 1
+      :unresolved 0
       :unsafeCoerce 0
     |docs-workflow.main/persist-storage! $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
-      :typeNone 1
+      :schemaDynamic 0
+      :typeNone 0
       :typeNotFull 1
-      :unresolved 1
+      :unresolved 0
       :unsafeCoerce 0
     |docs-workflow.main/reload! $ {} (:codeDynamic 0)
       :codeNil 0
       :declaredOptional 0
       :deprecatedCalls 0
       :schemaDynamic 1
-      :typeNone 1
+      :typeNone 0
       :typeNotFull 1
       :unresolved 1
       :unsafeCoerce 0
@@ -311,7 +284,7 @@
       :declaredOptional 0
       :deprecatedCalls 0
       :schemaDynamic 1
-      :typeNone 1
+      :typeNone 0
       :typeNotFull 1
       :unresolved 1
       :unsafeCoerce 0
@@ -328,20 +301,21 @@
       :codeNil 0
       :declaredOptional 0
       :deprecatedCalls 0
-      :schemaDynamic 1
-      :typeNone 1
+      :schemaDynamic 5
+      :typeNone 0
       :typeNotFull 1
-      :unresolved 1
+      :unresolved 5
       :unsafeCoerce 0
   :metrics $ {} (:codeDynamic 0)
     :codeNil 5
     :declaredOptional 0
     :deprecatedCalls 0
-    :schemaDynamic 38
-    :typeNone 24
-    :typeNotFull 35
-    :unresolved 43
-    :unsafeCoerce 24
-  :scope $ {} (:includeDependencies false)
+    :schemaDynamic 29
+    :typeNone 16
+    :typeNotFull 31
+    :unresolved 34
+    :unsafeCoerce 20
+  :scope $ {}
+    :includeDependencies false
     :namespace nil
     :namespacePrefix nil
