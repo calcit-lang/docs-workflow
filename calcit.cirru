@@ -46,9 +46,7 @@
                 cursor $ or (&map:get states :cursor) ([])
                 state $ unsafe-coerce
                   or (&map:get states :data)
-                    %{} docs-workflow.schema/State
-                      :selected $ [] :key :guide
-                      :history $ []
+                    docs-workflow.schema/State :selected ([] :key :guide) :history $ []
                   , 'docs-workflow.schema/State
                 selected $ :selected state
                 history $ :history state
@@ -139,24 +137,23 @@
                   ; a $ {} (:inner-text |Speech)
                     :class-name $ str-spaced css/link css-speech-button
                     :on-click $ fn (e d1)
-                      do
-                        reset! *text-content $ []
-                        -> e :event .-target .-parentElement .-firstChild .-children js/Array.from $ .!forEach $ fn (child idx ? a)
-                          if
-                            not= |PRE $ .-tagName child
-                            swap! *text-content conj $ .-innerText child
-                        if-let
-                          key $ get-env |azure-key
-                          speechOne (.join-str @*text-content &newline) (get-env |azure-key)
-                            option:unwrap-or (get-env |lang) |en-US
-                            fn $
-                            fn $
-                          nativeSpeechOne (.join-str @*text-content &newline)
-                            option:unwrap-or (get-env |lang) |en-US
+                      reset! *text-content $ []
+                      -> e :event .-target .-parentElement .-firstChild .-children js/Array.from $ .!forEach $ fn (child idx ? a)
+                        if
+                          not= |PRE $ .-tagName child
+                          swap! *text-content conj $ .-innerText child
+                      if-let
+                        key $ get-env |azure-key
+                        speechOne (.join-str @*text-content &newline) (get-env |azure-key)
+                          option:unwrap-or (get-env |lang) |en-US
+                          fn $
+                          fn $
+                        nativeSpeechOne (.join-str @*text-content &newline)
+                          option:unwrap-or (get-env |lang) |en-US
               (:none) (<> |)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] $ :: 'Option 'docs-workflow.schema/DocNode
+            :args $ [] $ :: 'calcit.core/Option 'docs-workflow.schema/DocNode
             :features $ #{} :js-ffi
         'comp-history-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-history-menu (history docs on-select)
@@ -334,7 +331,7 @@
           :schema $ :: 'Fn $ {}
             :args $ [] (:: 'List 'docs-workflow.schema/DocNode) (:: 'List 'Tag)
             :features $ #{} :js-ffi
-            :return $ :: 'Option 'docs-workflow.schema/DocNode
+            :return $ :: 'calcit.core/Option 'docs-workflow.schema/DocNode
           :tests $ [] $ %{} 'TestEntry (:name |finds-existing-and-missing-paths)
             :code $ quote $ do
               assert= (%some |Overview)
@@ -476,8 +473,7 @@
             :args $ []
             :features $ #{} :js-ffi
         'site $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def site
-            %{} docs-workflow.schema/SiteConfig $ :storage-key |workflow
+          :code $ quote $ def site (docs-workflow.schema/SiteConfig :storage-key |workflow)
           :examples $ []
           :schema $ :: 'Dynamic
       :ns $ %{} 'NsEntry (:doc |)
@@ -591,29 +587,13 @@
         'docs $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def docs
             []
-              %{} DocNode (:title |Guide) (:key :guide)
-                :content $ load-doc |guide.md
-                :children $ []
-              %{} DocNode (:title |Design) (:key :design)
-                :content $ load-doc |design.md
-                :children $ []
-                  %{} DocNode (:title |Guide) (:key :guide)
-                    :content $ load-doc |guide.md
-                    :children $ []
-                  %{} DocNode (:title |Design) (:key :design)
-                    :content $ load-doc |design.md
-                    :children $ []
-                  %{} DocNode (:title |Overview) (:key :overview)
-                    :content $ load-doc |overview.md
-                    :children $ [] $ %{} DocNode (:title |Cirru) (:key :cirru)
-                      :content $ load-doc |cirru.md
-                      :children $ []
-              %{} DocNode (:title |About) (:key :about)
-                :content $ load-doc |about.md
-                :children $ []
-              %{} DocNode (:title |Cirru) (:key :cirru)
-                :content $ load-doc |cirru.md
-                :children $ []
+              DocNode :title |Guide :key :guide :content (load-doc |guide.md) :children $ []
+              DocNode :title |Design :key :design :content (load-doc |design.md) :children $ []
+                DocNode :title |Guide :key :guide :content (load-doc |guide.md) :children $ []
+                DocNode :title |Design :key :design :content (load-doc |design.md) :children $ []
+                DocNode :title |Overview :key :overview :content (load-doc |overview.md) :children $ [] $ DocNode :title |Cirru :key :cirru :content (load-doc |cirru.md) :children ([])
+              DocNode :title |About :key :about :content (load-doc |about.md) :children $ []
+              DocNode :title |Cirru :key :cirru :content (load-doc |cirru.md) :children $ []
           :examples $ []
           :schema $ :: 'Dynamic
         'load-doc $ %{} 'CodeEntry (:doc |)
@@ -626,7 +606,7 @@
             :required $ [] $ :: 'Expr 'String
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
-            %{} Store $ :states $ {}
+            Store :states $ {}
           :examples $ []
           :schema $ :: 'docs-workflow.schema/Store
       :ns $ %{} 'NsEntry (:doc |)
