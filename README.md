@@ -6,7 +6,9 @@ Demo http://repo.calcit-lang.org/docs-workflow/ .
 
 ### APIs
 
-```cirru
+With `reel` and `docs` supplied by the caller:
+
+```cirru.no-check
 docs-workflow.comp.container/comp-container reel docs
 ```
 

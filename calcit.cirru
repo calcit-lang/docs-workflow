@@ -338,7 +338,10 @@
                 .map
                   find-target docs-workflow.schema/docs $ [] :design :overview
                   fn (target)
-                    :title $ unsafe-coerce target 'docs-workflow.schema/DocNode
+                    hint-fn $ {}
+                      :args $ [] 'docs-workflow.schema/DocNode
+                      :return 'String
+                    :title target
               assert= (%none)
                 find-target docs-workflow.schema/docs $ [] :design :missing
             :tags $ #{} :unit
