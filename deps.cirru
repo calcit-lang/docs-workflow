@@ -1,7 +1,7 @@
 
 {} (:calcit-version |0.27.0)
   :version |0.0.32
-  :dependencies $ {} (|Respo/alerts.calcit |0.10.46)
+  :dependencies $ {} (|Respo/alerts.calcit |0.10.47)
     |Respo/reel.calcit |0.6.33-alpha.2
     |Respo/respo-markdown.calcit |0.4.46
     |Respo/respo-router.calcit |0.8.28-alpha.4
