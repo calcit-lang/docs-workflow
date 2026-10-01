@@ -107,6 +107,8 @@ jobs:
           echo "$RUNNER_TEMP/mdbook-bin" >> "$GITHUB_PATH"
 
       - name: Build mdBook
+        env:
+          MDBOOK_OUTPUT__HTML__SITE_URL: ${{ steps.asset-path.outputs.base-url }}
         run: |
           mdbook build
           mv book/html/index.html book/html/mdbook.html
