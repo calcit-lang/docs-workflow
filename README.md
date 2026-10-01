@@ -40,6 +40,8 @@ http-server dist/
 
 CI 保留规范格式、严格入口、全部业务 namespace 公开定义、原质量基线及定义内测试，删除重复诊断报告。前端与 mdBook 都使用 COS Action 内置 verify，不增加单独校验脚本。PR 资源按 PR/run/attempt 隔离，同一 PR 或生产上传不会被新运行取消；原生产前缀、两个服务器部署步骤和 mdbook.html 入口保持不变，mdBook 二进制下载仍检查原 SHA256。
 
+mdBook 构建时将 `output.html.site-url` 设置为同次上传的公开 base URL，避免默认 404 页从域名根目录加载脚本和样式；COS action v1.2.0 内置检查 HTML 同域资源引用，再核验公开内容，无额外项目脚本。
+
 ### Workflow
 
 https://github.com/mvc-works/docs-calcit-workflow
