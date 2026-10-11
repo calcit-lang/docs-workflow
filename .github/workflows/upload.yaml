@@ -40,10 +40,13 @@ jobs:
         with:
           tools: calcit,caps
           caps-version: "0.1.1"
+          deps-file: deps.cirru
 
       - name: Resolve immutable dependencies
         run: |
           set -euo pipefail
+          test ! -e compact.cirru
+          test ! -e package.cirru
           # Published dependencies request different compatible js-ffi and
           # Respo versions; Caps records the deterministic highest selections.
           caps --ci
@@ -55,15 +58,16 @@ jobs:
           set -euo pipefail
           calcit edit format
           git diff --exit-code -- calcit.cirru
-          calcit calcit.cirru --check-only
-          calcit calcit.cirru analyze check-public \
+          calcit --check-only --all-defs --format json
+          calcit --check-only \
             --ns docs-workflow.comp.container \
             --ns docs-workflow.config \
             --ns docs-workflow.main \
             --ns docs-workflow.schema \
             --ns docs-workflow.updater \
             --summary-only --format json
-          calcit calcit.cirru analyze quality --baseline config/calcit-quality.cirru
+          calcit analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0'
+          calcit analyze weak-types --only dynamic-method --summary-only --format json | jq -e '.data.summary.findings == 0'
           calcit calcit.cirru test --require-match --summary-only --format json
 
       - name: Select CDN asset path
