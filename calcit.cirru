@@ -3,7 +3,7 @@
   :about "|Machine-generated snapshot. Do not edit directly — changes will be overwritten. Use `calcit query` to inspect and `calcit edit`/`calcit tree` to modify. Run `calcit docs agents --contract` before mutations; use `--full` for first orientation or changed contract digest. Manual edits must follow format and schema conventions, then run `calcit edit format`."
   :package |docs-workflow
   :entries $ {} $ :default
-    {} (:description |) (:init-fn 'docs-workflow.main/main!) (:mode :native) (:reload-fn 'docs-workflow.main/reload!) (:target :browser)
+    {} (:description |) (:init-fn 'docs-workflow.main/main!) (:mode :js) (:reload-fn 'docs-workflow.main/reload!) (:target :browser)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/ |js-ffi/
       :type-slots $ {}
@@ -25,28 +25,28 @@
                     {} (:tab-index 0)
                       :on-click $ fn (e d!)
                         on-select
-                          conj parent-path $ :key $ unsafe-coerce entry 'docs-workflow.schema/DocNode
+                          conj parent-path $ :key entry
                           , d!
                     div
                       {} $ :class-name style-child-entry
-                      <> $ :title $ unsafe-coerce entry 'docs-workflow.schema/DocNode
+                      <> $ :title entry
                       =< 8 nil
                       if
-                        not $ empty? $ :children (unsafe-coerce entry 'docs-workflow.schema/DocNode)
+                        not $ empty? $ :children entry
                         <> "|☰" $ {} $ :color (hsl 180 80 60)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'List 'Tag) (:: 'List 'Dynamic) 'Dynamic
+            :args $ [] (:: 'List 'Tag) (:: 'List 'docs-workflow.schema/DocNode) 'Dynamic
             :features $ #{} :js-ffi
         'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-container (reel docs)
             let
-                store $ unsafe-coerce (reel.schema/read-field reel :store) 'docs-workflow.schema/Store
+                store $ :store reel
                 states $ :states store
                 cursor $ or (&map:get states :cursor) ([])
                 state $ unsafe-coerce
                   or (&map:get states :data)
-                    docs-workflow.schema/State :selected ([] :key :guide) :history $ []
+                    docs-workflow.schema/State :selected ([] :guide) :history $ []
                   , 'docs-workflow.schema/State
                 selected $ :selected state
                 history $ :history state
@@ -98,12 +98,13 @@
                     target $ find-target docs $ :selected state
                   div
                     {} $ :class-name css/expand
-                    let
-                        children $ match target
-                          (:some target-value) (:children target-value)
-                          (:none) ([])
-                      if (empty? children) nil $ comp-child-entries (:selected state) children $ fn (xs d!)
-                        d! cursor $ next-path state xs
+                    match target
+                      (:some target-value)
+                        let
+                            children $ :children target-value
+                          if (empty? children) nil $ comp-child-entries (:selected state) children $ fn (xs d!)
+                            d! cursor $ next-path state xs
+                      (:none) nil
                     comp-doc-page target
                     =< nil 120
                 comp-global-keydown
@@ -121,10 +122,10 @@
                         .show quick-modal d!
                         if (= |Escape key) (.close quick-modal d!) %none
                 .render quick-modal
-                when dev? $ comp-reel (>> states :reel) reel $ {}
+                when dev? $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] 'Dynamic $ :: 'List 'docs-workflow.schema/DocNode
+            :args $ [] (:: 'reel.typed/State 'docs-workflow.schema/Op 'docs-workflow.schema/Store) (:: 'List 'docs-workflow.schema/DocNode)
             :features $ #{} :js-ffi
         'comp-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-doc-page (target)
@@ -133,7 +134,7 @@
                 div
                   {} $ :class-name css-doc-page
                   div $ {} (:class-name css-markdown)
-                    :innerHTML $ .!render md $ :content target-value
+                    :innerHTML $ .render md $ :content target-value
                   ; a $ {} (:inner-text |Speech)
                     :class-name $ str-spaced css/link css-speech-button
                     :on-click $ fn (e d1)
@@ -179,27 +180,26 @@
           :code $ quote $ defcomp comp-nav-tree (docs base-path on-select)
             list-> ({})
               -> docs $ map $ fn (entry)
-                []
-                  :key $ unsafe-coerce entry 'docs-workflow.schema/DocNode
+                [] (:key entry)
                   div ({})
                     div
                       {} (:tab-index 0) (:class-name style-doc-entry)
                         :style $ {} (:padding "|0 8px") (:cursor :pointer)
                         :on-click $ fn (e d!)
                           on-select
-                            conj base-path $ :key $ unsafe-coerce entry 'docs-workflow.schema/DocNode
+                            conj base-path $ :key entry
                             , d!
-                      <> $ :title $ unsafe-coerce entry 'docs-workflow.schema/DocNode
+                      <> $ :title entry
                     let
-                        xs $ :children $ unsafe-coerce entry 'docs-workflow.schema/DocNode
+                        xs $ :children entry
                       if
                         not $ empty? xs
                         div
                           {} $ :style $ {} (:padding-left 16)
                           comp-nav-tree xs
-                            conj base-path $ :key $ unsafe-coerce entry 'docs-workflow.schema/DocNode
+                            conj base-path $ :key entry
                             , on-select
-                        Option :none
+                        , nil
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
             :args $ [] (:: 'List 'docs-workflow.schema/DocNode) (:: 'List 'Tag) 'Dynamic
@@ -211,19 +211,19 @@
               list-> ({})
                 -> entries $ map-indexed $ fn (idx entry)
                   [] idx $ let
-                      selected? $ = selected $ :key (unsafe-coerce entry 'docs-workflow.schema/DocNode)
+                      selected? $ = selected $ :key entry
                     div
                       {} (:tab-index 0)
                         :on-click $ fn (e d!)
                           on-select
-                            conj parent-path $ :key $ unsafe-coerce entry 'docs-workflow.schema/DocNode
+                            conj parent-path $ :key entry
                             , d!
                       div
                         {} $ :class-name $ str-spaced style-doc-entry (if selected? style-doc-entry-selected)
-                        <> $ :title $ unsafe-coerce entry 'docs-workflow.schema/DocNode
+                        <> $ :title entry
                         =< 8 nil
                         if
-                          not $ empty? $ :children (unsafe-coerce entry 'docs-workflow.schema/DocNode)
+                          not $ empty? $ :children entry
                           <> "|☰" $ {} $ :color (hsl 180 80 60)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
@@ -307,7 +307,7 @@
                 do (js/console.warn "|no entries found for" entries path) ([])
           :examples $ []
           :schema $ :: 'Fn $ {}
-            :args $ [] (:: 'List 'docs-workflow.schema/DocNode) 'Dynamic
+            :args $ [] (:: 'List 'docs-workflow.schema/DocNode) (:: 'List 'Tag)
             :features $ #{} :js-ffi
             :return $ :: 'List 'docs-workflow.schema/DocNode
         'find-target $ %{} 'CodeEntry (:doc |)
@@ -320,7 +320,7 @@
                     hint-fn $ {}
                       :args $ [] 'docs-workflow.schema/DocNode
                       :return 'Bool
-                    = p0 $ :key $ unsafe-coerce entry 'docs-workflow.schema/DocNode
+                    = p0 $ :key entry
                   (:some target)
                     if
                       = 1 $ count path
@@ -345,19 +345,29 @@
               assert= (%none)
                 find-target docs-workflow.schema/docs $ [] :design :missing
             :tags $ #{} :unit
+        'make-markdown-parser $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn make-markdown-parser ()
+            let
+                highlighter $ js-cast hljs 'docs-workflow.schema/HighlightJsHost
+                m $ js-cast
+                  new Remarkable $ js-object (:html true) (:breaks true)
+                    :highlight $ fn (code lang)
+                      hint-fn $ {}
+                        :args $ [] 'String 'String
+                        :return 'String
+                        :features $ #{} :js-ffi
+                      if (= lang |cirru)
+                        contract/expect-string "|Cirru highlight" $ color/generate code
+                        .-value $ .highlight-auto highlighter code $ js-array lang
+                  , 'docs-workflow.schema/RemarkableHost
+              .use m linkify
+              , m
+          :examples $ []
+          :schema $ :: 'Fn $ {} (:return 'docs-workflow.schema/RemarkableHost)
+            :args $ []
+            :features $ #{} :js-ffi
         'md $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ def md
-            hint-fn
-              {} $ :features $ #{} :js-ffi
-              let
-                  m $ new Remarkable $ :: js-object (:html true) (:breaks true)
-                    :highlight $ :: fn (code lang)
-                      if (= lang |cirru) (color/generate code)
-                        .-value $ unsafe-coerce
-                          .!highlightAuto hljs code $ js-array lang
-                          , js-object
-                .!use m linkify
-                , m
+          :code $ quote $ def md (make-markdown-parser)
           :examples $ []
           :schema $ :: 'Dynamic
         'next-path $ %{} 'CodeEntry (:doc |)
@@ -458,6 +468,8 @@
             respo.css :refer $ defstyle
             respo-ui.css :as css
             respo.comp.global-keydown :refer $ comp-global-keydown
+            reel.typed-compat :as reel-view
+            js-ffi.contract :as contract
     'docs-workflow.config $ %{} 'FileEntry
       :defs $ {}
         'dev? $ %{} 'CodeEntry (:doc |)
@@ -467,12 +479,15 @@
           :schema $ :: 'Dynamic
         'register-languages! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn register-languages! ()
-            .register-language (unsafe-coerce hljs 'docs-workflow.schema/HighlightJsHost) |clojure clojure-lang
-            .register-language (unsafe-coerce hljs 'docs-workflow.schema/HighlightJsHost) |bash bash-lang
-            .register-language (unsafe-coerce hljs 'docs-workflow.schema/HighlightJsHost) |rust rust-lang
-            .register-language (unsafe-coerce hljs 'docs-workflow.schema/HighlightJsHost) |glsl glsl-lang
+            let
+                highlighter $ js-cast hljs 'docs-workflow.schema/HighlightJsHost
+              .register-language highlighter |clojure clojure-lang
+              .register-language highlighter |bash bash-lang
+              .register-language highlighter |rust rust-lang
+              .register-language highlighter |glsl glsl-lang
+              , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Dynamic)
+          :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
             :features $ #{} :js-ffi
         'site $ %{} 'CodeEntry (:doc |)
@@ -485,7 +500,7 @@
     'docs-workflow.main $ %{} 'FileEntry
       :defs $ {}
         '*reel $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *reel (typed/new-reel schema/store)
+          :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
           :schema $ :: 'Ref $ :: 'reel.typed/State 'docs-workflow.schema/Op 'docs-workflow.schema/Store
         'dispatch! $ %{} 'CodeEntry (:doc |)
@@ -511,10 +526,10 @@
             println "|Running mode:" $ if config/dev? |dev |release
             if config/dev? $ load-console-formatter!
             render-app!
-            add-watch *reel :changes $ fn (reel prev) (render-app!)
+            add-watch! *reel :changes $ fn (reel prev) (render-app!)
             listen-devtools! |k dispatch!
             js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
-            flipped js/setInterval 60000 persist-storage!
+            browser/set-interval! persist-storage! 60000
             ; let
               raw $ js/localStorage.getItem $ js/localStorage.getItem
                   :storage-key config/site
@@ -537,8 +552,8 @@
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (nil? build-errors)
-              do (remove-watch *reel :changes) (clear-cache!)
-                add-watch *reel :changes $ fn (reel prev) (render-app!)
+              do (remove-watch! *reel :changes) (clear-cache!)
+                add-watch! *reel :changes $ fn (reel prev) (render-app!)
                 reset! *reel $ typed/refresh updater @*reel schema/store
                 hud! |ok~ |Ok
               hud! |error build-errors
@@ -548,9 +563,10 @@
             :features $ #{} :js-ffi
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
-            render! (.?!querySelector js/document |.app)
-              comp-container (reel-view/view-data @*reel) schema/docs
-              , dispatch!
+            match (browser/query-selector |.app)
+              (:some element)
+                render! (narrow-element element) (comp-container @*reel schema/docs) dispatch!
+              (:none) (raise "|Missing .app mount element")
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
@@ -569,15 +585,20 @@
             js-ffi.shared :as shared
             |./calcit.build-errors :default build-errors
             |bottom-tip :default hud!
+            js-ffi.browser :as browser
+            respo.ffi.browser :refer $ narrow-element
     'docs-workflow.schema $ %{} 'FileEntry
       :defs $ {}
         'DocNode $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defstruct DocNode (:title 'String) (:key 'Dynamic) (:content 'Dynamic)
+          :code $ quote $ defstruct DocNode (:title 'String) (:key 'Tag) (:content 'String)
             :children $ :: 'List 'docs-workflow.schema/DocNode
           :examples $ []
           :schema $ :: 'StructDef
         'HighlightJsHost $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait HighlightJsHost
+            .highlight-auto $ :: 'Fn $ {}
+              :args $ [] 'docs-workflow.schema/HighlightJsHost 'String 'JsObject
+              :return 'docs-workflow.schema/HighlightResultHost
             .register-language $ :: 'Fn $ {}
               :args $ [] 'docs-workflow.schema/HighlightJsHost 'String 'Dynamic
               :return 'Unit
@@ -585,16 +606,34 @@
           :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
             :names $ {} $ :register-language |registerLanguage
           :schema $ :: 'Trait
+        'HighlightResultHost $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ deftrait HighlightResultHost (:value 'String)
+          :examples $ []
+          :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
+          :schema $ :: 'Trait
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op (:states 'List 'Dynamic) (:hydrate-storage 'docs-workflow.schema/Store)
           :examples $ []
           :schema $ :: 'EnumDef
+        'RemarkableHost $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ deftrait RemarkableHost
+            .render $ :: 'Fn $ {}
+              :args $ [] 'docs-workflow.schema/RemarkableHost 'String
+              :return 'String
+            .use $ :: 'Fn $ {}
+              :args $ [] 'docs-workflow.schema/RemarkableHost 'JsObject
+              :return 'docs-workflow.schema/RemarkableHost
+          :examples $ []
+          :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
+          :schema $ :: 'Trait
         'SiteConfig $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct SiteConfig (:storage-key 'String)
           :examples $ []
           :schema $ :: 'StructDef
         'State $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defstruct State (:selected 'List) (:history 'List)
+          :code $ quote $ defstruct State
+            :selected $ :: 'List 'Tag
+            :history $ :: 'List $ :: 'List 'Tag
           :examples $ []
           :schema $ :: 'StructDef
         'Store $ %{} 'CodeEntry (:doc |)
@@ -612,7 +651,7 @@
               DocNode :title |About :key :about :content (load-doc |about.md) :children $ []
               DocNode :title |Cirru :key :cirru :content (load-doc |cirru.md) :children $ []
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'List 'docs-workflow.schema/DocNode
         'load-doc $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defmacro load-doc (filename)
             read-file $ str |docs/ filename
