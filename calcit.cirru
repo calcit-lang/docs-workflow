@@ -11,7 +11,7 @@
     'docs-workflow.comp.container $ %{} 'FileEntry
       :defs $ {}
         '*text-content $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defatom *text-content ([])
+          :code $ quote $ defref *text-content ([])
           :examples $ []
           :schema $ :: 'Dynamic
         'comp-child-entries $ %{} 'CodeEntry (:doc |)
@@ -44,10 +44,12 @@
                 store $ :store reel
                 states $ :states store
                 cursor $ or (&map:get states :cursor) ([])
-                state $ unsafe-coerce
-                  or (&map:get states :data)
-                    docs-workflow.schema/State :selected ([] :guide) :history $ []
-                  , 'docs-workflow.schema/State
+                state $ let
+                    raw $ or (&map:get states :data)
+                      docs-workflow.schema/State :selected ([] :guide) :history $ []
+                  decode-map-as
+                    if (struct? raw) (&struct:to-map raw) raw
+                    , 'docs-workflow.schema/State
                 selected $ :selected state
                 history $ :history state
                 quick-modal $ use-modal (>> states :quick)
@@ -312,9 +314,9 @@
             :return $ :: 'List 'docs-workflow.schema/DocNode
         'find-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn find-target (entries path)
-            if (empty? path) (Option :none)
-              let
-                  p0 $ option:unwrap-or (first path) nil
+            match (first path)
+              (:none) (Option :none)
+              (:some p0)
                 match
                   find entries $ fn (entry)
                     hint-fn $ {}
