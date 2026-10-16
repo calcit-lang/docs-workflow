@@ -29,7 +29,7 @@ calcit-js is using [Calcit Editor](https://github.com/calcit-lang/editor).
 
 候选 0.0.36 使用正式 Calcit / `@calcit/procs` 0.30.0，仅维护 `calcit.cirru` / `deps.cirru`；Markdown 0.4.55、Alerts 0.10.54、Reel 0.6.38、Router 0.8.35、UI 0.7.40、Respo 0.16.120、js-ffi 0.2.3 均已正式发布。消费者其他模块需协调同一精确版本，不能只改根依赖或放宽 Caps strict。不使用 alpha 或 hash 模块依赖，候选尚未发版。
 
-`yarn dev` 编译一次后启动 Vite；需要实时编译时另开终端运行 `calcit calcit.cirru js -w`，无需新增 concurrently。Snapshot 必须通过 Calcit CLI 编辑。
+`yarn dev` 编译一次后启动 Vite；需要实时编译时另开终端运行 `calcit -w calcit.cirru`，由已配置的 JS entry 持续生成代码，不与一次性的 `js` 子命令混用。通过 CLI 修改 Snapshot 后，按 `calcit edit inc --help` 通知实际变更定义；无需新增 concurrently 或 watcher 脚本。Snapshot 必须通过 Calcit CLI 编辑。
 
 To build:
 
