@@ -16,6 +16,7 @@ concurrency:
 jobs:
   test:
     runs-on: ubuntu-24.04
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -56,6 +57,7 @@ jobs:
           calcit edit format
           git diff --exit-code -- calcit.cirru
           calcit --check-only --all-defs --format json
+          calcit fix --workflow strict --verify --format edn
           calcit analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0'
           calcit analyze weak-types --only dynamic-method --summary-only --format json | jq -e '.data.summary.findings == 0'
           calcit calcit.cirru test --require-match --summary-only --format json
@@ -106,6 +108,7 @@ jobs:
 
       - name: Upload and verify web assets on COS
         if: steps.production.outputs.current == 'true'
+        timeout-minutes: 10
         uses: worktools/cos-upload-action@06d6027dcca6413c5936e04a9b6e9f0d5ef71ba0 # v1.2.0
         with:
           source-dir: dist/assets
@@ -118,6 +121,7 @@ jobs:
 
       - name: Upload and verify mdBook on COS
         if: steps.production.outputs.current == 'true'
+        timeout-minutes: 10
         uses: worktools/cos-upload-action@06d6027dcca6413c5936e04a9b6e9f0d5ef71ba0 # v1.2.0
         with:
           source-dir: book/html

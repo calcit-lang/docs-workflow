@@ -43,9 +43,12 @@
             let
                 store $ :store reel
                 states $ :states store
-                cursor $ or (&map:get states :cursor) ([])
+                cursor $ or
+                  .unwrap-or (get states :cursor) nil
+                  []
                 state $ let
-                    raw $ or (&map:get states :data)
+                    raw $ or
+                      .unwrap-or (get states :data) nil
                       docs-workflow.schema/State :selected ([] :guide) :history $ []
                   decode-map-as
                     if (struct? raw) (&struct:to-map raw) raw
@@ -498,10 +501,10 @@
             respo-md.comp.md :refer $ comp-md
             docs-workflow.config :refer $ dev?
             |remarkable :refer $ Remarkable
-            |remarkable/linkify :refer $ linkify
+            |remarkable/dist/cjs/linkify.js :refer $ linkify
             |highlight.js :default hljs
             |cirru-color :as color
-            respo-alerts.core :refer $ [] use-modal ModalActions
+            respo-alerts.core :refer $ use-modal ModalActions
             respo.css :refer $ defstyle
             respo-ui.css :as css
             respo.comp.global-keydown :refer $ comp-global-keydown
@@ -606,6 +609,7 @@
                 reset! *reel $ typed/refresh updater @*reel schema/store
                 hud! |ok~ |Ok
               hud! |error build-errors
+            , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
@@ -614,7 +618,14 @@
           :code $ quote $ defn render-app! ()
             match (browser/query-selector |.app)
               (:some element)
-                render! (narrow-element element) (comp-container @*reel schema/docs) dispatch!
+                render! (narrow-element element) (comp-container @*reel schema/docs)
+                  fn (op)
+                    hint-fn $ {}
+                      :args $ [] 'Dynamic
+                      :return 'Unit
+                      :features $ #{} :js-ffi
+                    if (enum? op) (dispatch! op) (raise "|Expected an Enum render action")
+                    , &unit
               (:none) (raise "|Missing .app mount element")
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
