@@ -43,9 +43,12 @@
             let
                 store $ :store reel
                 states $ :states store
-                cursor $ or (&map:get states :cursor) ([])
+                cursor $ or
+                  .unwrap-or (get states :cursor) nil
+                  []
                 state $ let
-                    raw $ or (&map:get states :data)
+                    raw $ or
+                      .unwrap-or (get states :data) nil
                       docs-workflow.schema/State :selected ([] :guide) :history $ []
                   decode-map-as
                     if (struct? raw) (&struct:to-map raw) raw
@@ -62,7 +65,11 @@
                         {} $ :class-name $ str-spaced ui/expand style-jump-modal
                         comp-nav-tree docs ([])
                           fn (path d!)
+                            hint-fn $ {}
+                              :args $ [] (:: 'List 'Tag) 'Fn
+                              :return 'Unit
                             d! cursor $ next-path state path
+                            , &unit
               div
                 {} $ :class-name $ str-spaced |calcit-tile css/preset css/fullscreen css/global css/row
                 div
@@ -81,7 +88,11 @@
                     a $ {} (:href |mdbook.html) (:inner-text |mdbook)
                       :style $ {} (:font-size 12) (:font-family ui/font-fancy) (:opacity 0.3)
                   comp-parent-menu selected docs $ fn (path d!)
+                    hint-fn $ {}
+                      :args $ [] (:: 'List 'Tag) 'Fn
+                      :return 'Unit
                     d! cursor $ next-path state path
+                    , &unit
                   let
                       parent-path $ or (butlast selected) ([])
                       entries $ find-entries docs parent-path
@@ -90,12 +101,20 @@
                       comp-page-entries
                         option:unwrap $ last selected
                         , parent-path entries $ fn (xs d!)
+                          hint-fn $ {}
+                            :args $ [] (:: 'List 'Tag) 'Fn
+                            :return 'Unit
                           d! cursor $ next-path state xs
+                          , &unit
                   div
                     {} $ :style $ {} (:margin-top 20)
                     <> |Histories style-title
                     comp-history-menu history docs $ fn (path d!)
+                      hint-fn $ {}
+                        :args $ [] (:: 'List 'Tag) 'Fn
+                        :return 'Unit
                       d! cursor $ next-path state path
+                      , &unit
                 let
                     target $ find-target docs $ :selected state
                   div
@@ -105,7 +124,11 @@
                         let
                             children $ :children target-value
                           if (empty? children) nil $ comp-child-entries (:selected state) children $ fn (xs d!)
+                            hint-fn $ {}
+                              :args $ [] (:: 'List 'Tag) 'Fn
+                              :return 'Unit
                             d! cursor $ next-path state xs
+                            , &unit
                       (:none) nil
                     comp-doc-page target
                     =< nil 120
@@ -123,6 +146,7 @@
                         and (= |p key) (or meta? ctrl?)
                         .show quick-modal d!
                         if (= |Escape key) (.close quick-modal d!) %none
+                    , &unit
                 .render quick-modal
                 when dev? $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
           :examples $ []
@@ -336,7 +360,7 @@
             :return $ :: 'calcit.core/Option 'docs-workflow.schema/DocNode
           :tests $ [] $ %{} 'TestEntry (:name |finds-existing-and-missing-paths)
             :code $ quote $ do
-              assert= (%some |Overview)
+              assert= (Option :some |Overview)
                 .map
                   find-target docs-workflow.schema/docs $ [] :design :overview
                   fn (target)
@@ -344,7 +368,7 @@
                       :args $ [] 'docs-workflow.schema/DocNode
                       :return 'String
                     :title target
-              assert= (%none)
+              assert= (Option :none)
                 find-target docs-workflow.schema/docs $ [] :design :missing
             :tags $ #{} :unit
         'make-markdown-parser $ %{} 'CodeEntry (:doc |)
@@ -362,7 +386,7 @@
                         contract/expect-string "|Cirru highlight" $ color/generate code
                         .-value $ .highlight-auto highlighter code $ js-array lang
                   , 'docs-workflow.schema/RemarkableHost
-              .use m linkify
+              .use m $ contract/expect-function "|Remarkable linkify plugin" linkify
               , m
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'docs-workflow.schema/RemarkableHost)
@@ -374,20 +398,34 @@
           :schema $ :: 'Dynamic
         'next-path $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn next-path (state path)
-            -> state (assoc :selected path)
-              update :history $ fn (xs)
-                hint-fn $ {}
-                  :args $ [] $ :: 'List (:: 'List 'Tag)
-                  :return $ :: 'List $ :: 'List 'Tag
-                if (includes? xs path) xs $ prepend
-                  if
-                    > (count xs) 4
-                    butlast xs
-                    , xs
-                  , path
+            let
+                xs $ :history state
+              assoc (assoc state :selected path) :history $ if (includes? xs path) xs $ prepend
+                if
+                  > (count xs) 4
+                  butlast xs
+                  , xs
+                , path
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'docs-workflow.schema/State)
             :args $ [] 'docs-workflow.schema/State $ :: 'List 'Tag
+          :tests $ [] $ %{} 'TestEntry (:name |preserves-history-order-and-cap)
+            :code $ quote $ do
+              assert=
+                [] ([] :new) ([] :a) ([] :b) ([] :c) ([] :d)
+                :history $ next-path
+                  docs-workflow.schema/State :selected ([] :a) :history $ [] ([] :a) ([] :b) ([] :c) ([] :d) ([] :e)
+                  [] :new
+              assert= ([] :new)
+                :selected $ next-path
+                  docs-workflow.schema/State :selected ([] :a) :history $ [] ([] :a) ([] :b) ([] :c) ([] :d) ([] :e)
+                  [] :new
+              assert=
+                [] ([] :a) ([] :b) ([] :c) ([] :d) ([] :e)
+                :history $ next-path
+                  docs-workflow.schema/State :selected ([] :a) :history $ [] ([] :a) ([] :b) ([] :c) ([] :d) ([] :e)
+                  [] :b
+            :tags $ #{} :unit
         'style-child-entries-block $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-child-entries-block
             {} $ |& $ {} (:padding |8px) (:min-width 320) (:max-width 400) (:background-color :white) (:margin "|8px 12px") (:border-radius |4px)
@@ -463,10 +501,10 @@
             respo-md.comp.md :refer $ comp-md
             docs-workflow.config :refer $ dev?
             |remarkable :refer $ Remarkable
-            |remarkable/linkify :refer $ linkify
+            |remarkable/dist/cjs/linkify.js :refer $ linkify
             |highlight.js :default hljs
             |cirru-color :as color
-            respo-alerts.core :refer $ [] use-modal ModalActions
+            respo-alerts.core :refer $ use-modal ModalActions
             respo.css :refer $ defstyle
             respo-ui.css :as css
             respo.comp.global-keydown :refer $ comp-global-keydown
@@ -509,19 +547,31 @@
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ println |Dispatch: op
             let
-                typed-op $ assert-type op 'Enum
-                control $ typed/decode-control typed-op
-              reset! *reel $ assert-type
-                match control
-                  (:some action) (typed/apply-control updater @*reel action)
-                  (:none)
-                    typed/record-op updater @*reel (assert-type typed-op 'docs-workflow.schema/Op) (generate-id!)
-                      :timestamp $ shared/date-now-snapshot
-                :: 'reel.typed/State 'docs-workflow.schema/Op 'docs-workflow.schema/Store
-              , &unit
+                control $ typed/decode-control op
+              reset! *reel $ match control
+                (:some action) (typed/apply-control updater @*reel action)
+                (:none)
+                  typed/record-op updater @*reel
+                    match op
+                      (:states cursor data)
+                        match
+                          try-decode-map-as cursor $ :: 'List 'Dynamic
+                          (:ok checked-cursor) (docs-workflow.schema/Op :states checked-cursor data)
+                          (:err message) (raise message)
+                      (:hydrate-storage data)
+                        match
+                          try-decode-map-as
+                            if (struct? data) (&struct:to-map data) data
+                            , 'docs-workflow.schema/Store
+                          (:ok checked-store) (docs-workflow.schema/Op :hydrate-storage checked-store)
+                          (:err message) (raise message)
+                      _ $ raise "|Unknown Docs Workflow operation"
+                    generate-id!
+                    :timestamp $ shared/date-now-snapshot
+            , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Dynamic
+            :args $ [] 'Enum
             :features $ #{} :js-ffi
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! () (config/register-languages!)
@@ -559,6 +609,7 @@
                 reset! *reel $ typed/refresh updater @*reel schema/store
                 hud! |ok~ |Ok
               hud! |error build-errors
+            , &unit
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
             :args $ []
@@ -567,7 +618,14 @@
           :code $ quote $ defn render-app! ()
             match (browser/query-selector |.app)
               (:some element)
-                render! (narrow-element element) (comp-container @*reel schema/docs) dispatch!
+                render! (narrow-element element) (comp-container @*reel schema/docs)
+                  fn (op)
+                    hint-fn $ {}
+                      :args $ [] 'Dynamic
+                      :return 'Unit
+                      :features $ #{} :js-ffi
+                    if (enum? op) (dispatch! op) (raise "|Expected an Enum render action")
+                    , &unit
               (:none) (raise "|Missing .app mount element")
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'Unit)
@@ -674,7 +732,13 @@
         %{} 'CodeEntry (:doc |)
           :code $ quote $ defn updater (store op op-id op-time)
             match op
-              (:states cursor s) (update-states store cursor s)
+              (:states cursor s)
+                assoc store :states $ match
+                  try-decode-map-as
+                    update-state-tree (:states store) cursor s
+                    , 'Map
+                  (:ok updated-states) updated-states
+                  (:err message) (raise message)
               (:hydrate-storage d) d
               _ $ do (eprintln "|unknown op:" op) store
           :examples $ []
@@ -682,4 +746,4 @@
             :args $ [] 'docs-workflow.schema/Store 'docs-workflow.schema/Op 'String 'Number
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.updater
-          :require $ respo.cursor :refer $ update-states
+          :require $ respo.cursor :refer $ update-state-tree
