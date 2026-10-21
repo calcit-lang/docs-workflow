@@ -24,6 +24,10 @@
                   [] idx $ div
                     {} (:tab-index 0)
                       :on-click $ fn (e d!)
+                        hint-fn $ {} (:return 'Unit)
+                          :args $ [] (:: 'Map 'Tag 'Dynamic)
+                            :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                              :args $ [] 'Dynamic
                         on-select
                           conj parent-path $ :key entry
                           , d!
@@ -36,16 +40,21 @@
                         <> "|☰" $ {} $ :color (hsl 180 80 60)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'List 'Tag) (:: 'List 'docs-workflow.schema/DocNode) 'Dynamic
-            :features $ #{} :js-ffi
+            :args $ [] (:: 'List 'Tag) (:: 'List 'docs-workflow.schema/DocNode)
+              :: 'Fn $ {} (:return 'Unit)
+                :args $ [] (:: 'List 'Tag)
+                  :: 'Fn $ {} (:return 'Unit)
+                    :args $ [] 'Enum
         'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-container (reel docs)
             let
                 store $ :store reel
                 states $ :states store
-                cursor $ or
-                  .unwrap-or (get states :cursor) nil
-                  []
+                cursor $ decode-map-as
+                  or
+                    .unwrap-or (get states :cursor) nil
+                    []
+                  :: 'List 'Dynamic
                 state $ let
                     raw $ or
                       .unwrap-or (get states :data) nil
@@ -66,9 +75,11 @@
                         comp-nav-tree docs ([])
                           fn (path d!)
                             hint-fn $ {}
-                              :args $ [] (:: 'List 'Tag) 'Fn
+                              :args $ [] (:: 'List 'Tag)
+                                :: 'Fn $ {} (:return 'Unit)
+                                  :args $ [] 'Enum
                               :return 'Unit
-                            d! cursor $ next-path state path
+                            d! $ docs-workflow.schema/Op :states cursor $ next-path state path
                             , &unit
               div
                 {} $ :class-name $ str-spaced |calcit-tile css/preset css/fullscreen css/global css/row
@@ -89,9 +100,11 @@
                       :style $ {} (:font-size 12) (:font-family ui/font-fancy) (:opacity 0.3)
                   comp-parent-menu selected docs $ fn (path d!)
                     hint-fn $ {}
-                      :args $ [] (:: 'List 'Tag) 'Fn
+                      :args $ [] (:: 'List 'Tag)
+                        :: 'Fn $ {} (:return 'Unit)
+                          :args $ [] 'Enum
                       :return 'Unit
-                    d! cursor $ next-path state path
+                    d! $ docs-workflow.schema/Op :states cursor $ next-path state path
                     , &unit
                   let
                       parent-path $ or (butlast selected) ([])
@@ -102,18 +115,22 @@
                         option:unwrap $ last selected
                         , parent-path entries $ fn (xs d!)
                           hint-fn $ {}
-                            :args $ [] (:: 'List 'Tag) 'Fn
+                            :args $ [] (:: 'List 'Tag)
+                              :: 'Fn $ {} (:return 'Unit)
+                                :args $ [] 'Enum
                             :return 'Unit
-                          d! cursor $ next-path state xs
+                          d! $ docs-workflow.schema/Op :states cursor $ next-path state xs
                           , &unit
                   div
                     {} $ :style $ {} (:margin-top 20)
                     <> |Histories style-title
                     comp-history-menu history docs $ fn (path d!)
                       hint-fn $ {}
-                        :args $ [] (:: 'List 'Tag) 'Fn
+                        :args $ [] (:: 'List 'Tag)
+                          :: 'Fn $ {} (:return 'Unit)
+                            :args $ [] 'Enum
                         :return 'Unit
-                      d! cursor $ next-path state path
+                      d! $ docs-workflow.schema/Op :states cursor $ next-path state path
                       , &unit
                 let
                     target $ find-target docs $ :selected state
@@ -125,9 +142,11 @@
                             children $ :children target-value
                           if (empty? children) nil $ comp-child-entries (:selected state) children $ fn (xs d!)
                             hint-fn $ {}
-                              :args $ [] (:: 'List 'Tag) 'Fn
+                              :args $ [] (:: 'List 'Tag)
+                                :: 'Fn $ {} (:return 'Unit)
+                                  :args $ [] 'Enum
                               :return 'Unit
-                            d! cursor $ next-path state xs
+                            d! $ docs-workflow.schema/Op :states cursor $ next-path state xs
                             , &unit
                       (:none) nil
                     comp-doc-page target
@@ -191,7 +210,12 @@
                   div
                     {} (:tab-index 0)
                       :class-name $ str-spaced style-doc-entry style-history-entry
-                      :on-click $ fn (e d!) (on-select path d!)
+                      :on-click $ fn (e d!)
+                        hint-fn $ {} (:return 'Unit)
+                          :args $ [] (:: 'Map 'Tag 'Dynamic)
+                            :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                              :args $ [] 'Dynamic
+                        on-select path d!
                     <> $ match target
                       (:some target-value) (:title target-value)
                       (:none) |
@@ -200,8 +224,10 @@
             :args $ []
               :: 'List $ :: 'List 'Tag
               :: 'List 'docs-workflow.schema/DocNode
-              , 'Dynamic
-            :features $ #{} :js-ffi
+              :: 'Fn $ {} (:return 'Unit)
+                :args $ [] (:: 'List 'Tag)
+                  :: 'Fn $ {} (:return 'Unit)
+                    :args $ [] 'Enum
         'comp-nav-tree $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-nav-tree (docs base-path on-select)
             list-> ({})
@@ -212,6 +238,10 @@
                       {} (:tab-index 0) (:class-name style-doc-entry)
                         :style $ {} (:padding "|0 8px") (:cursor :pointer)
                         :on-click $ fn (e d!)
+                          hint-fn $ {} (:return 'Unit)
+                            :args $ [] (:: 'Map 'Tag 'Dynamic)
+                              :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                                :args $ [] 'Dynamic
                           on-select
                             conj base-path $ :key entry
                             , d!
@@ -228,8 +258,11 @@
                         , nil
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'List 'docs-workflow.schema/DocNode) (:: 'List 'Tag) 'Dynamic
-            :features $ #{} :js-ffi
+            :args $ [] (:: 'List 'docs-workflow.schema/DocNode) (:: 'List 'Tag)
+              :: 'Fn $ {} (:return 'Unit)
+                :args $ [] (:: 'List 'Tag)
+                  :: 'Fn $ {} (:return 'Unit)
+                    :args $ [] 'Enum
         'comp-page-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-page-entries (selected parent-path entries on-select)
             div
@@ -241,6 +274,10 @@
                     div
                       {} (:tab-index 0)
                         :on-click $ fn (e d!)
+                          hint-fn $ {} (:return 'Unit)
+                            :args $ [] (:: 'Map 'Tag 'Dynamic)
+                              :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                                :args $ [] 'Dynamic
                           on-select
                             conj parent-path $ :key entry
                             , d!
@@ -253,8 +290,11 @@
                           <> "|☰" $ {} $ :color (hsl 180 80 60)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] 'Tag (:: 'List 'Tag) (:: 'List 'docs-workflow.schema/DocNode) 'Dynamic
-            :features $ #{} :js-ffi
+            :args $ [] 'Tag (:: 'List 'Tag) (:: 'List 'docs-workflow.schema/DocNode)
+              :: 'Fn $ {} (:return 'Unit)
+                :args $ [] (:: 'List 'Tag)
+                  :: 'Fn $ {} (:return 'Unit)
+                    :args $ [] 'Enum
         'comp-parent-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-parent-menu (selected docs on-select)
             list->
@@ -272,14 +312,23 @@
                           :style $ {} (:cursor :pointer) (:font-style :italic) (:font-family ui/font-fancy)
                             :color $ hsl 0 0 40
                             :background-color $ hsl 180 90 94
-                          :on-click $ fn (e d!) (on-select sub-path d!)
+                          :on-click $ fn (e d!)
+                            hint-fn $ {} (:return 'Unit)
+                              :args $ [] (:: 'Map 'Tag 'Dynamic)
+                                :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                                  :args $ [] 'Dynamic
+                            on-select sub-path d!
                         <> $ str "|< " $ match target
                           (:some target-value) (:title target-value)
                           (:none) "|NOT FOUND"
                 []
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'List 'Tag) (:: 'List 'docs-workflow.schema/DocNode) 'Fn
+            :args $ [] (:: 'List 'Tag) (:: 'List 'docs-workflow.schema/DocNode)
+              :: 'Fn $ {} (:return 'Unit)
+                :args $ [] (:: 'List 'Tag)
+                  :: 'Fn $ {} (:return 'Unit)
+                    :args $ [] 'Enum
         'css-doc $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-doc
             {}
@@ -672,7 +721,9 @@
           :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
           :schema $ :: 'Trait
         'Op $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defenum Op (:states 'List 'Dynamic) (:hydrate-storage 'docs-workflow.schema/Store)
+          :code $ quote $ defenum Op
+            :states (:: 'List 'Dynamic) 'Dynamic
+            :hydrate-storage 'docs-workflow.schema/Store
           :examples $ []
           :schema $ :: 'EnumDef
         'RemarkableHost $ %{} 'CodeEntry (:doc |)
