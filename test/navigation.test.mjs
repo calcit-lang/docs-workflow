@@ -71,4 +71,12 @@ test('real navigation callbacks retain paths and history through Respo dispatch'
   click('comp-container', '☰');
   click('comp-nav-tree', 'Guide');
   assert.deepEqual(path(field(state(), 'selected')), ['guide']);
+  const navOp = ops.at(-1);
+  assert.equal(navOp.tag.value, 'states');
+  assert.equal(navOp.extra.length, 2);
+  assert.deepEqual(path(navOp.extra[0]), []);
+  assert.deepEqual(path(field(navOp.extra[1], 'selected')), ['guide']);
+  assert.deepEqual(field(navOp.extra[1], 'history').toArray().map(path), [
+    ['guide'], ['design', 'overview'], ['design'],
+  ]);
 });
