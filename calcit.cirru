@@ -112,7 +112,7 @@
                     div
                       {} $ :class-name css/expand
                       comp-page-entries
-                        option:unwrap $ last selected
+                        .unwrap $ last selected
                         , parent-path entries $ fn (xs d!)
                           hint-fn $ {}
                             :args $ [] (:: 'List 'Tag)
@@ -191,11 +191,11 @@
                       if-let
                         key $ get-env |azure-key
                         speechOne (.join-str @*text-content &newline) (get-env |azure-key)
-                          option:unwrap-or (get-env |lang) |en-US
+                          .unwrap-or (get-env |lang) |en-US
                           fn $
                           fn $
                         nativeSpeechOne (.join-str @*text-content &newline)
-                          option:unwrap-or (get-env |lang) |en-US
+                          .unwrap-or (get-env |lang) |en-US
               (:none) (<> |)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
@@ -444,7 +444,7 @@
         'md $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def md (make-markdown-parser)
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'docs-workflow.schema/RemarkableHost
         'next-path $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn next-path (state path)
             let
@@ -563,7 +563,7 @@
       :defs $ {}
         'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def dev?
-            = |dev $ option:unwrap-or (get-env |mode) |release
+            = |dev $ .unwrap-or (get-env |mode) |release
           :examples $ []
           :schema $ :: 'Dynamic
         'register-languages! $ %{} 'CodeEntry (:doc |)

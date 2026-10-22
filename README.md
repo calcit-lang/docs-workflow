@@ -8,8 +8,8 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 候选版本 0.0.37 将 Calcit CLI 与 `@calcit/procs` 配对升级到正式 **0.30.1**，尚未发版。使用 Node.js 24、Yarn 4.18.0。消费者应协调完整正式模块图，不能只改根版本或放宽 Caps strict：
 
-- Alerts 0.10.56、Reel 0.6.39、Markdown 0.4.58、Router 0.8.36。
-- UI 0.7.41、Respo 0.16.122、js-ffi 0.2.3。
+- Alerts 0.10.57、Reel 0.6.41、Markdown 0.4.59、Router 0.8.37。
+- UI 0.8.0、Respo 0.16.124、js-ffi 0.2.5。
 
 文档节点、路径与导航状态采用具名类型；调用方传入 `List<DocNode>` 和 `reel.typed/State<Op, Store>`。导航辅助组件的 `on-select` 合同为 `Fn(List<Tag>, Fn(Enum) -> Unit) -> Unit`，不再用裸 Fn 隐去 dispatch 的调用要求。
 
@@ -50,6 +50,8 @@ node --test test/navigation.test.mjs
 
 五处回调按正式 Respo 的实际 `EventHandler` 合同标注：事件为 `Map<Tag, Dynamic>`，dispatch 接受 Dynamic 和可变参数并返回 Unit。具体导航回调仍只发送 Enum；没有把 opaque Fn 强转成猜造的具体合同。上游合同丢失问题由 [Respo #275](https://github.com/Respo/respo.calcit/issues/275) 跟进。
 
+四处内部 Option helper 使用公开 `.unwrap` / `.unwrap-or`，保留环境变量 fallback 和空路径失败行为；`md` 采用构造函数已经承诺的具体 `RemarkableHost` schema，不增加强转。原两项附着测试与导航 JS 断言不变。
+
 unsafe、废弃调用和动态方法分派保持为 0；仍有 CSS、Markdown 全局值等未显式声明类型和部分 nil 边界，不宣称全模块类型闭合。沿用完整 strict 和类型定位视图，不新增 quality 预算、验证脚本或编译器 fix/proof 规则。
 
 Remarkable linkify 使用安装包声明的 `remarkable/dist/cjs/linkify.js` 发布入口，不使用 Node 24 不支持的目录导入。
@@ -58,7 +60,7 @@ Remarkable linkify 使用安装包声明的 `remarkable/dist/cjs/linkify.js` 发
 
 `yarn build` 生成前端资源。CI 另构建 mdBook，保留 `mdbook.html` 入口，二进制下载仍验证原 SHA256。
 
-PR 只检查和构建，不上传或部署。生产部署串行完成，资源与页面发布前分别核对 main HEAD。前端 COS 仅上传 `dist/assets`；mdBook 保留原公开前缀。两者都使用 COS Action v1.2.0 自身的 verify，不增加重复校验脚本。原两个服务器目录及 CDN 前缀不变。
+PR 只检查和构建，不上传 COS 或部署；保存原始双前端构建 artifact，使用本地相对路径验收，不改写生成 HTML。生产部署串行完成，资源与页面发布前分别核对 main HEAD。前端 COS 仅上传 `dist/assets`；mdBook 保留原公开前缀。两者都使用 COS Action v1.2.0 自身的 verify，不增加重复校验脚本。原两个服务器目录及 CDN 前缀不变。Actions 使用精确正式 tag，接受 tag 可移动风险。
 
 正式 0.30.1 配对以 PR Linux CI 的精确提交结果为准；本地 0.30.0 中间验证不冒充目标版本验收。生产部署和正式 tag 发布需要独立验收与授权。
 
