@@ -13,7 +13,7 @@ const some = value => value.tag.value === 'some' ? value.extra[0] : null;
 const path = value => value.toArray().map(x => x.value);
 
 // Inspect the actual rendered component tree, not a replacement selection callback.
-function clickable(root) {
+function clickable(root, eventName = 'click') {
   const found = [];
   function visit(component) {
     const name = field(component, 'name').value;
@@ -28,7 +28,7 @@ function clickable(root) {
     for (const pair of field(element, 'children').toArray()) {
       text += render(some(field(pair, 'node')), owner);
     }
-    const listener = some(c.get(field(element, 'event'), tag('click')));
+    const listener = some(c.get(field(element, 'event'), tag(eventName)));
     if (listener) found.push({ owner, text, listener });
     return text;
   }
@@ -79,4 +79,23 @@ test('real navigation callbacks retain paths and history through Respo dispatch'
   assert.deepEqual(field(navOp.extra[1], 'history').toArray().map(path), [
     ['guide'], ['design', 'overview'], ['design'],
   ]);
+
+  // Respo delivers normalized Calcit Map events, not native KeyboardEvent objects.
+  function keydown(key, ctrl = false) {
+    const target = clickable(comp_container(new_reel(store), schema.docs), 'keydown')
+      .find(x => x.owner === 'comp-global-keydown');
+    assert.ok(target, 'Missing global keyboard listener');
+    target.listener(c._$n__$M_(tag('key'), key, tag('ctrl?'), ctrl, tag('meta?'), false), dispatch);
+  }
+  function quickShown() {
+    const quick = some(c.get(field(store, 'states'), tag('quick')));
+    const data = some(c.get(quick, tag('data')));
+    return some(c.get(data, tag('show?')));
+  }
+  keydown('Escape');
+  assert.equal(quickShown(), false);
+  keydown('p', true);
+  assert.equal(quickShown(), true);
+  keydown('Escape');
+  assert.equal(quickShown(), false);
 });
