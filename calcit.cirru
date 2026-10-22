@@ -112,7 +112,7 @@
                     div
                       {} $ :class-name css/expand
                       comp-page-entries
-                        option:unwrap $ last selected
+                        .unwrap $ last selected
                         , parent-path entries $ fn (xs d!)
                           hint-fn $ {}
                             :args $ [] (:: 'List 'Tag)
@@ -155,12 +155,16 @@
                   {} $ :disabled-commands $ #{} |p
                   fn (e d!)
                     hint-fn $ {}
-                      :args $ [] 'js-ffi.browser/KeyboardEventHost 'Dynamic
+                      :args $ [] (:: 'Map 'Tag 'Dynamic)
+                        :: 'Fn $ {}
+                          :args $ [] 'Dynamic
+                          :rest 'Dynamic
+                          :return 'Unit
                       :return 'Unit
                     let
-                        key $ .-key e
-                        meta? $ .-meta-key? e
-                        ctrl? $ .-ctrl-key? e
+                        key $ contract/expect-string |keyboard.key $ .unwrap (get e :key)
+                        meta? $ contract/expect-bool |keyboard.meta $ .unwrap (get e :meta?)
+                        ctrl? $ contract/expect-bool |keyboard.ctrl $ .unwrap (get e :ctrl?)
                       if
                         and (= |p key) (or meta? ctrl?)
                         .show quick-modal d!
@@ -191,11 +195,11 @@
                       if-let
                         key $ get-env |azure-key
                         speechOne (.join-str @*text-content &newline) (get-env |azure-key)
-                          option:unwrap-or (get-env |lang) |en-US
+                          .unwrap-or (get-env |lang) |en-US
                           fn $
                           fn $
                         nativeSpeechOne (.join-str @*text-content &newline)
-                          option:unwrap-or (get-env |lang) |en-US
+                          .unwrap-or (get-env |lang) |en-US
               (:none) (<> |)
           :examples $ []
           :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
@@ -444,7 +448,7 @@
         'md $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def md (make-markdown-parser)
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'docs-workflow.schema/RemarkableHost
         'next-path $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn next-path (state path)
             let
@@ -563,7 +567,7 @@
       :defs $ {}
         'dev? $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def dev?
-            = |dev $ option:unwrap-or (get-env |mode) |release
+            = |dev $ .unwrap-or (get-env |mode) |release
           :examples $ []
           :schema $ :: 'Dynamic
         'register-languages! $ %{} 'CodeEntry (:doc |)

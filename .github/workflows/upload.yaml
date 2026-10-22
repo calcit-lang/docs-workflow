@@ -19,12 +19,12 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@v7.0.1
         with:
           persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        uses: actions/setup-node@v6.5.0
         with:
           node-version: 24
           package-manager-cache: false
@@ -36,7 +36,7 @@ jobs:
           yarn --version
 
       - name: Set up Calcit and Caps
-        uses: calcit-lang/setup-calcit@ca701be5a471759e442aa053cd100720bbe1f09f # v1.5.0
+        uses: calcit-lang/setup-calcit@v1.5.0
         with:
           tools: calcit,caps
           caps-version: "0.1.1"
@@ -57,14 +57,14 @@ jobs:
           calcit edit format
           git diff --exit-code -- calcit.cirru
           calcit --check-only --all-defs --format json
-          calcit fix --workflow strict --verify --format edn
+          calcit fix --workflow strict --verify --format json | jq -e 'select(.data.workflow.status == "passed" and .diagnostics == []) | {workflow:.data.workflow,diagnostics:.diagnostics}'
           calcit analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0'
           calcit analyze weak-types --only dynamic-method --summary-only --format json | jq -e '.data.summary.findings == 0'
           calcit calcit.cirru test --require-match --summary-only --format json
 
       - name: Build web assets with CDN URLs
         env:
-          VITE_BASE_URL: https://cos-sh.tiye.me/${{ github.repository }}/
+          VITE_BASE_URL: ${{ github.event_name == 'pull_request' && './' || format('https://cos-sh.tiye.me/{0}/', github.repository) }}
         run: |
           set -euo pipefail
           yarn build
@@ -88,10 +88,21 @@ jobs:
 
       - name: Build mdBook
         env:
-          MDBOOK_OUTPUT__HTML__SITE_URL: https://cos-sh.tiye.me/${{ github.repository }}/
+          MDBOOK_OUTPUT__HTML__SITE_URL: ${{ github.event_name == 'pull_request' && '/' || format('https://cos-sh.tiye.me/{0}/', github.repository) }}
         run: |
           mdbook build
           mv book/html/index.html book/html/mdbook.html
+
+      - name: Save original PR frontend builds
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: docs-workflow-preview
+          path: |
+            dist
+            book/html
+          if-no-files-found: error
+          retention-days: 7
 
       - name: Check current production revision
         id: production
@@ -110,7 +121,7 @@ jobs:
       - name: Upload and verify web assets on COS
         if: steps.production.outputs.current == 'true'
         timeout-minutes: 10
-        uses: worktools/cos-upload-action@06d6027dcca6413c5936e04a9b6e9f0d5ef71ba0 # v1.2.0
+        uses: worktools/cos-upload-action@v1.2.0
         with:
           source-dir: dist/assets
           bucket: ${{ secrets.COS_BUCKET }}
@@ -123,7 +134,7 @@ jobs:
       - name: Upload and verify mdBook on COS
         if: steps.production.outputs.current == 'true'
         timeout-minutes: 10
-        uses: worktools/cos-upload-action@06d6027dcca6413c5936e04a9b6e9f0d5ef71ba0 # v1.2.0
+        uses: worktools/cos-upload-action@v1.2.0
         with:
           source-dir: book/html
           bucket: ${{ secrets.COS_BUCKET }}
@@ -150,7 +161,7 @@ jobs:
       - name: Deploy web assets
         if: steps.page-revision.outputs.current == 'true'
         id: deploy-web
-        uses: Pendect/action-rsyncer@8e05ffa5c93e5d9c9b167796b26044d2c616b2b9 # v2.0.0
+        uses: Pendect/action-rsyncer@v2.0.0
         env:
           DEPLOY_KEY: ${{ secrets.rsync_private_key }}
         with:
@@ -163,7 +174,7 @@ jobs:
       - name: Deploy mdBook
         if: steps.page-revision.outputs.current == 'true'
         id: deploy-mdbook
-        uses: Pendect/action-rsyncer@8e05ffa5c93e5d9c9b167796b26044d2c616b2b9 # v2.0.0
+        uses: Pendect/action-rsyncer@v2.0.0
         env:
           DEPLOY_KEY: ${{ secrets.rsync_private_key }}
         with:
