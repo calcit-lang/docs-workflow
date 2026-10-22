@@ -51,29 +51,6 @@ jobs:
           yarn install --immutable
           caps verify --toolchain
 
-      - name: Export official CLI keyboard correction
-        if: github.event_name == 'pull_request'
-        run: |
-          set -euo pipefail
-          test "$(git hash-object calcit.cirru)" = f8c8cf52e9c25b8184f6a5c085339de8fb47bece
-          calcit tree show docs-workflow.comp.container/comp-container --path @3.2.4.2
-          preview="$(calcit edit transaction --file .github/migrations/docs-workflow-keyboard031.cirru --dry-run --format json)"
-          echo "$preview" | jq '{original_revision,new_revision,scoped_revision,changed}'
-          guard="$(echo "$preview" | jq -er '.scoped_revision')"
-          calcit edit transaction --file .github/migrations/docs-workflow-keyboard031.cirru --expect-revision "$guard" --format json
-          calcit tree show docs-workflow.comp.container/comp-container --path @3.2.4.2
-          calcit analyze program-diff HEAD --format json
-          git hash-object calcit.cirru
-
-      - name: Save corrected keyboard Snapshot
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v7.0.2
-        with:
-          name: docs-workflow-keyboard-source
-          path: calcit.cirru
-          if-no-files-found: error
-          retention-days: 1
-
       - name: Validate Calcit upgrade
         run: |
           set -euo pipefail

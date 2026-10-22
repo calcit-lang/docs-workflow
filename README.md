@@ -52,6 +52,8 @@ node --test test/navigation.test.mjs
 
 四处内部 Option helper 使用公开 `.unwrap` / `.unwrap-or`，保留环境变量 fallback 和空路径失败行为；`md` 采用构造函数已经承诺的具体 `RemarkableHost` schema，不增加强转。原两项附着测试与导航 JS 断言不变。
 
+快速跳转的键盘回调接收 Respo 规范化的 `Map<Tag, Dynamic>`，实际检查 `:key/:ctrl?/:meta?`，不把 Map 假装成原生 KeyboardEvent。修复 [#94](https://github.com/calcit-lang/docs-workflow/issues/94) 的 Ctrl+P 失效，并在现有导航测试中覆盖该实际事件入口；保留原快捷键和弹层/导航策略。
+
 unsafe、废弃调用和动态方法分派保持为 0；仍有 CSS、Markdown 全局值等未显式声明类型和部分 nil 边界，不宣称全模块类型闭合。沿用完整 strict 和类型定位视图，不新增 quality 预算、验证脚本或编译器 fix/proof 规则。
 
 Remarkable linkify 使用安装包声明的 `remarkable/dist/cjs/linkify.js` 发布入口，不使用 Node 24 不支持的目录导入。

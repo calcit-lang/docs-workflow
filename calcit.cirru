@@ -155,12 +155,16 @@
                   {} $ :disabled-commands $ #{} |p
                   fn (e d!)
                     hint-fn $ {}
-                      :args $ [] 'js-ffi.browser/KeyboardEventHost 'Dynamic
+                      :args $ [] (:: 'Map 'Tag 'Dynamic)
+                        :: 'Fn $ {}
+                          :args $ [] 'Dynamic
+                          :rest 'Dynamic
+                          :return 'Unit
                       :return 'Unit
                     let
-                        key $ .-key e
-                        meta? $ .-meta-key? e
-                        ctrl? $ .-ctrl-key? e
+                        key $ contract/expect-string |keyboard.key $ .unwrap (get e :key)
+                        meta? $ contract/expect-bool |keyboard.meta $ .unwrap (get e :meta?)
+                        ctrl? $ contract/expect-bool |keyboard.ctrl $ .unwrap (get e :ctrl?)
                       if
                         and (= |p key) (or meta? ctrl?)
                         .show quick-modal d!
