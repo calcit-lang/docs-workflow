@@ -25,7 +25,7 @@ function walk(x,path,id){
   if(!Array.isArray(x)||['quote','quasiquote','comment',';','defmacro'].includes(x[0]))return x;
   if(x[0]==='fn'&&JSON.stringify(x[1])===JSON.stringify(['e','d!'])&&x.length===3&&JSON.stringify(x[2])===JSON.stringify(['.show','quick-modal','d!'])){
     assert.equal(id,'docs-workflow.comp.container/comp-container');
-    const old=structuredClone(x);x.splice(2,0,['hint-fn',['{}',[':return',"'Unit"],[':args',structuredClone(eventArgs)]]]);replace(id,path,old,x);counts.dom++;return x;
+    const old=structuredClone(x);x.splice(2,0,['hint-fn',['{}',[':return',"'Unit"],[':args',structuredClone(eventArgs)]]]);x.push('&unit');replace(id,path,old,x);counts.dom++;return x;
   }
   if(x[0]==='merge'){assert.equal(id,'docs-workflow.comp.container/css-doc-page');replace(id,[...path,0],'merge','.merge');x[0]='.merge';counts.merge++;}
   if(x[0]==='count'){

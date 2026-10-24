@@ -36,11 +36,7 @@ jobs:
           set -euo pipefail
           mkdir -p acceptance
           calcit --check-only --all-defs
-          if calcit fix --workflow strict --verify --format json > acceptance/strict-before.json; then
-            jq -e '.data.workflow.status == "passed" and .diagnostics == []' acceptance/strict-before.json
-          else
-            jq -e '.data.workflow.status == "failed" and (.diagnostics | length == 1) and .diagnostics[0].code == "E_CALL_ARGUMENT_UNPROVEN" and .diagnostics[0].definition == "docs-workflow.comp.container/comp-container"' acceptance/strict-before.json
-          fi
+          calcit fix --workflow strict --verify --format json | tee acceptance/strict-before.json | jq -e '.data.workflow.status == "passed" and .diagnostics == []'
           calcit analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0'
           calcit analyze weak-types --only dynamic-method --summary-only --format json | jq -e '.data.summary.findings == 0'
           calcit test --require-match --format json | tee acceptance/tests-before.json
