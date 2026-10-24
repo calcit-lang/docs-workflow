@@ -16,6 +16,9 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 不改变历史容量、默认路径、快捷键、Markdown/语音代码、公开导航回调或存档行为，保留实际 `hud!`。
 升级完整图后请重新安装、重启开发服务并刷新；UI 升级可能带来样式差异，不承诺逐像素相同。
 原测试与门禁保持，不新增强转、质量预算、重复 COS 校验脚本或 concurrently。
+Quick Jump 点击事件按真实 EventHandler 声明，并在原 `.show` 副作用后明确返回 Unit；
+不吞异常或改变调用次数，但不承诺开放回调返回值逐字不变。上游 Modal 返回合同由
+[Alerts #110](https://github.com/Respo/alerts.calcit/issues/110) 跟进。
 
 文档节点、路径与导航状态采用具名类型；调用方传入 `List<DocNode>` 和 `reel.typed/State<Op, Store>`。导航辅助组件的 `on-select` 合同为 `Fn(List<Tag>, Fn(Enum) -> Unit) -> Unit`，不再用裸 Fn 隐去 dispatch 的调用要求。
 
