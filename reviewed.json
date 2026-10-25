@@ -1,0 +1,6017 @@
+{
+  "config": {
+    "package": "docs-workflow",
+    "version": "0.0.37",
+    "selected_entry": null,
+    "entries": [
+      {
+        "name": "default",
+        "mode": "js",
+        "target": "browser",
+        "init_fn": "docs-workflow.main/main!",
+        "reload_fn": "docs-workflow.main/reload!",
+        "description": "",
+        "modules": [
+          "respo.calcit/",
+          "respo-ui.calcit/",
+          "respo-markdown.calcit/",
+          "reel.calcit/",
+          "respo-router.calcit/",
+          "alerts.calcit/",
+          "js-ffi/"
+        ],
+        "type_slots": {},
+        "feature_policy": {}
+      }
+    ],
+    "verification_schema_version": 1,
+    "verification_profiles": []
+  },
+  "namespaces": [
+    {
+      "definition_count": 2,
+      "doc": "",
+      "namespace": "docs-workflow.$meta",
+      "ns_code": [
+        "ns",
+        "docs-workflow.$meta"
+      ]
+    },
+    {
+      "definition_count": 27,
+      "doc": "",
+      "namespace": "docs-workflow.comp.container",
+      "ns_code": [
+        "ns",
+        "docs-workflow.comp.container",
+        [
+          ":require",
+          [
+            "respo-ui.core",
+            ":as",
+            "ui"
+          ],
+          [
+            "respo-ui.core",
+            ":refer",
+            [
+              "hsl"
+            ]
+          ],
+          [
+            "respo.core",
+            ":refer",
+            [
+              "defcomp",
+              "defeffect",
+              "<>",
+              ">>",
+              "div",
+              "button",
+              "textarea",
+              "span",
+              "input",
+              "list->",
+              "a"
+            ]
+          ],
+          [
+            "respo.comp.space",
+            ":refer",
+            [
+              "=<"
+            ]
+          ],
+          [
+            "reel.comp.reel",
+            ":refer",
+            [
+              "comp-reel"
+            ]
+          ],
+          [
+            "respo-md.comp.md",
+            ":refer",
+            [
+              "comp-md"
+            ]
+          ],
+          [
+            "docs-workflow.config",
+            ":refer",
+            [
+              "dev?"
+            ]
+          ],
+          [
+            "|remarkable",
+            ":refer",
+            [
+              "Remarkable"
+            ]
+          ],
+          [
+            "|remarkable/dist/cjs/linkify.js",
+            ":refer",
+            [
+              "linkify"
+            ]
+          ],
+          [
+            "|highlight.js",
+            ":default",
+            "hljs"
+          ],
+          [
+            "|cirru-color",
+            ":as",
+            "color"
+          ],
+          [
+            "respo-alerts.core",
+            ":refer",
+            [
+              "use-modal",
+              "ModalActions"
+            ]
+          ],
+          [
+            "respo.css",
+            ":refer",
+            [
+              "defstyle"
+            ]
+          ],
+          [
+            "respo-ui.css",
+            ":as",
+            "css"
+          ],
+          [
+            "respo.comp.global-keydown",
+            ":refer",
+            [
+              "comp-global-keydown"
+            ]
+          ],
+          [
+            "reel.typed-compat",
+            ":as",
+            "reel-view"
+          ],
+          [
+            "js-ffi.contract",
+            ":as",
+            "contract"
+          ]
+        ]
+      ]
+    },
+    {
+      "definition_count": 3,
+      "doc": "",
+      "namespace": "docs-workflow.config",
+      "ns_code": [
+        "ns",
+        "docs-workflow.config",
+        [
+          ":require",
+          [
+            "|highlight.js/lib/languages/rust",
+            ":default",
+            "rust-lang"
+          ],
+          [
+            "|highlight.js/lib/languages/clojure",
+            ":default",
+            "clojure-lang"
+          ],
+          [
+            "|highlight.js/lib/languages/bash",
+            ":default",
+            "bash-lang"
+          ],
+          [
+            "|highlight.js/lib/languages/glsl",
+            ":default",
+            "glsl-lang"
+          ],
+          [
+            "|highlight.js",
+            ":default",
+            "hljs"
+          ]
+        ]
+      ]
+    },
+    {
+      "definition_count": 6,
+      "doc": "",
+      "namespace": "docs-workflow.main",
+      "ns_code": [
+        "ns",
+        "docs-workflow.main",
+        [
+          ":require",
+          [
+            "respo.core",
+            ":refer",
+            [
+              "render!",
+              "clear-cache!"
+            ]
+          ],
+          [
+            "docs-workflow.comp.container",
+            ":refer",
+            [
+              "comp-container"
+            ]
+          ],
+          [
+            "docs-workflow.updater",
+            ":refer",
+            [
+              "updater"
+            ]
+          ],
+          [
+            "docs-workflow.schema",
+            ":as",
+            "schema"
+          ],
+          [
+            "reel.util",
+            ":refer",
+            [
+              "listen-devtools!",
+              "generate-id!"
+            ]
+          ],
+          [
+            "reel.typed",
+            ":as",
+            "typed"
+          ],
+          [
+            "reel.typed-compat",
+            ":as",
+            "reel-view"
+          ],
+          [
+            "docs-workflow.config",
+            ":as",
+            "config"
+          ],
+          [
+            "js-ffi.shared",
+            ":as",
+            "shared"
+          ],
+          [
+            "|./calcit.build-errors",
+            ":default",
+            "build-errors"
+          ],
+          [
+            "|bottom-tip",
+            ":default",
+            "hud!"
+          ],
+          [
+            "js-ffi.browser",
+            ":as",
+            "browser"
+          ],
+          [
+            "respo.ffi.browser",
+            ":refer",
+            [
+              "narrow-element"
+            ]
+          ]
+        ]
+      ]
+    },
+    {
+      "definition_count": 11,
+      "doc": "",
+      "namespace": "docs-workflow.schema",
+      "ns_code": [
+        "ns",
+        "docs-workflow.schema"
+      ]
+    },
+    {
+      "definition_count": 1,
+      "doc": "",
+      "namespace": "docs-workflow.updater",
+      "ns_code": [
+        "ns",
+        "docs-workflow.updater",
+        [
+          ":require",
+          [
+            "respo.cursor",
+            ":refer",
+            [
+              "update-state-tree"
+            ]
+          ]
+        ]
+      ]
+    }
+  ],
+  "defs": [
+    {
+      "code": [
+        "def",
+        "calcit-dirname",
+        "|"
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.$meta/calcit-dirname",
+      "js_ffi": null,
+      "schema": null,
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "def",
+        "calcit-filename",
+        "|calcit.cirru"
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.$meta/calcit-filename",
+      "js_ffi": null,
+      "schema": null,
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defref",
+        "*text-content",
+        [
+          "[]"
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/*text-content",
+      "js_ffi": null,
+      "schema": [
+        "::",
+        "'Ref",
+        [
+          "::",
+          "'List",
+          "'String"
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defcomp",
+        "comp-child-entries",
+        [
+          "parent-path",
+          "entries",
+          "on-select"
+        ],
+        [
+          "div",
+          [
+            "{}",
+            [
+              ":class-name",
+              "style-child-entries-block"
+            ]
+          ],
+          [
+            "<>",
+            "|Child pages",
+            "style-title"
+          ],
+          [
+            "list->",
+            [
+              "{}"
+            ],
+            [
+              "->",
+              "entries",
+              [
+                "map-indexed",
+                [
+                  "fn",
+                  [
+                    "idx",
+                    "entry"
+                  ],
+                  [
+                    "[]",
+                    "idx",
+                    [
+                      "div",
+                      [
+                        "{}",
+                        [
+                          ":tab-index",
+                          "0"
+                        ],
+                        [
+                          ":on-click",
+                          [
+                            "fn",
+                            [
+                              "e",
+                              "d!"
+                            ],
+                            [
+                              "hint-fn",
+                              [
+                                "{}",
+                                [
+                                  ":return",
+                                  "'Unit"
+                                ],
+                                [
+                                  ":args",
+                                  [
+                                    "[]",
+                                    [
+                                      "::",
+                                      "'Map",
+                                      "'Tag",
+                                      "'Dynamic"
+                                    ],
+                                    [
+                                      "::",
+                                      "'Fn",
+                                      [
+                                        "{}",
+                                        [
+                                          ":rest",
+                                          "'Dynamic"
+                                        ],
+                                        [
+                                          ":return",
+                                          "'Unit"
+                                        ],
+                                        [
+                                          ":args",
+                                          [
+                                            "[]",
+                                            "'Dynamic"
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ]
+                            ],
+                            [
+                              "on-select",
+                              [
+                                "conj",
+                                "parent-path",
+                                [
+                                  ":key",
+                                  "entry"
+                                ]
+                              ],
+                              "d!"
+                            ]
+                          ]
+                        ]
+                      ],
+                      [
+                        "div",
+                        [
+                          "{}",
+                          [
+                            ":class-name",
+                            "style-child-entry"
+                          ]
+                        ],
+                        [
+                          "<>",
+                          [
+                            ":title",
+                            "entry"
+                          ]
+                        ],
+                        [
+                          "=<",
+                          "8",
+                          "nil"
+                        ],
+                        [
+                          "if",
+                          [
+                            "not",
+                            [
+                              "empty?",
+                              [
+                                ":children",
+                                "entry"
+                              ]
+                            ]
+                          ],
+                          [
+                            "<>",
+                            "|☰",
+                            [
+                              "{}",
+                              [
+                                ":color",
+                                [
+                                  "hsl",
+                                  "180",
+                                  "80",
+                                  "60"
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/comp-child-entries",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'respo.schema/Component"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            [
+              "::",
+              "'List",
+              "'Tag"
+            ],
+            [
+              "::",
+              "'List",
+              "'docs-workflow.schema/DocNode"
+            ],
+            [
+              "::",
+              "'Fn",
+              [
+                "{}",
+                [
+                  ":return",
+                  "'Unit"
+                ],
+                [
+                  ":args",
+                  [
+                    "[]",
+                    [
+                      "::",
+                      "'List",
+                      "'Tag"
+                    ],
+                    [
+                      "::",
+                      "'Fn",
+                      [
+                        "{}",
+                        [
+                          ":return",
+                          "'Unit"
+                        ],
+                        [
+                          ":args",
+                          [
+                            "[]",
+                            "'Enum"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defcomp",
+        "comp-container",
+        [
+          "reel",
+          "docs"
+        ],
+        [
+          "let",
+          [
+            [
+              "store",
+              [
+                ":store",
+                "reel"
+              ]
+            ],
+            [
+              "states",
+              [
+                ":states",
+                "store"
+              ]
+            ],
+            [
+              "cursor",
+              [
+                "decode-map-as",
+                [
+                  "or",
+                  [
+                    ".unwrap-or",
+                    [
+                      "get",
+                      "states",
+                      ":cursor"
+                    ],
+                    "nil"
+                  ],
+                  [
+                    "[]"
+                  ]
+                ],
+                [
+                  "::",
+                  "'List",
+                  "'Dynamic"
+                ]
+              ]
+            ],
+            [
+              "state",
+              [
+                "let",
+                [
+                  [
+                    "raw",
+                    [
+                      "or",
+                      [
+                        ".unwrap-or",
+                        [
+                          "get",
+                          "states",
+                          ":data"
+                        ],
+                        "nil"
+                      ],
+                      [
+                        "docs-workflow.schema/State",
+                        ":selected",
+                        [
+                          "[]",
+                          ":guide"
+                        ],
+                        ":history",
+                        [
+                          "[]"
+                        ]
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "decode-map-as",
+                  [
+                    "if",
+                    [
+                      "struct?",
+                      "raw"
+                    ],
+                    [
+                      "&struct:to-map",
+                      "raw"
+                    ],
+                    "raw"
+                  ],
+                  "'docs-workflow.schema/State"
+                ]
+              ]
+            ],
+            [
+              "selected",
+              [
+                ":selected",
+                "state"
+              ]
+            ],
+            [
+              "history",
+              [
+                ":history",
+                "state"
+              ]
+            ],
+            [
+              "quick-modal",
+              [
+                "use-modal",
+                [
+                  ">>",
+                  "states",
+                  ":quick"
+                ],
+                [
+                  "{}",
+                  [
+                    ":title",
+                    "|Quick jump"
+                  ],
+                  [
+                    ":card-style",
+                    [
+                      "{}",
+                      [
+                        ":max-width",
+                        "|18vw"
+                      ],
+                      [
+                        ":height",
+                        "|90vh"
+                      ],
+                      [
+                        ":max-height",
+                        "|90vh"
+                      ],
+                      [
+                        ":margin-left",
+                        "|0px"
+                      ]
+                    ]
+                  ],
+                  [
+                    ":backdrop-style",
+                    [
+                      "{}",
+                      [
+                        ":background-color",
+                        [
+                          "hsl",
+                          "0",
+                          "29",
+                          "10",
+                          [
+                            "Option",
+                            ":some",
+                            "0.2"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    ":render",
+                    [
+                      "fn",
+                      [
+                        "on-close"
+                      ],
+                      [
+                        "div",
+                        [
+                          "{}",
+                          [
+                            ":class-name",
+                            [
+                              "str-spaced",
+                              "ui/expand",
+                              "style-jump-modal"
+                            ]
+                          ]
+                        ],
+                        [
+                          "comp-nav-tree",
+                          "docs",
+                          [
+                            "[]"
+                          ],
+                          [
+                            "fn",
+                            [
+                              "path",
+                              "d!"
+                            ],
+                            [
+                              "hint-fn",
+                              [
+                                "{}",
+                                [
+                                  ":args",
+                                  [
+                                    "[]",
+                                    [
+                                      "::",
+                                      "'List",
+                                      "'Tag"
+                                    ],
+                                    [
+                                      "::",
+                                      "'Fn",
+                                      [
+                                        "{}",
+                                        [
+                                          ":return",
+                                          "'Unit"
+                                        ],
+                                        [
+                                          ":args",
+                                          [
+                                            "[]",
+                                            "'Enum"
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ],
+                                [
+                                  ":return",
+                                  "'Unit"
+                                ]
+                              ]
+                            ],
+                            [
+                              "d!",
+                              [
+                                "docs-workflow.schema/Op",
+                                ":states",
+                                "cursor",
+                                [
+                                  "next-path",
+                                  "state",
+                                  "path"
+                                ]
+                              ]
+                            ],
+                            "&unit"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "div",
+            [
+              "{}",
+              [
+                ":class-name",
+                [
+                  "str-spaced",
+                  "|calcit-tile",
+                  "css/preset",
+                  "css/fullscreen",
+                  "css/global",
+                  "css/row"
+                ]
+              ]
+            ],
+            [
+              "div",
+              [
+                "{}",
+                [
+                  ":class-name",
+                  [
+                    "str-spaced",
+                    "css/column",
+                    "css-layout"
+                  ]
+                ]
+              ],
+              [
+                "div",
+                [
+                  "{}",
+                  [
+                    ":class-name",
+                    "css/row-parted"
+                  ],
+                  [
+                    ":style",
+                    [
+                      "{}",
+                      [
+                        ":margin-top",
+                        "|12px"
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "div",
+                  [
+                    "{}",
+                    [
+                      ":class-name",
+                      [
+                        "str-spaced",
+                        "css/row-middle",
+                        "css/gap8"
+                      ]
+                    ]
+                  ],
+                  [
+                    "<>",
+                    "|Pages",
+                    "style-title"
+                  ],
+                  [
+                    "div",
+                    [
+                      "{}",
+                      [
+                        ":style",
+                        [
+                          "{}"
+                        ]
+                      ],
+                      [
+                        ":on-click",
+                        [
+                          "fn",
+                          [
+                            "e",
+                            "d!"
+                          ],
+                          [
+                            "hint-fn",
+                            [
+                              "{}",
+                              [
+                                ":return",
+                                "'Unit"
+                              ],
+                              [
+                                ":args",
+                                [
+                                  "[]",
+                                  [
+                                    "::",
+                                    "'Map",
+                                    "'Tag",
+                                    "'Dynamic"
+                                  ],
+                                  [
+                                    "::",
+                                    "'Fn",
+                                    [
+                                      "{}",
+                                      [
+                                        ":rest",
+                                        "'Dynamic"
+                                      ],
+                                      [
+                                        ":return",
+                                        "'Unit"
+                                      ],
+                                      [
+                                        ":args",
+                                        [
+                                          "[]",
+                                          "'Dynamic"
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ],
+                          [
+                            ".show",
+                            "quick-modal",
+                            "d!"
+                          ],
+                          "&unit"
+                        ]
+                      ]
+                    ],
+                    [
+                      "<>",
+                      "|☰",
+                      [
+                        "str-spaced",
+                        "css/font-fancy",
+                        "style-jump"
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "a",
+                  [
+                    "{}",
+                    [
+                      ":href",
+                      "|mdbook.html"
+                    ],
+                    [
+                      ":inner-text",
+                      "|mdbook"
+                    ],
+                    [
+                      ":style",
+                      [
+                        "{}",
+                        [
+                          ":font-size",
+                          "|12px"
+                        ],
+                        [
+                          ":font-family",
+                          "ui/font-fancy"
+                        ],
+                        [
+                          ":opacity",
+                          "|0.3"
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "comp-parent-menu",
+                "selected",
+                "docs",
+                [
+                  "fn",
+                  [
+                    "path",
+                    "d!"
+                  ],
+                  [
+                    "hint-fn",
+                    [
+                      "{}",
+                      [
+                        ":args",
+                        [
+                          "[]",
+                          [
+                            "::",
+                            "'List",
+                            "'Tag"
+                          ],
+                          [
+                            "::",
+                            "'Fn",
+                            [
+                              "{}",
+                              [
+                                ":return",
+                                "'Unit"
+                              ],
+                              [
+                                ":args",
+                                [
+                                  "[]",
+                                  "'Enum"
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ],
+                      [
+                        ":return",
+                        "'Unit"
+                      ]
+                    ]
+                  ],
+                  [
+                    "d!",
+                    [
+                      "docs-workflow.schema/Op",
+                      ":states",
+                      "cursor",
+                      [
+                        "next-path",
+                        "state",
+                        "path"
+                      ]
+                    ]
+                  ],
+                  "&unit"
+                ]
+              ],
+              [
+                "let",
+                [
+                  [
+                    "parent-path",
+                    [
+                      "or",
+                      [
+                        "butlast",
+                        "selected"
+                      ],
+                      [
+                        "[]"
+                      ]
+                    ]
+                  ],
+                  [
+                    "entries",
+                    [
+                      "find-entries",
+                      "docs",
+                      "parent-path"
+                    ]
+                  ]
+                ],
+                [
+                  "div",
+                  [
+                    "{}",
+                    [
+                      ":class-name",
+                      "css/expand"
+                    ]
+                  ],
+                  [
+                    "comp-page-entries",
+                    [
+                      ".unwrap",
+                      [
+                        "last",
+                        "selected"
+                      ]
+                    ],
+                    "parent-path",
+                    "entries",
+                    [
+                      "fn",
+                      [
+                        "xs",
+                        "d!"
+                      ],
+                      [
+                        "hint-fn",
+                        [
+                          "{}",
+                          [
+                            ":args",
+                            [
+                              "[]",
+                              [
+                                "::",
+                                "'List",
+                                "'Tag"
+                              ],
+                              [
+                                "::",
+                                "'Fn",
+                                [
+                                  "{}",
+                                  [
+                                    ":return",
+                                    "'Unit"
+                                  ],
+                                  [
+                                    ":args",
+                                    [
+                                      "[]",
+                                      "'Enum"
+                                    ]
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ],
+                          [
+                            ":return",
+                            "'Unit"
+                          ]
+                        ]
+                      ],
+                      [
+                        "d!",
+                        [
+                          "docs-workflow.schema/Op",
+                          ":states",
+                          "cursor",
+                          [
+                            "next-path",
+                            "state",
+                            "xs"
+                          ]
+                        ]
+                      ],
+                      "&unit"
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "div",
+                [
+                  "{}",
+                  [
+                    ":style",
+                    [
+                      "{}",
+                      [
+                        ":margin-top",
+                        "|20px"
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "<>",
+                  "|Histories",
+                  "style-title"
+                ],
+                [
+                  "comp-history-menu",
+                  "history",
+                  "docs",
+                  [
+                    "fn",
+                    [
+                      "path",
+                      "d!"
+                    ],
+                    [
+                      "hint-fn",
+                      [
+                        "{}",
+                        [
+                          ":args",
+                          [
+                            "[]",
+                            [
+                              "::",
+                              "'List",
+                              "'Tag"
+                            ],
+                            [
+                              "::",
+                              "'Fn",
+                              [
+                                "{}",
+                                [
+                                  ":return",
+                                  "'Unit"
+                                ],
+                                [
+                                  ":args",
+                                  [
+                                    "[]",
+                                    "'Enum"
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ],
+                        [
+                          ":return",
+                          "'Unit"
+                        ]
+                      ]
+                    ],
+                    [
+                      "d!",
+                      [
+                        "docs-workflow.schema/Op",
+                        ":states",
+                        "cursor",
+                        [
+                          "next-path",
+                          "state",
+                          "path"
+                        ]
+                      ]
+                    ],
+                    "&unit"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "let",
+              [
+                [
+                  "target",
+                  [
+                    "find-target",
+                    "docs",
+                    [
+                      ":selected",
+                      "state"
+                    ]
+                  ]
+                ]
+              ],
+              [
+                "div",
+                [
+                  "{}",
+                  [
+                    ":class-name",
+                    "css/expand"
+                  ]
+                ],
+                [
+                  "match",
+                  "target",
+                  [
+                    [
+                      ":some",
+                      "target-value"
+                    ],
+                    [
+                      "let",
+                      [
+                        [
+                          "children",
+                          [
+                            ":children",
+                            "target-value"
+                          ]
+                        ]
+                      ],
+                      [
+                        "if",
+                        [
+                          "empty?",
+                          "children"
+                        ],
+                        "nil",
+                        [
+                          "comp-child-entries",
+                          [
+                            ":selected",
+                            "state"
+                          ],
+                          "children",
+                          [
+                            "fn",
+                            [
+                              "xs",
+                              "d!"
+                            ],
+                            [
+                              "hint-fn",
+                              [
+                                "{}",
+                                [
+                                  ":args",
+                                  [
+                                    "[]",
+                                    [
+                                      "::",
+                                      "'List",
+                                      "'Tag"
+                                    ],
+                                    [
+                                      "::",
+                                      "'Fn",
+                                      [
+                                        "{}",
+                                        [
+                                          ":return",
+                                          "'Unit"
+                                        ],
+                                        [
+                                          ":args",
+                                          [
+                                            "[]",
+                                            "'Enum"
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ],
+                                [
+                                  ":return",
+                                  "'Unit"
+                                ]
+                              ]
+                            ],
+                            [
+                              "d!",
+                              [
+                                "docs-workflow.schema/Op",
+                                ":states",
+                                "cursor",
+                                [
+                                  "next-path",
+                                  "state",
+                                  "xs"
+                                ]
+                              ]
+                            ],
+                            "&unit"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    [
+                      ":none"
+                    ],
+                    "nil"
+                  ]
+                ],
+                [
+                  "comp-doc-page",
+                  "target"
+                ],
+                [
+                  "=<",
+                  "nil",
+                  "120"
+                ]
+              ]
+            ],
+            [
+              "comp-global-keydown",
+              [
+                "{}",
+                [
+                  ":disabled-commands",
+                  [
+                    "#{}",
+                    "|p"
+                  ]
+                ]
+              ],
+              [
+                "fn",
+                [
+                  "e",
+                  "d!"
+                ],
+                [
+                  "hint-fn",
+                  [
+                    "{}",
+                    [
+                      ":args",
+                      [
+                        "[]",
+                        [
+                          "::",
+                          "'Map",
+                          "'Tag",
+                          "'Dynamic"
+                        ],
+                        [
+                          "::",
+                          "'Fn",
+                          [
+                            "{}",
+                            [
+                              ":args",
+                              [
+                                "[]",
+                                "'Dynamic"
+                              ]
+                            ],
+                            [
+                              ":rest",
+                              "'Dynamic"
+                            ],
+                            [
+                              ":return",
+                              "'Unit"
+                            ]
+                          ]
+                        ]
+                      ]
+                    ],
+                    [
+                      ":return",
+                      "'Unit"
+                    ]
+                  ]
+                ],
+                [
+                  "let",
+                  [
+                    [
+                      "key",
+                      [
+                        "contract/expect-string",
+                        "|keyboard.key",
+                        [
+                          ".unwrap",
+                          [
+                            "get",
+                            "e",
+                            ":key"
+                          ]
+                        ]
+                      ]
+                    ],
+                    [
+                      "meta?",
+                      [
+                        "contract/expect-bool",
+                        "|keyboard.meta",
+                        [
+                          ".unwrap",
+                          [
+                            "get",
+                            "e",
+                            ":meta?"
+                          ]
+                        ]
+                      ]
+                    ],
+                    [
+                      "ctrl?",
+                      [
+                        "contract/expect-bool",
+                        "|keyboard.ctrl",
+                        [
+                          ".unwrap",
+                          [
+                            "get",
+                            "e",
+                            ":ctrl?"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "if",
+                    [
+                      "and",
+                      [
+                        "=",
+                        "|p",
+                        "key"
+                      ],
+                      [
+                        "or",
+                        "meta?",
+                        "ctrl?"
+                      ]
+                    ],
+                    [
+                      ".show",
+                      "quick-modal",
+                      "d!"
+                    ],
+                    [
+                      "if",
+                      [
+                        "=",
+                        "|Escape",
+                        "key"
+                      ],
+                      [
+                        ".close",
+                        "quick-modal",
+                        "d!"
+                      ],
+                      "%none"
+                    ]
+                  ]
+                ],
+                "&unit"
+              ]
+            ],
+            [
+              ".render",
+              "quick-modal"
+            ],
+            [
+              "when",
+              "dev?",
+              [
+                "comp-reel",
+                [
+                  ">>",
+                  "states",
+                  ":reel"
+                ],
+                [
+                  "reel-view/view-data",
+                  "reel"
+                ],
+                [
+                  "{}"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/comp-container",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'respo.schema/Component"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            [
+              "::",
+              "'reel.typed/State",
+              "'docs-workflow.schema/Op",
+              "'docs-workflow.schema/Store"
+            ],
+            [
+              "::",
+              "'List",
+              "'docs-workflow.schema/DocNode"
+            ]
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defcomp",
+        "comp-doc-page",
+        [
+          "target"
+        ],
+        [
+          "match",
+          "target",
+          [
+            [
+              ":some",
+              "target-value"
+            ],
+            [
+              "div",
+              [
+                "{}",
+                [
+                  ":class-name",
+                  "css-doc-page"
+                ]
+              ],
+              [
+                "div",
+                [
+                  "{}",
+                  [
+                    ":class-name",
+                    "css-markdown"
+                  ],
+                  [
+                    ":innerHTML",
+                    [
+                      ".render",
+                      "md",
+                      [
+                        ":content",
+                        "target-value"
+                      ]
+                    ]
+                  ]
+                ]
+              ],
+              [
+                ";",
+                "a",
+                [
+                  "{}",
+                  [
+                    ":inner-text",
+                    "|Speech"
+                  ],
+                  [
+                    ":class-name",
+                    [
+                      "str-spaced",
+                      "css/link",
+                      "css-speech-button"
+                    ]
+                  ],
+                  [
+                    ":on-click",
+                    [
+                      "fn",
+                      [
+                        "e",
+                        "d1"
+                      ],
+                      [
+                        "reset!",
+                        "*text-content",
+                        [
+                          "[]"
+                        ]
+                      ],
+                      [
+                        "->",
+                        "e",
+                        ":event",
+                        ".-target",
+                        ".-parentElement",
+                        ".-firstChild",
+                        ".-children",
+                        "js/Array.from",
+                        [
+                          ".!forEach",
+                          [
+                            "fn",
+                            [
+                              "child",
+                              "idx",
+                              "?",
+                              "a"
+                            ],
+                            [
+                              "if",
+                              [
+                                "not=",
+                                "|PRE",
+                                [
+                                  ".-tagName",
+                                  "child"
+                                ]
+                              ],
+                              [
+                                "swap!",
+                                "*text-content",
+                                "conj",
+                                [
+                                  ".-innerText",
+                                  "child"
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ],
+                      [
+                        "if-let",
+                        [
+                          "key",
+                          [
+                            "get-env",
+                            "|azure-key"
+                          ]
+                        ],
+                        [
+                          "speechOne",
+                          [
+                            ".join-str",
+                            "@*text-content",
+                            "&newline"
+                          ],
+                          [
+                            "get-env",
+                            "|azure-key"
+                          ],
+                          [
+                            ".unwrap-or",
+                            [
+                              "get-env",
+                              "|lang"
+                            ],
+                            "|en-US"
+                          ],
+                          [
+                            "fn",
+                            []
+                          ],
+                          [
+                            "fn",
+                            []
+                          ]
+                        ],
+                        [
+                          "nativeSpeechOne",
+                          [
+                            ".join-str",
+                            "@*text-content",
+                            "&newline"
+                          ],
+                          [
+                            ".unwrap-or",
+                            [
+                              "get-env",
+                              "|lang"
+                            ],
+                            "|en-US"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            [
+              ":none"
+            ],
+            [
+              "<>",
+              "|"
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/comp-doc-page",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'respo.schema/Component"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            [
+              "::",
+              "'calcit.core/Option",
+              "'docs-workflow.schema/DocNode"
+            ]
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defcomp",
+        "comp-history-menu",
+        [
+          "history",
+          "docs",
+          "on-select"
+        ],
+        [
+          "list->",
+          [
+            "{}"
+          ],
+          [
+            "->",
+            "history",
+            [
+              "map-indexed",
+              [
+                "fn",
+                [
+                  "idx",
+                  "path"
+                ],
+                [
+                  "[]",
+                  "idx",
+                  [
+                    "let",
+                    [
+                      [
+                        "target",
+                        [
+                          "find-target",
+                          "docs",
+                          "path"
+                        ]
+                      ]
+                    ],
+                    [
+                      "div",
+                      [
+                        "{}",
+                        [
+                          ":tab-index",
+                          "0"
+                        ],
+                        [
+                          ":class-name",
+                          [
+                            "str-spaced",
+                            "style-doc-entry",
+                            "style-history-entry"
+                          ]
+                        ],
+                        [
+                          ":on-click",
+                          [
+                            "fn",
+                            [
+                              "e",
+                              "d!"
+                            ],
+                            [
+                              "hint-fn",
+                              [
+                                "{}",
+                                [
+                                  ":return",
+                                  "'Unit"
+                                ],
+                                [
+                                  ":args",
+                                  [
+                                    "[]",
+                                    [
+                                      "::",
+                                      "'Map",
+                                      "'Tag",
+                                      "'Dynamic"
+                                    ],
+                                    [
+                                      "::",
+                                      "'Fn",
+                                      [
+                                        "{}",
+                                        [
+                                          ":rest",
+                                          "'Dynamic"
+                                        ],
+                                        [
+                                          ":return",
+                                          "'Unit"
+                                        ],
+                                        [
+                                          ":args",
+                                          [
+                                            "[]",
+                                            "'Dynamic"
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ]
+                            ],
+                            [
+                              "on-select",
+                              "path",
+                              "d!"
+                            ]
+                          ]
+                        ]
+                      ],
+                      [
+                        "<>",
+                        [
+                          "match",
+                          "target",
+                          [
+                            [
+                              ":some",
+                              "target-value"
+                            ],
+                            [
+                              ":title",
+                              "target-value"
+                            ]
+                          ],
+                          [
+                            [
+                              ":none"
+                            ],
+                            "|"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/comp-history-menu",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'respo.schema/Component"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            [
+              "::",
+              "'List",
+              [
+                "::",
+                "'List",
+                "'Tag"
+              ]
+            ],
+            [
+              "::",
+              "'List",
+              "'docs-workflow.schema/DocNode"
+            ],
+            [
+              "::",
+              "'Fn",
+              [
+                "{}",
+                [
+                  ":return",
+                  "'Unit"
+                ],
+                [
+                  ":args",
+                  [
+                    "[]",
+                    [
+                      "::",
+                      "'List",
+                      "'Tag"
+                    ],
+                    [
+                      "::",
+                      "'Fn",
+                      [
+                        "{}",
+                        [
+                          ":return",
+                          "'Unit"
+                        ],
+                        [
+                          ":args",
+                          [
+                            "[]",
+                            "'Enum"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defcomp",
+        "comp-nav-tree",
+        [
+          "docs",
+          "base-path",
+          "on-select"
+        ],
+        [
+          "list->",
+          [
+            "{}"
+          ],
+          [
+            "->",
+            "docs",
+            [
+              "map",
+              [
+                "fn",
+                [
+                  "entry"
+                ],
+                [
+                  "[]",
+                  [
+                    ":key",
+                    "entry"
+                  ],
+                  [
+                    "div",
+                    [
+                      "{}"
+                    ],
+                    [
+                      "div",
+                      [
+                        "{}",
+                        [
+                          ":tab-index",
+                          "0"
+                        ],
+                        [
+                          ":class-name",
+                          "style-doc-entry"
+                        ],
+                        [
+                          ":style",
+                          [
+                            "{}",
+                            [
+                              ":padding",
+                              "|0 8px"
+                            ],
+                            [
+                              ":cursor",
+                              "|pointer"
+                            ]
+                          ]
+                        ],
+                        [
+                          ":on-click",
+                          [
+                            "fn",
+                            [
+                              "e",
+                              "d!"
+                            ],
+                            [
+                              "hint-fn",
+                              [
+                                "{}",
+                                [
+                                  ":return",
+                                  "'Unit"
+                                ],
+                                [
+                                  ":args",
+                                  [
+                                    "[]",
+                                    [
+                                      "::",
+                                      "'Map",
+                                      "'Tag",
+                                      "'Dynamic"
+                                    ],
+                                    [
+                                      "::",
+                                      "'Fn",
+                                      [
+                                        "{}",
+                                        [
+                                          ":rest",
+                                          "'Dynamic"
+                                        ],
+                                        [
+                                          ":return",
+                                          "'Unit"
+                                        ],
+                                        [
+                                          ":args",
+                                          [
+                                            "[]",
+                                            "'Dynamic"
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ]
+                            ],
+                            [
+                              "on-select",
+                              [
+                                "conj",
+                                "base-path",
+                                [
+                                  ":key",
+                                  "entry"
+                                ]
+                              ],
+                              "d!"
+                            ]
+                          ]
+                        ]
+                      ],
+                      [
+                        "<>",
+                        [
+                          ":title",
+                          "entry"
+                        ]
+                      ]
+                    ],
+                    [
+                      "let",
+                      [
+                        [
+                          "xs",
+                          [
+                            ":children",
+                            "entry"
+                          ]
+                        ]
+                      ],
+                      [
+                        "if",
+                        [
+                          "not",
+                          [
+                            "empty?",
+                            "xs"
+                          ]
+                        ],
+                        [
+                          "div",
+                          [
+                            "{}",
+                            [
+                              ":style",
+                              [
+                                "{}",
+                                [
+                                  ":padding-left",
+                                  "|16px"
+                                ]
+                              ]
+                            ]
+                          ],
+                          [
+                            "comp-nav-tree",
+                            "xs",
+                            [
+                              "conj",
+                              "base-path",
+                              [
+                                ":key",
+                                "entry"
+                              ]
+                            ],
+                            "on-select"
+                          ]
+                        ],
+                        "nil"
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/comp-nav-tree",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'respo.schema/Component"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            [
+              "::",
+              "'List",
+              "'docs-workflow.schema/DocNode"
+            ],
+            [
+              "::",
+              "'List",
+              "'Tag"
+            ],
+            [
+              "::",
+              "'Fn",
+              [
+                "{}",
+                [
+                  ":return",
+                  "'Unit"
+                ],
+                [
+                  ":args",
+                  [
+                    "[]",
+                    [
+                      "::",
+                      "'List",
+                      "'Tag"
+                    ],
+                    [
+                      "::",
+                      "'Fn",
+                      [
+                        "{}",
+                        [
+                          ":return",
+                          "'Unit"
+                        ],
+                        [
+                          ":args",
+                          [
+                            "[]",
+                            "'Enum"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defcomp",
+        "comp-page-entries",
+        [
+          "selected",
+          "parent-path",
+          "entries",
+          "on-select"
+        ],
+        [
+          "div",
+          [
+            "{}",
+            [
+              ":style",
+              [
+                "{}",
+                [
+                  ":min-width",
+                  "|240px"
+                ],
+                [
+                  ":max-width",
+                  "|320px"
+                ]
+              ]
+            ]
+          ],
+          [
+            "list->",
+            [
+              "{}"
+            ],
+            [
+              "->",
+              "entries",
+              [
+                "map-indexed",
+                [
+                  "fn",
+                  [
+                    "idx",
+                    "entry"
+                  ],
+                  [
+                    "[]",
+                    "idx",
+                    [
+                      "let",
+                      [
+                        [
+                          "selected?",
+                          [
+                            "=",
+                            "selected",
+                            [
+                              ":key",
+                              "entry"
+                            ]
+                          ]
+                        ]
+                      ],
+                      [
+                        "div",
+                        [
+                          "{}",
+                          [
+                            ":tab-index",
+                            "0"
+                          ],
+                          [
+                            ":on-click",
+                            [
+                              "fn",
+                              [
+                                "e",
+                                "d!"
+                              ],
+                              [
+                                "hint-fn",
+                                [
+                                  "{}",
+                                  [
+                                    ":return",
+                                    "'Unit"
+                                  ],
+                                  [
+                                    ":args",
+                                    [
+                                      "[]",
+                                      [
+                                        "::",
+                                        "'Map",
+                                        "'Tag",
+                                        "'Dynamic"
+                                      ],
+                                      [
+                                        "::",
+                                        "'Fn",
+                                        [
+                                          "{}",
+                                          [
+                                            ":rest",
+                                            "'Dynamic"
+                                          ],
+                                          [
+                                            ":return",
+                                            "'Unit"
+                                          ],
+                                          [
+                                            ":args",
+                                            [
+                                              "[]",
+                                              "'Dynamic"
+                                            ]
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ],
+                              [
+                                "on-select",
+                                [
+                                  "conj",
+                                  "parent-path",
+                                  [
+                                    ":key",
+                                    "entry"
+                                  ]
+                                ],
+                                "d!"
+                              ]
+                            ]
+                          ]
+                        ],
+                        [
+                          "div",
+                          [
+                            "{}",
+                            [
+                              ":class-name",
+                              [
+                                "str-spaced",
+                                "style-doc-entry",
+                                [
+                                  "if",
+                                  "selected?",
+                                  "style-doc-entry-selected"
+                                ]
+                              ]
+                            ]
+                          ],
+                          [
+                            "<>",
+                            [
+                              ":title",
+                              "entry"
+                            ]
+                          ],
+                          [
+                            "=<",
+                            "8",
+                            "nil"
+                          ],
+                          [
+                            "if",
+                            [
+                              "not",
+                              [
+                                "empty?",
+                                [
+                                  ":children",
+                                  "entry"
+                                ]
+                              ]
+                            ],
+                            [
+                              "<>",
+                              "|☰",
+                              [
+                                "{}",
+                                [
+                                  ":color",
+                                  [
+                                    "hsl",
+                                    "180",
+                                    "80",
+                                    "60"
+                                  ]
+                                ]
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/comp-page-entries",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'respo.schema/Component"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            "'Tag",
+            [
+              "::",
+              "'List",
+              "'Tag"
+            ],
+            [
+              "::",
+              "'List",
+              "'docs-workflow.schema/DocNode"
+            ],
+            [
+              "::",
+              "'Fn",
+              [
+                "{}",
+                [
+                  ":return",
+                  "'Unit"
+                ],
+                [
+                  ":args",
+                  [
+                    "[]",
+                    [
+                      "::",
+                      "'List",
+                      "'Tag"
+                    ],
+                    [
+                      "::",
+                      "'Fn",
+                      [
+                        "{}",
+                        [
+                          ":return",
+                          "'Unit"
+                        ],
+                        [
+                          ":args",
+                          [
+                            "[]",
+                            "'Enum"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defcomp",
+        "comp-parent-menu",
+        [
+          "selected",
+          "docs",
+          "on-select"
+        ],
+        [
+          "list->",
+          [
+            "{}",
+            [
+              ":style",
+              [
+                "{}"
+              ]
+            ]
+          ],
+          [
+            "if",
+            [
+              "not",
+              [
+                "empty?",
+                "selected"
+              ]
+            ],
+            [
+              "->",
+              [
+                "range",
+                [
+                  "dec",
+                  [
+                    ".len",
+                    "selected"
+                  ]
+                ]
+              ],
+              [
+                "map",
+                [
+                  "fn",
+                  [
+                    "idx"
+                  ],
+                  [
+                    "let",
+                    [
+                      [
+                        "sub-path",
+                        [
+                          "slice",
+                          "selected",
+                          "0",
+                          [
+                            "inc",
+                            "idx"
+                          ]
+                        ]
+                      ],
+                      [
+                        "target",
+                        [
+                          "find-target",
+                          "docs",
+                          "sub-path"
+                        ]
+                      ]
+                    ],
+                    [
+                      "[]",
+                      "idx",
+                      [
+                        "div",
+                        [
+                          "{}",
+                          [
+                            ":style",
+                            [
+                              "{}",
+                              [
+                                ":cursor",
+                                "|pointer"
+                              ],
+                              [
+                                ":font-style",
+                                "|italic"
+                              ],
+                              [
+                                ":font-family",
+                                "ui/font-fancy"
+                              ],
+                              [
+                                ":color",
+                                [
+                                  "hsl",
+                                  "0",
+                                  "0",
+                                  "40"
+                                ]
+                              ],
+                              [
+                                ":background-color",
+                                [
+                                  "hsl",
+                                  "180",
+                                  "90",
+                                  "94"
+                                ]
+                              ]
+                            ]
+                          ],
+                          [
+                            ":on-click",
+                            [
+                              "fn",
+                              [
+                                "e",
+                                "d!"
+                              ],
+                              [
+                                "hint-fn",
+                                [
+                                  "{}",
+                                  [
+                                    ":return",
+                                    "'Unit"
+                                  ],
+                                  [
+                                    ":args",
+                                    [
+                                      "[]",
+                                      [
+                                        "::",
+                                        "'Map",
+                                        "'Tag",
+                                        "'Dynamic"
+                                      ],
+                                      [
+                                        "::",
+                                        "'Fn",
+                                        [
+                                          "{}",
+                                          [
+                                            ":rest",
+                                            "'Dynamic"
+                                          ],
+                                          [
+                                            ":return",
+                                            "'Unit"
+                                          ],
+                                          [
+                                            ":args",
+                                            [
+                                              "[]",
+                                              "'Dynamic"
+                                            ]
+                                          ]
+                                        ]
+                                      ]
+                                    ]
+                                  ]
+                                ]
+                              ],
+                              [
+                                "on-select",
+                                "sub-path",
+                                "d!"
+                              ]
+                            ]
+                          ]
+                        ],
+                        [
+                          "<>",
+                          [
+                            "str",
+                            "|< ",
+                            [
+                              "match",
+                              "target",
+                              [
+                                [
+                                  ":some",
+                                  "target-value"
+                                ],
+                                [
+                                  ":title",
+                                  "target-value"
+                                ]
+                              ],
+                              [
+                                [
+                                  ":none"
+                                ],
+                                "|NOT FOUND"
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ],
+            [
+              "[]"
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/comp-parent-menu",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'respo.schema/Component"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            [
+              "::",
+              "'List",
+              "'Tag"
+            ],
+            [
+              "::",
+              "'List",
+              "'docs-workflow.schema/DocNode"
+            ],
+            [
+              "::",
+              "'Fn",
+              [
+                "{}",
+                [
+                  ":return",
+                  "'Unit"
+                ],
+                [
+                  ":args",
+                  [
+                    "[]",
+                    [
+                      "::",
+                      "'List",
+                      "'Tag"
+                    ],
+                    [
+                      "::",
+                      "'Fn",
+                      [
+                        "{}",
+                        [
+                          ":return",
+                          "'Unit"
+                        ],
+                        [
+                          ":args",
+                          [
+                            "[]",
+                            "'Enum"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "css-doc",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              "{}",
+              [
+                ":font-size",
+                "|15px"
+              ]
+            ]
+          ],
+          [
+            "|& p",
+            [
+              "{}",
+              [
+                ":line-height",
+                "|1.56"
+              ]
+            ]
+          ],
+          [
+            "|& p > code",
+            [
+              "{}",
+              [
+                ":background-color",
+                [
+                  "hsl",
+                  "0",
+                  "0",
+                  "97"
+                ]
+              ],
+              [
+                ":padding",
+                "|0 6px"
+              ],
+              [
+                ":border-radius",
+                "|3px"
+              ],
+              [
+                ":border",
+                [
+                  "str",
+                  "|1px solid ",
+                  [
+                    "hsl",
+                    "0",
+                    "0",
+                    "90"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/css-doc",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "css-doc-page",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              ".merge",
+              "ui/expand",
+              [
+                "{}",
+                [
+                  ":padding",
+                  "|8px 16px"
+                ],
+                [
+                  ":background-color",
+                  [
+                    "hsl",
+                    "0",
+                    "0",
+                    "100",
+                    [
+                      "Option",
+                      ":some",
+                      "0.6"
+                    ]
+                  ]
+                ],
+                [
+                  ":position",
+                  "|relative"
+                ]
+              ]
+            ]
+          ],
+          [
+            "|& iframe",
+            [
+              "{}",
+              [
+                ":border",
+                [
+                  "str",
+                  "|1px solid ",
+                  [
+                    "hsl",
+                    "0",
+                    "0",
+                    "86"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/css-doc-page",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "css-layout",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              "{}",
+              [
+                ":padding",
+                "|0 8px"
+              ],
+              [
+                ":width",
+                "|20%"
+              ],
+              [
+                ":min-width",
+                "|266px"
+              ],
+              [
+                ":background-color",
+                "|white"
+              ],
+              [
+                ":border-right",
+                [
+                  "str",
+                  "|1px solid ",
+                  [
+                    "hsl",
+                    "0",
+                    "0",
+                    "94"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/css-layout",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "css-markdown",
+        [
+          "{}",
+          [
+            "|& p code",
+            [
+              "{}",
+              [
+                ":border",
+                [
+                  "str",
+                  "|1px solid ",
+                  [
+                    "hsl",
+                    "0",
+                    "0",
+                    "90"
+                  ]
+                ]
+              ],
+              [
+                ":border-radius",
+                "|4px"
+              ],
+              [
+                ":padding",
+                "|2px 2px"
+              ],
+              [
+                ":margin",
+                "|-2px 2px"
+              ]
+            ]
+          ],
+          [
+            "|& pre",
+            [
+              "{}",
+              [
+                ":background-color",
+                "|hsla(0, 0%, 96%, 0.5)"
+              ],
+              [
+                ":border",
+                "|1px solid #eee"
+              ],
+              [
+                ":padding",
+                "|2px 8px"
+              ],
+              [
+                ":line-height",
+                "|1.4"
+              ],
+              [
+                ":min-width",
+                "|400px"
+              ],
+              [
+                ":border-radius",
+                "|4px"
+              ],
+              [
+                ":overflow",
+                "|auto"
+              ]
+            ]
+          ],
+          [
+            "|& blockquote",
+            [
+              "{}",
+              [
+                ":margin",
+                "|16px 0"
+              ],
+              [
+                ":padding",
+                "|1px 16px"
+              ],
+              [
+                ":color",
+                "|#777"
+              ],
+              [
+                ":background-color",
+                "|#eee8e8"
+              ],
+              [
+                ":border-left",
+                "|4px solid #ccc"
+              ],
+              [
+                ":line-height",
+                "|1.5em"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/css-markdown",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "css-speech-button",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              "{}",
+              [
+                ":position",
+                "|absolute"
+              ],
+              [
+                ":top",
+                "|32px"
+              ],
+              [
+                ":right",
+                "|8px"
+              ],
+              [
+                ":font-family",
+                "css/font-fancy"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/css-speech-button",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defn",
+        "find-entries",
+        [
+          "entries",
+          "path"
+        ],
+        [
+          "if",
+          [
+            "empty?",
+            "path"
+          ],
+          "entries",
+          [
+            "match",
+            [
+              "find-target",
+              "entries",
+              "path"
+            ],
+            [
+              [
+                ":some",
+                "target"
+              ],
+              [
+                ":children",
+                "target"
+              ]
+            ],
+            [
+              [
+                ":none"
+              ],
+              [
+                "do",
+                [
+                  "js/console.warn",
+                  "|no entries found for",
+                  "entries",
+                  "path"
+                ],
+                [
+                  "[]"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/find-entries",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            [
+              "::",
+              "'List",
+              "'docs-workflow.schema/DocNode"
+            ],
+            [
+              "::",
+              "'List",
+              "'Tag"
+            ]
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ],
+        [
+          ":return",
+          [
+            "::",
+            "'List",
+            "'docs-workflow.schema/DocNode"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defn",
+        "find-target",
+        [
+          "entries",
+          "path"
+        ],
+        [
+          "match",
+          [
+            "first",
+            "path"
+          ],
+          [
+            [
+              ":none"
+            ],
+            [
+              "Option",
+              ":none"
+            ]
+          ],
+          [
+            [
+              ":some",
+              "p0"
+            ],
+            [
+              "match",
+              [
+                "find",
+                "entries",
+                [
+                  "fn",
+                  [
+                    "entry"
+                  ],
+                  [
+                    "hint-fn",
+                    [
+                      "{}",
+                      [
+                        ":args",
+                        [
+                          "[]",
+                          "'docs-workflow.schema/DocNode"
+                        ]
+                      ],
+                      [
+                        ":return",
+                        "'Bool"
+                      ]
+                    ]
+                  ],
+                  [
+                    "=",
+                    "p0",
+                    [
+                      ":key",
+                      "entry"
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  ":some",
+                  "target"
+                ],
+                [
+                  "if",
+                  [
+                    "=",
+                    "1",
+                    [
+                      ".len",
+                      "path"
+                    ]
+                  ],
+                  [
+                    "Option",
+                    ":some",
+                    "target"
+                  ],
+                  [
+                    "find-target",
+                    [
+                      ":children",
+                      "target"
+                    ],
+                    [
+                      "rest",
+                      "path"
+                    ]
+                  ]
+                ]
+              ],
+              [
+                [
+                  ":none"
+                ],
+                [
+                  "Option",
+                  ":none"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/find-target",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            [
+              "::",
+              "'List",
+              "'docs-workflow.schema/DocNode"
+            ],
+            [
+              "::",
+              "'List",
+              "'Tag"
+            ]
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ],
+        [
+          ":return",
+          [
+            "::",
+            "'calcit.core/Option",
+            "'docs-workflow.schema/DocNode"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": [
+        {
+          "code": [
+            "do",
+            [
+              "assert=",
+              [
+                "Option",
+                ":some",
+                "|Overview"
+              ],
+              [
+                ".map",
+                [
+                  "find-target",
+                  "docs-workflow.schema/docs",
+                  [
+                    "[]",
+                    ":design",
+                    ":overview"
+                  ]
+                ],
+                [
+                  "fn",
+                  [
+                    "target"
+                  ],
+                  [
+                    "hint-fn",
+                    [
+                      "{}",
+                      [
+                        ":args",
+                        [
+                          "[]",
+                          "'docs-workflow.schema/DocNode"
+                        ]
+                      ],
+                      [
+                        ":return",
+                        "'String"
+                      ]
+                    ]
+                  ],
+                  [
+                    ":title",
+                    "target"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "assert=",
+              [
+                "Option",
+                ":none"
+              ],
+              [
+                "find-target",
+                "docs-workflow.schema/docs",
+                [
+                  "[]",
+                  ":design",
+                  ":missing"
+                ]
+              ]
+            ]
+          ],
+          "name": "finds-existing-and-missing-paths",
+          "tags": [
+            "unit"
+          ]
+        }
+      ]
+    },
+    {
+      "code": [
+        "defn",
+        "make-markdown-parser",
+        [],
+        [
+          "let",
+          [
+            [
+              "highlighter",
+              [
+                "js-cast",
+                "hljs",
+                "'docs-workflow.schema/HighlightJsHost"
+              ]
+            ],
+            [
+              "m",
+              [
+                "js-cast",
+                [
+                  "new",
+                  "Remarkable",
+                  [
+                    "js-object",
+                    [
+                      ":html",
+                      "true"
+                    ],
+                    [
+                      ":breaks",
+                      "true"
+                    ],
+                    [
+                      ":highlight",
+                      [
+                        "fn",
+                        [
+                          "code",
+                          "lang"
+                        ],
+                        [
+                          "hint-fn",
+                          [
+                            "{}",
+                            [
+                              ":args",
+                              [
+                                "[]",
+                                "'String",
+                                "'String"
+                              ]
+                            ],
+                            [
+                              ":return",
+                              "'String"
+                            ],
+                            [
+                              ":features",
+                              [
+                                "#{}",
+                                ":js-ffi"
+                              ]
+                            ]
+                          ]
+                        ],
+                        [
+                          "if",
+                          [
+                            "=",
+                            "lang",
+                            "|cirru"
+                          ],
+                          [
+                            "contract/expect-string",
+                            "|Cirru highlight",
+                            [
+                              "color/generate",
+                              "code"
+                            ]
+                          ],
+                          [
+                            ".-value",
+                            [
+                              ".highlight-auto",
+                              "highlighter",
+                              "code",
+                              [
+                                "js-array",
+                                "lang"
+                              ]
+                            ]
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ],
+                "'docs-workflow.schema/RemarkableHost"
+              ]
+            ]
+          ],
+          [
+            ".use",
+            "m",
+            [
+              "contract/expect-function",
+              "|Remarkable linkify plugin",
+              "linkify"
+            ]
+          ],
+          "m"
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/make-markdown-parser",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'docs-workflow.schema/RemarkableHost"
+        ],
+        [
+          ":args",
+          [
+            "[]"
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "def",
+        "md",
+        [
+          "make-markdown-parser"
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/md",
+      "js_ffi": null,
+      "schema": "'docs-workflow.schema/RemarkableHost",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defn",
+        "next-path",
+        [
+          "state",
+          "path"
+        ],
+        [
+          "let",
+          [
+            [
+              "xs",
+              [
+                ":history",
+                "state"
+              ]
+            ]
+          ],
+          [
+            "assoc",
+            [
+              "assoc",
+              "state",
+              ":selected",
+              "path"
+            ],
+            ":history",
+            [
+              "if",
+              [
+                "includes?",
+                "xs",
+                "path"
+              ],
+              "xs",
+              [
+                "prepend",
+                [
+                  "if",
+                  [
+                    ">",
+                    [
+                      ".len",
+                      "xs"
+                    ],
+                    "4"
+                  ],
+                  [
+                    "butlast",
+                    "xs"
+                  ],
+                  "xs"
+                ],
+                "path"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/next-path",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'docs-workflow.schema/State"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            "'docs-workflow.schema/State",
+            [
+              "::",
+              "'List",
+              "'Tag"
+            ]
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": [
+        {
+          "code": [
+            "do",
+            [
+              "assert=",
+              [
+                "[]",
+                [
+                  "[]",
+                  ":new"
+                ],
+                [
+                  "[]",
+                  ":a"
+                ],
+                [
+                  "[]",
+                  ":b"
+                ],
+                [
+                  "[]",
+                  ":c"
+                ],
+                [
+                  "[]",
+                  ":d"
+                ]
+              ],
+              [
+                ":history",
+                [
+                  "next-path",
+                  [
+                    "docs-workflow.schema/State",
+                    ":selected",
+                    [
+                      "[]",
+                      ":a"
+                    ],
+                    ":history",
+                    [
+                      "[]",
+                      [
+                        "[]",
+                        ":a"
+                      ],
+                      [
+                        "[]",
+                        ":b"
+                      ],
+                      [
+                        "[]",
+                        ":c"
+                      ],
+                      [
+                        "[]",
+                        ":d"
+                      ],
+                      [
+                        "[]",
+                        ":e"
+                      ]
+                    ]
+                  ],
+                  [
+                    "[]",
+                    ":new"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "assert=",
+              [
+                "[]",
+                ":new"
+              ],
+              [
+                ":selected",
+                [
+                  "next-path",
+                  [
+                    "docs-workflow.schema/State",
+                    ":selected",
+                    [
+                      "[]",
+                      ":a"
+                    ],
+                    ":history",
+                    [
+                      "[]",
+                      [
+                        "[]",
+                        ":a"
+                      ],
+                      [
+                        "[]",
+                        ":b"
+                      ],
+                      [
+                        "[]",
+                        ":c"
+                      ],
+                      [
+                        "[]",
+                        ":d"
+                      ],
+                      [
+                        "[]",
+                        ":e"
+                      ]
+                    ]
+                  ],
+                  [
+                    "[]",
+                    ":new"
+                  ]
+                ]
+              ]
+            ],
+            [
+              "assert=",
+              [
+                "[]",
+                [
+                  "[]",
+                  ":a"
+                ],
+                [
+                  "[]",
+                  ":b"
+                ],
+                [
+                  "[]",
+                  ":c"
+                ],
+                [
+                  "[]",
+                  ":d"
+                ],
+                [
+                  "[]",
+                  ":e"
+                ]
+              ],
+              [
+                ":history",
+                [
+                  "next-path",
+                  [
+                    "docs-workflow.schema/State",
+                    ":selected",
+                    [
+                      "[]",
+                      ":a"
+                    ],
+                    ":history",
+                    [
+                      "[]",
+                      [
+                        "[]",
+                        ":a"
+                      ],
+                      [
+                        "[]",
+                        ":b"
+                      ],
+                      [
+                        "[]",
+                        ":c"
+                      ],
+                      [
+                        "[]",
+                        ":d"
+                      ],
+                      [
+                        "[]",
+                        ":e"
+                      ]
+                    ]
+                  ],
+                  [
+                    "[]",
+                    ":b"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          "name": "preserves-history-order-and-cap",
+          "tags": [
+            "unit"
+          ]
+        }
+      ]
+    },
+    {
+      "code": [
+        "defstyle",
+        "style-child-entries-block",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              "{}",
+              [
+                ":padding",
+                "|8px"
+              ],
+              [
+                ":min-width",
+                "|320px"
+              ],
+              [
+                ":max-width",
+                "|400px"
+              ],
+              [
+                ":background-color",
+                "|white"
+              ],
+              [
+                ":margin",
+                "|8px 12px"
+              ],
+              [
+                ":border-radius",
+                "|4px"
+              ],
+              [
+                ":border",
+                [
+                  "str",
+                  "|1px solid ",
+                  [
+                    "hsl",
+                    "0",
+                    "0",
+                    "86"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/style-child-entries-block",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "style-child-entry",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              "{}",
+              [
+                ":padding",
+                "|0 8px"
+              ],
+              [
+                ":cursor",
+                "|pointer"
+              ],
+              [
+                ":transition-duration",
+                "|200ms"
+              ],
+              [
+                ":line-height",
+                "|2.4"
+              ]
+            ]
+          ],
+          [
+            "|&:hover",
+            [
+              "{}",
+              [
+                ":background-color",
+                [
+                  "hsl",
+                  "190",
+                  "10",
+                  "70",
+                  [
+                    "Option",
+                    ":some",
+                    "0.1"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/style-child-entry",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "style-doc-entry",
+        [
+          "{}",
+          [
+            "|&",
+            "style-entry"
+          ],
+          [
+            "|&:hover",
+            [
+              "{}",
+              [
+                ":background-color",
+                [
+                  "hsl",
+                  "190",
+                  "10",
+                  "70",
+                  [
+                    "Option",
+                    ":some",
+                    "0.1"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/style-doc-entry",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "style-doc-entry-selected",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              "{}",
+              [
+                ":border-left",
+                [
+                  "str",
+                  "|8px solid ",
+                  [
+                    "hsl",
+                    "200",
+                    "90",
+                    "70"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "|&:hover",
+            [
+              "{}",
+              [
+                ":border-left",
+                [
+                  "str",
+                  "|10px solid ",
+                  [
+                    "hsl",
+                    "200",
+                    "90",
+                    "70"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/style-doc-entry-selected",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "def",
+        "style-entry",
+        [
+          "{}",
+          [
+            ":padding",
+            "|0 8px"
+          ],
+          [
+            ":cursor",
+            "|pointer"
+          ],
+          [
+            ":transition-duration",
+            "|200ms"
+          ],
+          [
+            ":line-height",
+            "|2.4"
+          ],
+          [
+            ":border-bottom",
+            [
+              "str",
+              "|1px solid ",
+              [
+                "hsl",
+                "0",
+                "0",
+                "92"
+              ]
+            ]
+          ],
+          [
+            ":border-left",
+            [
+              "str",
+              "|0px solid ",
+              [
+                "hsl",
+                "200",
+                "90",
+                "60"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/style-entry",
+      "js_ffi": null,
+      "schema": [
+        "::",
+        "'Map",
+        "'Tag",
+        "'String"
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "style-history-entry",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              "{}",
+              [
+                ":cursor",
+                "|pointer"
+              ],
+              [
+                ":padding",
+                "|0 8px"
+              ],
+              [
+                ":font-size",
+                "|12px"
+              ],
+              [
+                ":color",
+                [
+                  "hsl",
+                  "0",
+                  "0",
+                  "60"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/style-history-entry",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "style-jump",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              "{}",
+              [
+                ":color",
+                [
+                  "hsl",
+                  "0",
+                  "0",
+                  "60"
+                ]
+              ],
+              [
+                ":cursor",
+                "|pointer"
+              ],
+              [
+                ":opacity",
+                "|0.6"
+              ]
+            ]
+          ],
+          [
+            "|&:hover",
+            [
+              "{}",
+              [
+                ":opacity",
+                "|1"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/style-jump",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "style-jump-modal",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              "{}",
+              [
+                ":padding",
+                "|16px 16px 120px"
+              ],
+              [
+                ":border-top",
+                [
+                  "str",
+                  "|1px solid ",
+                  [
+                    "hsl",
+                    "0",
+                    "0",
+                    "94"
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/style-jump-modal",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstyle",
+        "style-title",
+        [
+          "{}",
+          [
+            "|&",
+            [
+              "{}",
+              [
+                ":font-family",
+                "ui/font-fancy"
+              ],
+              [
+                ":font-size",
+                "|18px"
+              ],
+              [
+                ":font-weight",
+                "|300"
+              ],
+              [
+                ":color",
+                [
+                  "hsl",
+                  "0",
+                  "0",
+                  "60"
+                ]
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.comp.container/style-title",
+      "js_ffi": null,
+      "schema": "'String",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "def",
+        "dev?",
+        [
+          "=",
+          "|dev",
+          [
+            ".unwrap-or",
+            [
+              "get-env",
+              "|mode"
+            ],
+            "|release"
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.config/dev?",
+      "js_ffi": null,
+      "schema": "'Bool",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defn",
+        "register-languages!",
+        [],
+        [
+          "let",
+          [
+            [
+              "highlighter",
+              [
+                "js-cast",
+                "hljs",
+                "'docs-workflow.schema/HighlightJsHost"
+              ]
+            ]
+          ],
+          [
+            ".register-language",
+            "highlighter",
+            "|clojure",
+            "clojure-lang"
+          ],
+          [
+            ".register-language",
+            "highlighter",
+            "|bash",
+            "bash-lang"
+          ],
+          [
+            ".register-language",
+            "highlighter",
+            "|rust",
+            "rust-lang"
+          ],
+          [
+            ".register-language",
+            "highlighter",
+            "|glsl",
+            "glsl-lang"
+          ],
+          "&unit"
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.config/register-languages!",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'Unit"
+        ],
+        [
+          ":args",
+          [
+            "[]"
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "def",
+        "site",
+        [
+          "docs-workflow.schema/SiteConfig",
+          ":storage-key",
+          "|workflow"
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.config/site",
+      "js_ffi": null,
+      "schema": "'docs-workflow.schema/SiteConfig",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defref",
+        "*reel",
+        [
+          "typed/new-reel",
+          "schema/store"
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.main/*reel",
+      "js_ffi": null,
+      "schema": [
+        "::",
+        "'Ref",
+        [
+          "::",
+          "'reel.typed/State",
+          "'docs-workflow.schema/Op",
+          "'docs-workflow.schema/Store"
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defn",
+        "dispatch!",
+        [
+          "op"
+        ],
+        [
+          "when",
+          "config/dev?",
+          [
+            "println",
+            "|Dispatch:",
+            "op"
+          ]
+        ],
+        [
+          "let",
+          [
+            [
+              "control",
+              [
+                "typed/decode-control",
+                "op"
+              ]
+            ]
+          ],
+          [
+            "reset!",
+            "*reel",
+            [
+              "match",
+              "control",
+              [
+                [
+                  ":some",
+                  "action"
+                ],
+                [
+                  "typed/apply-control",
+                  "updater",
+                  "@*reel",
+                  "action"
+                ]
+              ],
+              [
+                [
+                  ":none"
+                ],
+                [
+                  "typed/record-op",
+                  "updater",
+                  "@*reel",
+                  [
+                    "match",
+                    "op",
+                    [
+                      [
+                        ":states",
+                        "cursor",
+                        "data"
+                      ],
+                      [
+                        "match",
+                        [
+                          "try-decode-map-as",
+                          "cursor",
+                          [
+                            "::",
+                            "'List",
+                            "'Dynamic"
+                          ]
+                        ],
+                        [
+                          [
+                            ":ok",
+                            "checked-cursor"
+                          ],
+                          [
+                            "docs-workflow.schema/Op",
+                            ":states",
+                            "checked-cursor",
+                            "data"
+                          ]
+                        ],
+                        [
+                          [
+                            ":err",
+                            "message"
+                          ],
+                          [
+                            "raise",
+                            "message"
+                          ]
+                        ]
+                      ]
+                    ],
+                    [
+                      [
+                        ":hydrate-storage",
+                        "data"
+                      ],
+                      [
+                        "match",
+                        [
+                          "try-decode-map-as",
+                          [
+                            "if",
+                            [
+                              "struct?",
+                              "data"
+                            ],
+                            [
+                              "&struct:to-map",
+                              "data"
+                            ],
+                            "data"
+                          ],
+                          "'docs-workflow.schema/Store"
+                        ],
+                        [
+                          [
+                            ":ok",
+                            "checked-store"
+                          ],
+                          [
+                            "docs-workflow.schema/Op",
+                            ":hydrate-storage",
+                            "checked-store"
+                          ]
+                        ],
+                        [
+                          [
+                            ":err",
+                            "message"
+                          ],
+                          [
+                            "raise",
+                            "message"
+                          ]
+                        ]
+                      ]
+                    ],
+                    [
+                      "_",
+                      [
+                        "raise",
+                        "|Unknown Docs Workflow operation"
+                      ]
+                    ]
+                  ],
+                  [
+                    "generate-id!"
+                  ],
+                  [
+                    ":timestamp",
+                    [
+                      "shared/date-now-snapshot"
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        "&unit"
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.main/dispatch!",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'Unit"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            "'Enum"
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defn",
+        "main!",
+        [],
+        [
+          "config/register-languages!"
+        ],
+        [
+          "println",
+          "|Running mode:",
+          [
+            "if",
+            "config/dev?",
+            "|dev",
+            "|release"
+          ]
+        ],
+        [
+          "if",
+          "config/dev?",
+          [
+            "load-console-formatter!"
+          ]
+        ],
+        [
+          "render-app!"
+        ],
+        [
+          "add-watch!",
+          "*reel",
+          ":changes",
+          [
+            "fn",
+            [
+              "reel",
+              "prev"
+            ],
+            [
+              "render-app!"
+            ]
+          ]
+        ],
+        [
+          "listen-devtools!",
+          "|k",
+          "dispatch!"
+        ],
+        [
+          "js/window.addEventListener",
+          "|beforeunload",
+          [
+            "fn",
+            [
+              "event"
+            ],
+            [
+              "persist-storage!"
+            ]
+          ]
+        ],
+        [
+          "browser/set-interval!",
+          "persist-storage!",
+          "60000"
+        ],
+        [
+          ";",
+          "let",
+          [
+            "raw",
+            [
+              "js/localStorage.getItem",
+              [
+                "js/localStorage.getItem",
+                [
+                  [
+                    ":storage-key",
+                    "config/site"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "when",
+            [
+              "some?",
+              "raw"
+            ],
+            [
+              "dispatch!",
+              [
+                "::",
+                ":hydrate-storage",
+                [
+                  "parse-cirru-edn",
+                  "raw"
+                ]
+              ]
+            ]
+          ]
+        ],
+        [
+          "println",
+          "|App started."
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.main/main!",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'Unit"
+        ],
+        [
+          ":args",
+          [
+            "[]"
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defn",
+        "persist-storage!",
+        [],
+        [
+          "js/console.log",
+          "|persist"
+        ],
+        [
+          "js/localStorage.setItem",
+          [
+            ":storage-key",
+            "config/site"
+          ],
+          [
+            "format-cirru-edn",
+            [
+              ":store",
+              "@*reel"
+            ]
+          ]
+        ],
+        "&unit"
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.main/persist-storage!",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'Unit"
+        ],
+        [
+          ":args",
+          [
+            "[]"
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defn",
+        "reload!",
+        [],
+        [
+          "if",
+          [
+            "nil?",
+            "build-errors"
+          ],
+          [
+            "do",
+            [
+              "remove-watch!",
+              "*reel",
+              ":changes"
+            ],
+            [
+              "clear-cache!"
+            ],
+            [
+              "add-watch!",
+              "*reel",
+              ":changes",
+              [
+                "fn",
+                [
+                  "reel",
+                  "prev"
+                ],
+                [
+                  "render-app!"
+                ]
+              ]
+            ],
+            [
+              "reset!",
+              "*reel",
+              [
+                "typed/refresh",
+                "updater",
+                "@*reel",
+                "schema/store"
+              ]
+            ],
+            [
+              "hud!",
+              "|ok~",
+              "|Ok"
+            ]
+          ],
+          [
+            "hud!",
+            "|error",
+            "build-errors"
+          ]
+        ],
+        "&unit"
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.main/reload!",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'Unit"
+        ],
+        [
+          ":args",
+          [
+            "[]"
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defn",
+        "render-app!",
+        [],
+        [
+          "match",
+          [
+            "browser/query-selector",
+            "|.app"
+          ],
+          [
+            [
+              ":some",
+              "element"
+            ],
+            [
+              "render!",
+              [
+                "narrow-element",
+                "element"
+              ],
+              [
+                "comp-container",
+                "@*reel",
+                "schema/docs"
+              ],
+              [
+                "fn",
+                [
+                  "op"
+                ],
+                [
+                  "hint-fn",
+                  [
+                    "{}",
+                    [
+                      ":args",
+                      [
+                        "[]",
+                        "'Dynamic"
+                      ]
+                    ],
+                    [
+                      ":return",
+                      "'Unit"
+                    ],
+                    [
+                      ":features",
+                      [
+                        "#{}",
+                        ":js-ffi"
+                      ]
+                    ]
+                  ]
+                ],
+                [
+                  "if",
+                  [
+                    "enum?",
+                    "op"
+                  ],
+                  [
+                    "dispatch!",
+                    "op"
+                  ],
+                  [
+                    "raise",
+                    "|Expected an Enum render action"
+                  ]
+                ],
+                "&unit"
+              ]
+            ]
+          ],
+          [
+            [
+              ":none"
+            ],
+            [
+              "raise",
+              "|Missing .app mount element"
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.main/render-app!",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'Unit"
+        ],
+        [
+          ":args",
+          [
+            "[]"
+          ]
+        ],
+        [
+          ":features",
+          [
+            "#{}",
+            ":js-ffi"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstruct",
+        "DocNode",
+        [
+          ":title",
+          "'String"
+        ],
+        [
+          ":key",
+          "'Tag"
+        ],
+        [
+          ":content",
+          "'String"
+        ],
+        [
+          ":children",
+          [
+            "::",
+            "'List",
+            "'docs-workflow.schema/DocNode"
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.schema/DocNode",
+      "js_ffi": null,
+      "schema": "'StructDef",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "deftrait",
+        "HighlightJsHost",
+        [
+          ".highlight-auto",
+          [
+            "::",
+            "'Fn",
+            [
+              "{}",
+              [
+                ":args",
+                [
+                  "[]",
+                  "'docs-workflow.schema/HighlightJsHost",
+                  "'String",
+                  "'JsObject"
+                ]
+              ],
+              [
+                ":return",
+                "'docs-workflow.schema/HighlightResultHost"
+              ]
+            ]
+          ]
+        ],
+        [
+          ".register-language",
+          [
+            "::",
+            "'Fn",
+            [
+              "{}",
+              [
+                ":args",
+                [
+                  "[]",
+                  "'docs-workflow.schema/HighlightJsHost",
+                  "'String",
+                  "'Dynamic"
+                ]
+              ],
+              [
+                ":return",
+                "'Unit"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": {
+        ":backend": {
+          "__edn_tag": "js"
+        },
+        ":kind": {
+          "__edn_tag": "external-object"
+        },
+        ":names": {
+          ":register-language": "registerLanguage"
+        },
+        ":target": {
+          "__edn_tag": "browser"
+        }
+      },
+      "ffi_edn": "{} (:backend :js) (:kind :external-object) (:target :browser)\n  :names $ {} $ :register-language |registerLanguage",
+      "id": "docs-workflow.schema/HighlightJsHost",
+      "js_ffi": null,
+      "schema": "'Trait",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "deftrait",
+        "HighlightResultHost",
+        [
+          ":value",
+          "'String"
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": {
+        ":backend": {
+          "__edn_tag": "js"
+        },
+        ":kind": {
+          "__edn_tag": "external-object"
+        },
+        ":target": {
+          "__edn_tag": "browser"
+        }
+      },
+      "ffi_edn": "{} (:backend :js) (:kind :external-object) (:target :browser)",
+      "id": "docs-workflow.schema/HighlightResultHost",
+      "js_ffi": null,
+      "schema": "'Trait",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defenum",
+        "Op",
+        [
+          ":states",
+          [
+            "::",
+            "'List",
+            "'Dynamic"
+          ],
+          "'Dynamic"
+        ],
+        [
+          ":hydrate-storage",
+          "'docs-workflow.schema/Store"
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.schema/Op",
+      "js_ffi": null,
+      "schema": "'EnumDef",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "deftrait",
+        "RemarkableHost",
+        [
+          ".render",
+          [
+            "::",
+            "'Fn",
+            [
+              "{}",
+              [
+                ":args",
+                [
+                  "[]",
+                  "'docs-workflow.schema/RemarkableHost",
+                  "'String"
+                ]
+              ],
+              [
+                ":return",
+                "'String"
+              ]
+            ]
+          ]
+        ],
+        [
+          ".use",
+          [
+            "::",
+            "'Fn",
+            [
+              "{}",
+              [
+                ":args",
+                [
+                  "[]",
+                  "'docs-workflow.schema/RemarkableHost",
+                  "'JsObject"
+                ]
+              ],
+              [
+                ":return",
+                "'docs-workflow.schema/RemarkableHost"
+              ]
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": {
+        ":backend": {
+          "__edn_tag": "js"
+        },
+        ":kind": {
+          "__edn_tag": "external-object"
+        },
+        ":target": {
+          "__edn_tag": "browser"
+        }
+      },
+      "ffi_edn": "{} (:backend :js) (:kind :external-object) (:target :browser)",
+      "id": "docs-workflow.schema/RemarkableHost",
+      "js_ffi": null,
+      "schema": "'Trait",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstruct",
+        "SiteConfig",
+        [
+          ":storage-key",
+          "'String"
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.schema/SiteConfig",
+      "js_ffi": null,
+      "schema": "'StructDef",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstruct",
+        "State",
+        [
+          ":selected",
+          [
+            "::",
+            "'List",
+            "'Tag"
+          ]
+        ],
+        [
+          ":history",
+          [
+            "::",
+            "'List",
+            [
+              "::",
+              "'List",
+              "'Tag"
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.schema/State",
+      "js_ffi": null,
+      "schema": "'StructDef",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defstruct",
+        "Store",
+        [
+          ":states",
+          [
+            "::",
+            "'Map",
+            "'Dynamic",
+            "'Dynamic"
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.schema/Store",
+      "js_ffi": null,
+      "schema": "'StructDef",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "def",
+        "docs",
+        [
+          "[]",
+          [
+            "DocNode",
+            ":title",
+            "|Guide",
+            ":key",
+            ":guide",
+            ":content",
+            [
+              "load-doc",
+              "|guide.md"
+            ],
+            ":children",
+            [
+              "[]"
+            ]
+          ],
+          [
+            "DocNode",
+            ":title",
+            "|Design",
+            ":key",
+            ":design",
+            ":content",
+            [
+              "load-doc",
+              "|design.md"
+            ],
+            ":children",
+            [
+              "[]",
+              [
+                "DocNode",
+                ":title",
+                "|Guide",
+                ":key",
+                ":guide",
+                ":content",
+                [
+                  "load-doc",
+                  "|guide.md"
+                ],
+                ":children",
+                [
+                  "[]"
+                ]
+              ],
+              [
+                "DocNode",
+                ":title",
+                "|Design",
+                ":key",
+                ":design",
+                ":content",
+                [
+                  "load-doc",
+                  "|design.md"
+                ],
+                ":children",
+                [
+                  "[]"
+                ]
+              ],
+              [
+                "DocNode",
+                ":title",
+                "|Overview",
+                ":key",
+                ":overview",
+                ":content",
+                [
+                  "load-doc",
+                  "|overview.md"
+                ],
+                ":children",
+                [
+                  "[]",
+                  [
+                    "DocNode",
+                    ":title",
+                    "|Cirru",
+                    ":key",
+                    ":cirru",
+                    ":content",
+                    [
+                      "load-doc",
+                      "|cirru.md"
+                    ],
+                    ":children",
+                    [
+                      "[]"
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            "DocNode",
+            ":title",
+            "|About",
+            ":key",
+            ":about",
+            ":content",
+            [
+              "load-doc",
+              "|about.md"
+            ],
+            ":children",
+            [
+              "[]"
+            ]
+          ],
+          [
+            "DocNode",
+            ":title",
+            "|Cirru",
+            ":key",
+            ":cirru",
+            ":content",
+            [
+              "load-doc",
+              "|cirru.md"
+            ],
+            ":children",
+            [
+              "[]"
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.schema/docs",
+      "js_ffi": null,
+      "schema": [
+        "::",
+        "'List",
+        "'docs-workflow.schema/DocNode"
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defmacro",
+        "load-doc",
+        [
+          "filename"
+        ],
+        [
+          "read-file",
+          [
+            "str",
+            "|docs/",
+            "filename"
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.schema/load-doc",
+      "js_ffi": null,
+      "schema": [
+        "::",
+        "'Macro",
+        [
+          "{}",
+          [
+            ":capabilities",
+            [
+              "#{}",
+              ":fs-read"
+            ]
+          ],
+          [
+            ":expansion",
+            [
+              "::",
+              "'Expr",
+              "'String"
+            ]
+          ],
+          [
+            ":required",
+            [
+              "[]",
+              "'Syntax"
+            ]
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "def",
+        "store",
+        [
+          "Store",
+          ":states",
+          [
+            "{}"
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.schema/store",
+      "js_ffi": null,
+      "schema": "'docs-workflow.schema/Store",
+      "tags": [],
+      "tests": []
+    },
+    {
+      "code": [
+        "defn",
+        "updater",
+        [
+          "store",
+          "op",
+          "op-id",
+          "op-time"
+        ],
+        [
+          "match",
+          "op",
+          [
+            [
+              ":states",
+              "cursor",
+              "s"
+            ],
+            [
+              "assoc",
+              "store",
+              ":states",
+              [
+                "match",
+                [
+                  "try-decode-map-as",
+                  [
+                    "update-state-tree",
+                    [
+                      ":states",
+                      "store"
+                    ],
+                    "cursor",
+                    "s"
+                  ],
+                  [
+                    "::",
+                    "'Map",
+                    "'Dynamic",
+                    "'Dynamic"
+                  ]
+                ],
+                [
+                  [
+                    ":ok",
+                    "updated-states"
+                  ],
+                  "updated-states"
+                ],
+                [
+                  [
+                    ":err",
+                    "message"
+                  ],
+                  [
+                    "raise",
+                    "message"
+                  ]
+                ]
+              ]
+            ]
+          ],
+          [
+            [
+              ":hydrate-storage",
+              "d"
+            ],
+            "d"
+          ],
+          [
+            "_",
+            [
+              "do",
+              [
+                "eprintln",
+                "|unknown op:",
+                "op"
+              ],
+              "store"
+            ]
+          ]
+        ]
+      ],
+      "doc": "",
+      "examples": [],
+      "ffi": null,
+      "ffi_edn": null,
+      "id": "docs-workflow.updater/updater",
+      "js_ffi": null,
+      "schema": [
+        "{}",
+        [
+          ":kind",
+          ":fn"
+        ],
+        [
+          ":return",
+          "'docs-workflow.schema/Store"
+        ],
+        [
+          ":args",
+          [
+            "[]",
+            "'docs-workflow.schema/Store",
+            "'docs-workflow.schema/Op",
+            "'String",
+            "'Number"
+          ]
+        ]
+      ],
+      "tags": [],
+      "tests": []
+    }
+  ]
+}
