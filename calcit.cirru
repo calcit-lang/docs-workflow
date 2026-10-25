@@ -13,7 +13,7 @@
         '*text-content $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *text-content ([])
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Ref $ :: 'List 'String
         'comp-child-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-child-entries (parent-path entries on-select)
             div
@@ -66,7 +66,7 @@
                 history $ :history state
                 quick-modal $ use-modal (>> states :quick)
                   {} (:title "|Quick jump")
-                    :card-style $ {} (:max-width |18vw) (:height |90vh) (:max-height |90vh) (:margin-left 0)
+                    :card-style $ {} (:max-width |18vw) (:height |90vh) (:max-height |90vh) (:margin-left |0px)
                     :backdrop-style $ {} $ :background-color
                       hsl 0 29 10 $ Option :some 0.2
                     :render $ fn (on-close)
@@ -87,17 +87,22 @@
                   {} $ :class-name $ str-spaced css/column css-layout
                   div
                     {} (:class-name css/row-parted)
-                      :style $ {} $ :margin-top 12
+                      :style $ {} $ :margin-top |12px
                     div
                       {} $ :class-name $ str-spaced css/row-middle css/gap8
                       <> |Pages style-title
                       div
                         {}
                           :style $ {}
-                          :on-click $ fn (e d!) (.show quick-modal d!)
+                          :on-click $ fn (e d!)
+                            hint-fn $ {} (:return 'Unit)
+                              :args $ [] (:: 'Map 'Tag 'Dynamic)
+                                :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                                  :args $ [] 'Dynamic
+                            .show quick-modal d!
                         <> "|☰" $ str-spaced css/font-fancy style-jump
                     a $ {} (:href |mdbook.html) (:inner-text |mdbook)
-                      :style $ {} (:font-size 12) (:font-family ui/font-fancy) (:opacity 0.3)
+                      :style $ {} (:font-size |12px) (:font-family ui/font-fancy) (:opacity |0.3)
                   comp-parent-menu selected docs $ fn (path d!)
                     hint-fn $ {}
                       :args $ [] (:: 'List 'Tag)
@@ -122,7 +127,7 @@
                           d! $ docs-workflow.schema/Op :states cursor $ next-path state xs
                           , &unit
                   div
-                    {} $ :style $ {} (:margin-top 20)
+                    {} $ :style $ {} (:margin-top |20px)
                     <> |Histories style-title
                     comp-history-menu history docs $ fn (path d!)
                       hint-fn $ {}
@@ -240,7 +245,7 @@
                   div ({})
                     div
                       {} (:tab-index 0) (:class-name style-doc-entry)
-                        :style $ {} (:padding "|0 8px") (:cursor :pointer)
+                        :style $ {} (:padding "|0 8px") (:cursor |pointer)
                         :on-click $ fn (e d!)
                           hint-fn $ {} (:return 'Unit)
                             :args $ [] (:: 'Map 'Tag 'Dynamic)
@@ -255,7 +260,7 @@
                       if
                         not $ empty? xs
                         div
-                          {} $ :style $ {} (:padding-left 16)
+                          {} $ :style $ {} (:padding-left |16px)
                           comp-nav-tree xs
                             conj base-path $ :key entry
                             , on-select
@@ -270,7 +275,7 @@
         'comp-page-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-page-entries (selected parent-path entries on-select)
             div
-              {} $ :style $ {} (:min-width 240) (:max-width 320)
+              {} $ :style $ {} (:min-width |240px) (:max-width |320px)
               list-> ({})
                 -> entries $ map-indexed $ fn (idx entry)
                   [] idx $ let
@@ -306,14 +311,14 @@
               if
                 not $ empty? selected
                 ->
-                  range $ dec $ count selected
+                  range $ dec $ .len selected
                   map $ fn (idx)
                     let
                         sub-path $ slice selected 0 $ inc idx
                         target $ find-target docs sub-path
                       [] idx $ div
                         {}
-                          :style $ {} (:cursor :pointer) (:font-style :italic) (:font-family ui/font-fancy)
+                          :style $ {} (:cursor |pointer) (:font-style |italic) (:font-family ui/font-fancy)
                             :color $ hsl 0 0 40
                             :background-color $ hsl 180 90 94
                           :on-click $ fn (e d!)
@@ -336,31 +341,31 @@
         'css-doc $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-doc
             {}
-              |& $ {} $ :font-size 15
-              "|& p" $ {} $ :line-height 1.56
+              |& $ {} $ :font-size |15px
+              "|& p" $ {} $ :line-height |1.56
               "|& p > code" $ {}
                 :background-color $ hsl 0 0 97
                 :padding "|0 6px"
                 :border-radius |3px
                 :border $ str "|1px solid " $ hsl 0 0 90
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'css-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-doc-page
             {}
-              |& $ merge ui/expand $ {} (:padding "|8px 16px")
+              |& $ .merge ui/expand $ {} (:padding "|8px 16px")
                 :background-color $ hsl 0 0 100 $ Option :some 0.6
-                :position :relative
+                :position |relative
               "|& iframe" $ {} $ :border
                 str "|1px solid " $ hsl 0 0 86
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'css-layout $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-layout
-            {} $ |& $ {} (:padding "|0 8px") (:width |20%) (:min-width 266) (:background-color :white)
+            {} $ |& $ {} (:padding "|0 8px") (:width |20%) (:min-width |266px) (:background-color |white)
               :border-right $ str "|1px solid " $ hsl 0 0 94
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'css-markdown $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-markdown
             {}
@@ -372,12 +377,12 @@
               "|& pre" $ {} (:background-color "|hsla(0, 0%, 96%, 0.5)") (:border "|1px solid #eee") (:padding "|2px 8px") (:line-height |1.4) (:min-width |400px) (:border-radius |4px) (:overflow |auto)
               "|& blockquote" $ {} (:margin "|16px 0") (:padding "|1px 16px") (:color |#777) (:background-color |#eee8e8) (:border-left "|4px solid #ccc") (:line-height |1.5em)
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'css-speech-button $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-speech-button
-            {} $ |& $ {} (:position :absolute) (:top 32) (:right 8) (:font-family css/font-fancy)
+            {} $ |& $ {} (:position |absolute) (:top |32px) (:right |8px) (:font-family css/font-fancy)
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'find-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn find-entries (entries path)
             if (empty? path) entries $ match (find-target entries path)
@@ -402,7 +407,7 @@
                     = p0 $ :key entry
                   (:some target)
                     if
-                      = 1 $ count path
+                      = 1 $ .len path
                       Option :some target
                       find-target (:children target) (rest path)
                   (:none) (Option :none)
@@ -455,7 +460,7 @@
                 xs $ :history state
               assoc (assoc state :selected path) :history $ if (includes? xs path) xs $ prepend
                 if
-                  > (count xs) 4
+                  > (.len xs) 4
                   butlast xs
                   , xs
                 , path
@@ -481,25 +486,25 @@
             :tags $ #{} :unit
         'style-child-entries-block $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-child-entries-block
-            {} $ |& $ {} (:padding |8px) (:min-width 320) (:max-width 400) (:background-color :white) (:margin "|8px 12px") (:border-radius |4px)
+            {} $ |& $ {} (:padding |8px) (:min-width |320px) (:max-width |400px) (:background-color |white) (:margin "|8px 12px") (:border-radius |4px)
               :border $ str "|1px solid " $ hsl 0 0 86
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'style-child-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-child-entry
             {}
-              |& $ {} (:padding "|0 8px") (:cursor :pointer) (:transition-duration |200ms) (:line-height |2.4)
+              |& $ {} (:padding "|0 8px") (:cursor |pointer) (:transition-duration |200ms) (:line-height |2.4)
               |&:hover $ {} $ :background-color
                 hsl 190 10 70 $ Option :some 0.1
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'style-doc-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-doc-entry
             {} (|& style-entry)
               |&:hover $ {} $ :background-color
                 hsl 190 10 70 $ Option :some 0.1
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'style-doc-entry-selected $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-doc-entry-selected
             {}
@@ -508,42 +513,42 @@
               |&:hover $ {} $ :border-left
                 str "|10px solid " $ hsl 200 90 70
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'style-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def style-entry
-            {} (:padding "|0 8px") (:cursor :pointer) (:transition-duration |200ms) (:line-height |2.4)
+            {} (:padding "|0 8px") (:cursor |pointer) (:transition-duration |200ms) (:line-height |2.4)
               :border-bottom $ str "|1px solid " $ hsl 0 0 92
               :border-left $ str "|0px solid " $ hsl 200 90 60
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Map 'Tag 'String
         'style-history-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-history-entry
-            {} $ |& $ {} (:cursor :pointer) (:padding "|0 8px") (:font-size 12)
+            {} $ |& $ {} (:cursor |pointer) (:padding "|0 8px") (:font-size |12px)
               :color $ hsl 0 0 60
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'style-jump $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-jump
             {}
               |& $ {}
                 :color $ hsl 0 0 60
-                :cursor :pointer
-                :opacity 0.6
-              |&:hover $ {} $ :opacity 1
+                :cursor |pointer
+                :opacity |0.6
+              |&:hover $ {} $ :opacity |1
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'style-jump-modal $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-jump-modal
             {} $ |& $ {} (:padding "|16px 16px 120px")
               :border-top $ str "|1px solid " $ hsl 0 0 94
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
         'style-title $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-title
-            {} $ |& $ {} (:font-family ui/font-fancy) (:font-size 18) (:font-weight 300)
+            {} $ |& $ {} (:font-family ui/font-fancy) (:font-size |18px) (:font-weight |300)
               :color $ hsl 0 0 60
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.comp.container
           :require (respo-ui.core :as ui)
@@ -569,7 +574,7 @@
           :code $ quote $ def dev?
             = |dev $ .unwrap-or (get-env |mode) |release
           :examples $ []
-          :schema $ :: 'Dynamic
+          :schema $ :: 'Bool
         'register-languages! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn register-languages! ()
             let
@@ -752,7 +757,8 @@
           :examples $ []
           :schema $ :: 'StructDef
         'Store $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defstruct Store (:states 'Map)
+          :code $ quote $ defstruct Store
+            :states $ :: 'Map 'Dynamic 'Dynamic
           :examples $ []
           :schema $ :: 'StructDef
         'docs $ %{} 'CodeEntry (:doc |)
@@ -791,7 +797,7 @@
                 assoc store :states $ match
                   try-decode-map-as
                     update-state-tree (:states store) cursor s
-                    , 'Map
+                    :: 'Map 'Dynamic 'Dynamic
                   (:ok updated-states) updated-states
                   (:err message) (raise message)
               (:hydrate-storage d) d

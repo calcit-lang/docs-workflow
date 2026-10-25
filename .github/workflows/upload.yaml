@@ -50,12 +50,13 @@ jobs:
           caps --strict --ci
           yarn install --immutable
           caps verify --toolchain
+          git diff --quiet -- deps.cirru package.json yarn.lock .yarnrc.yml
 
       - name: Validate Calcit upgrade
         run: |
           set -euo pipefail
           calcit edit format
-          git diff --exit-code -- calcit.cirru
+          git diff --quiet -- calcit.cirru
           calcit --check-only --all-defs --format json
           calcit fix --workflow strict --verify --format json | jq -e 'select(.data.workflow.status == "passed" and .diagnostics == []) | {workflow:.data.workflow,diagnostics:.diagnostics}'
           calcit analyze weak-types --only deprecated-call --summary-only --format json | jq -e '.data.summary.calls == 0'
