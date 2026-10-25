@@ -8,7 +8,7 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 候选版本 0.0.37 将 Calcit CLI 与 `@calcit/procs` 配对升级到正式 **0.30.1**，尚未发版。使用 Node.js 24、Yarn 4.18.0。消费者应协调完整正式模块图，不能只改根版本或放宽 Caps strict：
 
-- Alerts 0.10.58、Reel 0.6.42、Markdown 0.4.60、Router 0.8.38。
+- Alerts 0.10.59、Reel 0.6.42、Markdown 0.4.60、Router 0.8.38。
 - UI 0.8.1、Respo 0.16.126、js-ffi 0.2.6。
 
 本轮继续迁移三处 List count 和一处 Map merge；静态 CSS 叶子改为等价 String，
@@ -16,9 +16,10 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 不改变历史容量、默认路径、快捷键、Markdown/语音代码、公开导航回调或存档行为，保留实际 `hud!`。
 升级完整图后请重新安装、重启开发服务并刷新；UI 升级可能带来样式差异，不承诺逐像素相同。
 原测试与门禁保持，不新增强转、质量预算、重复 COS 校验脚本或 concurrently。
-Quick Jump 点击事件按真实 EventHandler 声明，并在原 `.show` 副作用后明确返回 Unit；
-不吞异常或改变调用次数，但不承诺开放回调返回值逐字不变。上游 Modal 返回合同由
-[Alerts #110](https://github.com/Respo/alerts.calcit/issues/110) 跟进。
+Quick Jump 点击事件保留真实 EventHandler 声明，直接返回 `.show` 的结果，不再额外补 Unit。
+正式 [Alerts 0.10.59](https://github.com/Respo/alerts.calcit/releases/tag/0.10.59) 已保留
+dispatcher 的泛型返回关系，因此此处可以证明原本的 Unit 返回，不吞异常或改变调用次数。
+其他原有 Unit 尾值和开放边界不顺带改写；此处不再依赖未发布候选或本地模块覆盖。
 
 文档节点、路径与导航状态采用具名类型；调用方传入 `List<DocNode>` 和 `reel.typed/State<Op, Store>`。导航辅助组件的 `on-select` 合同为 `Fn(List<Tag>, Fn(Enum) -> Unit) -> Unit`，不再用裸 Fn 隐去 dispatch 的调用要求。
 

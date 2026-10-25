@@ -100,7 +100,6 @@
                                 :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
                                   :args $ [] 'Dynamic
                             .show quick-modal d!
-                            , &unit
                         <> "|☰" $ str-spaced css/font-fancy style-jump
                     a $ {} (:href |mdbook.html) (:inner-text |mdbook)
                       :style $ {} (:font-size |12px) (:font-family ui/font-fancy) (:opacity |0.3)
