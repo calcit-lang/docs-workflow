@@ -26,7 +26,7 @@
                       :on-click $ fn (e d!)
                         hint-fn $ {} (:return 'Unit)
                           :args $ [] (:: 'Map 'Tag 'Dynamic)
-                            :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                            :: 'Fn $ {} (:return 'Unit)
                               :args $ [] 'Dynamic
                         on-select
                           conj parent-path $ :key entry
@@ -97,7 +97,7 @@
                           :on-click $ fn (e d!)
                             hint-fn $ {} (:return 'Unit)
                               :args $ [] (:: 'Map 'Tag 'Dynamic)
-                                :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                                :: 'Fn $ {} (:return 'Unit)
                                   :args $ [] 'Dynamic
                             .show quick-modal d!
                         <> "|☰" $ str-spaced css/font-fancy style-jump
@@ -163,7 +163,6 @@
                       :args $ [] (:: 'Map 'Tag 'Dynamic)
                         :: 'Fn $ {}
                           :args $ [] 'Dynamic
-                          :rest 'Dynamic
                           :return 'Unit
                       :return 'Unit
                     let
@@ -222,7 +221,7 @@
                       :on-click $ fn (e d!)
                         hint-fn $ {} (:return 'Unit)
                           :args $ [] (:: 'Map 'Tag 'Dynamic)
-                            :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                            :: 'Fn $ {} (:return 'Unit)
                               :args $ [] 'Dynamic
                         on-select path d!
                     <> $ match target
@@ -249,7 +248,7 @@
                         :on-click $ fn (e d!)
                           hint-fn $ {} (:return 'Unit)
                             :args $ [] (:: 'Map 'Tag 'Dynamic)
-                              :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                              :: 'Fn $ {} (:return 'Unit)
                                 :args $ [] 'Dynamic
                           on-select
                             conj base-path $ :key entry
@@ -285,7 +284,7 @@
                         :on-click $ fn (e d!)
                           hint-fn $ {} (:return 'Unit)
                             :args $ [] (:: 'Map 'Tag 'Dynamic)
-                              :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                              :: 'Fn $ {} (:return 'Unit)
                                 :args $ [] 'Dynamic
                           on-select
                             conj parent-path $ :key entry
@@ -324,7 +323,7 @@
                           :on-click $ fn (e d!)
                             hint-fn $ {} (:return 'Unit)
                               :args $ [] (:: 'Map 'Tag 'Dynamic)
-                                :: 'Fn $ {} (:rest 'Dynamic) (:return 'Unit)
+                                :: 'Fn $ {} (:return 'Unit)
                                   :args $ [] 'Dynamic
                             on-select sub-path d!
                         <> $ str "|< " $ match target
