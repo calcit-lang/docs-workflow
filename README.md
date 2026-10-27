@@ -6,20 +6,22 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 ## 使用者需要注意
 
-候选版本 0.0.37 将 Calcit CLI 与 `@calcit/procs` 配对升级到正式 **0.30.1**，尚未发版。使用 Node.js 24、Yarn 4.18.0。消费者应协调完整正式模块图，不能只改根版本或放宽 Caps strict：
+候选版本 0.0.38 将 Calcit CLI 与 `@calcit/procs` 配对升级到正式 **0.31.0**，尚未发版。使用 Node.js 24、Yarn 4.18.0。消费者应协调完整模块图，不能只改根版本或放宽 Caps strict：
 
-- Alerts 0.10.59、Reel 0.6.42、Markdown 0.4.60、Router 0.8.38。
-- UI 0.8.1、Respo 0.16.126、js-ffi 0.2.6。
+- Alerts 0.11.0-alpha.2、Reel 0.7.0-alpha.2、Markdown 0.5.0-alpha.3、Router 0.9.0-alpha.1。
+- UI 0.9.0-alpha.2、Respo 0.17.0-alpha.2、js-ffi 0.2.5。使用已发布 tag，不以 main/hash 代替；模块仍含 alpha，正式 CLI 不代表整张图都已稳定。
 
-本轮继续迁移三处 List count 和一处 Map merge；静态 CSS 叶子改为等价 String，
-样式类、样式 Map、开发标记及文本缓存补齐准确类型，状态 Map 显式保留真实混合 key/value。
+本轮迁移管道外的裸 Option 缺省值、List slice 的显式 Option 终点及失效 import；
+未选中条目的样式拼接显式返回原基类，保留原 nil 被跳过时的字符串结果，不补额外空格。
 不改变历史容量、默认路径、快捷键、Markdown/语音代码、公开导航回调或存档行为，保留实际 `hud!`。
 升级完整图后请重新安装、重启开发服务并刷新；UI 升级可能带来样式差异，不承诺逐像素相同。
 原测试与门禁保持，不新增强转、质量预算、重复 COS 校验脚本或 concurrently。
-Quick Jump 点击事件保留真实 EventHandler 声明，直接返回 `.show` 的结果，不再额外补 Unit。
-正式 [Alerts 0.10.59](https://github.com/Respo/alerts.calcit/releases/tag/0.10.59) 已保留
-dispatcher 的泛型返回关系，因此此处可以证明原本的 Unit 返回，不吞异常或改变调用次数。
-其他原有 Unit 尾值和开放边界不顺带改写；此处不再依赖未发布候选或本地模块覆盖。
+Quick Jump 直接返回 `.show` 的结果，不额外补 Unit；已发布 [Alerts 0.11.0-alpha.2](https://github.com/Respo/alerts.calcit/tree/0.11.0-alpha.2)
+保留 dispatcher 的泛型返回关系，不吞异常或改变调用次数。其他原有 Unit 尾值和开放边界不顺带改写。
+
+默认 renderer slot 显式匹配原有 `Fn<Dynamic, Unit>` 适配器：非 Enum 仍在 renderer 拒绝，
+业务 payload 仍在 dispatch 中检查并构造具名 Op。DocNode、State、Store、Op 及导航回调合同不变。
+这记录既有开放入口，不表示所有 dispatch 都已静态证明；没有关闭审计、增加强转或放宽质量预算。
 
 文档节点、路径与导航状态采用具名类型；调用方传入 `List<DocNode>` 和 `reel.typed/State<Op, Store>`。导航辅助组件的 `on-select` 合同为 `Fn(List<Tag>, Fn(Enum) -> Unit) -> Unit`，不再用裸 Fn 隐去 dispatch 的调用要求。
 
@@ -56,7 +58,7 @@ yarn build
 node --test test/navigation.test.mjs
 ```
 
-保留原两项定义内路径/历史测试；Node 回归执行实际生成的组件事件，经 Respo 的真实 dispatch wrapper 进入原 updater，覆盖页面、子页面、父级、历史及快速导航。它不替代真实浏览器的 DOM、样式或键盘验收。
+保留原两项定义内路径/历史测试；Node 回归执行实际生成的组件事件，按当前 Respo 直接传入 dispatcher 的方式进入原 updater，覆盖页面、子页面、父级、历史及快速导航。已删除旧 wrapper import，原业务断言保留；它不替代真实浏览器的 DOM、样式或键盘验收。
 
 五处回调按正式 Respo 的实际 `EventHandler` 合同标注：事件为 `Map<Tag, Dynamic>`，dispatch 接受 Dynamic 和可变参数并返回 Unit。具体导航回调仍只发送 Enum；没有把 opaque Fn 强转成猜造的具体合同。上游合同丢失问题由 [Respo #275](https://github.com/Respo/respo.calcit/issues/275) 跟进。
 
@@ -74,7 +76,7 @@ Remarkable linkify 使用安装包声明的 `remarkable/dist/cjs/linkify.js` 发
 
 PR 只检查和构建，不上传 COS 或部署；保存原始双前端构建 artifact，使用本地相对路径验收，不改写生成 HTML。生产部署串行完成，资源与页面发布前分别核对 main HEAD。前端 COS 仅上传 `dist/assets`；mdBook 保留原公开前缀。两者都使用 COS Action v1.2.0 自身的 verify，不增加重复校验脚本。原两个服务器目录及 CDN 前缀不变。Actions 使用精确正式 tag，接受 tag 可移动风险。
 
-正式 0.30.1 配对以 PR Linux CI 的精确提交结果为准；本地 0.30.0 中间验证不冒充目标版本验收。生产部署和正式 tag 发布需要独立验收与授权。
+正式 0.31.0 配对及原 mdBook 双前端构建以 PR Linux CI 的精确提交结果为准。生产部署和正式 tag 发布仍需独立验收。
 
 ## License
 
