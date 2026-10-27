@@ -6,7 +6,7 @@
     {} (:description |) (:init-fn 'docs-workflow.main/main!) (:mode :js) (:reload-fn 'docs-workflow.main/reload!) (:target :browser)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/ |js-ffi/
-      :type-slots $ {}
+      :type-slots $ {} $ :dispatch-op 'Dynamic
   :files $ {}
     'docs-workflow.comp.container $ %{} 'FileEntry
       :defs $ {}
@@ -173,7 +173,7 @@
                       if
                         and (= |p key) (or meta? ctrl?)
                         .show quick-modal d!
-                        if (= |Escape key) (.close quick-modal d!) %none
+                        if (= |Escape key) (.close quick-modal d!) (Option :none)
                     , &unit
                 .render quick-modal
                 when dev? $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
@@ -291,7 +291,7 @@
                             conj parent-path $ :key entry
                             , d!
                       div
-                        {} $ :class-name $ str-spaced style-doc-entry (if selected? style-doc-entry-selected)
+                        {} $ :class-name $ if selected? (str-spaced style-doc-entry style-doc-entry-selected) style-doc-entry
                         <> $ :title entry
                         =< 8 nil
                         if
@@ -314,7 +314,7 @@
                   range $ dec $ .len selected
                   map $ fn (idx)
                     let
-                        sub-path $ slice selected 0 $ inc idx
+                        sub-path $ selected .slice 0 $ Option :some (inc idx)
                         target $ find-target docs sub-path
                       [] idx $ div
                         {}
@@ -696,7 +696,7 @@
             docs-workflow.comp.container :refer $ comp-container
             docs-workflow.updater :refer $ updater
             docs-workflow.schema :as schema
-            reel.util :refer $ listen-devtools! generate-id!
+            reel.util :refer $ listen-devtools!
             reel.typed :as typed
             reel.typed-compat :as reel-view
             docs-workflow.config :as config

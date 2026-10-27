@@ -5,7 +5,6 @@ import * as schema from '../js-out/docs-workflow.schema.mjs';
 import { comp_container } from '../js-out/docs-workflow.comp.container.mjs';
 import { updater } from '../js-out/docs-workflow.updater.mjs';
 import { new_reel } from '../js-out/reel.typed.mjs';
-import { wrap_dispatch } from '../js-out/respo.controller.client.mjs';
 
 const tag = c.newTag;
 const field = (value, name) => c._$n_struct_$o_get(value, tag(name));
@@ -36,14 +35,15 @@ function clickable(root, eventName = 'click') {
   return found;
 }
 
-test('real navigation callbacks retain paths and history through Respo dispatch', () => {
+test('real navigation callbacks retain paths and history with the single-op dispatcher', () => {
   let store = schema.store;
   const ops = [];
-  const dispatch = wrap_dispatch(c.ref(op => {
+  // Current Respo passes the stored dispatcher directly; the retired wrapper is absent.
+  const dispatch = op => {
     ops.push(op);
     store = updater(store, op, 'navigation-test', 0);
     return undefined; // Calcit Unit in generated JavaScript.
-  }));
+  };
   function click(owner, text) {
     const targets = clickable(comp_container(new_reel(store), schema.docs));
     const target = targets.find(x => x.owner === owner && x.text === text);
