@@ -6,17 +6,17 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 ## 使用者需要注意
 
-候选版本 **0.0.39** 将完整依赖图对齐正式 **Calcit 0.31.0**，尚未发版；CLI 与 `@calcit/procs` 都是 0.31.0。使用 Node.js 24、Yarn 4.18.0。消费者应同步完整模块图并保留 Caps strict：
+候选版本 **0.0.40** 迁移到正式 **Calcit 0.32.0** 的类型标注语法，CLI 与 `@calcit/procs` 同步为 0.32.0。使用 Node.js 24、Yarn 4.18.0。消费者需同步完整依赖图并保留 Caps strict：
 
-- Alerts 0.11.0-alpha.3、Reel 0.7.0-alpha.4、Markdown 0.5.0-alpha.4、Router 0.9.0-alpha.3。
-- UI 0.9.0-alpha.4、Respo 0.17.0-alpha.4、js-ffi 0.2.7。各精确 tag 的 deps.cirru 均声明 0.31.0；不以 main/hash 代替。模块仍含 alpha，正式 CLI 不代表整张图都已稳定。
+- Alerts 0.11.0、Reel 0.7.0、Markdown 0.5.0、Router 0.9.0。
+- UI 0.9.0、Respo 0.17.0、js-ffi 0.2.8；不以 main/hash 代替正式 tag。
 
-本轮去掉 6 个定义中 7 处内部 dispatch 提示的多余 rest 参数，匹配实际单参数 `Fn<Dynamic, Unit>`。
-公开 schema、业务表达式、原测试和 CI 保持；不新增强转、质量预算、验证脚本或 concurrently。
-不改变历史容量、默认路径、快捷键、Markdown/语音代码、公开导航回调或存档行为，保留实际 `hud!`。
+目前这是本地候选：上游候选模块通过本地链接联合验证，尚不能视为已发布依赖图通过 Caps strict；须等这些精确 tag 可用，再验证干净安装和 PR Linux CI。
+
+官方 formatter 转换 25 处旧类型形式，48 个定义的 schema 不变；函数提示、具名结构与附带测试中的类型使用新语法，原业务表达式和断言保持。
+不新增强转、质量预算、验证脚本或 concurrently。不改变历史容量、默认路径、快捷键、Markdown/语音代码、公开导航回调或存档行为，保留实际 `hud!`。
 升级完整图后请重新安装、重启开发服务并刷新；UI 升级可能带来样式差异，不承诺逐像素相同。
-Quick Jump 直接返回 `.show` 的结果，不额外补 Unit；已发布 [Alerts 0.11.0-alpha.3](https://github.com/Respo/alerts.calcit/tree/0.11.0-alpha.3)
-保留 dispatcher 的泛型返回关系，不吞异常或改变调用次数。其他原有 Unit 尾值和开放边界不顺带改写。
+Quick Jump 保留 `.show` 的结果和 dispatcher 的泛型返回关系，不吞异常或改变调用次数。其他原有 Unit 尾值和开放边界不顺带改写。
 
 默认 renderer slot 显式匹配原有 `Fn<Dynamic, Unit>` 适配器：非 Enum 仍在 renderer 拒绝，
 业务 payload 仍在 dispatch 中检查并构造具名 Op。DocNode、State、Store、Op 及导航回调合同不变。
@@ -75,7 +75,7 @@ Remarkable linkify 使用安装包声明的 `remarkable/dist/cjs/linkify.js` 发
 
 PR 只检查和构建，不上传 COS 或部署；保存原始双前端构建 artifact，使用本地相对路径验收，不改写生成 HTML。生产部署串行完成，资源与页面发布前分别核对 main HEAD。前端 COS 仅上传 `dist/assets`；mdBook 保留原公开前缀。两者都使用 COS Action v1.2.0 自身的 verify，不增加重复校验脚本。原两个服务器目录及 CDN 前缀不变。Actions 使用精确正式 tag，接受 tag 可移动风险。
 
-正式 0.31.0 配对及原 mdBook 双前端构建以 PR Linux CI 的精确提交结果为准。生产部署和正式 tag 发布仍需独立验收。
+正式 0.32.0 配对及原 mdBook 双前端构建以 PR Linux CI 的精确提交结果为准。生产部署和正式 tag 发布仍需独立验收。
 
 ## License
 
