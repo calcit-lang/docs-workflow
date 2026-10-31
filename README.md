@@ -6,12 +6,12 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 ## 使用者需要注意
 
-候选版本 **0.0.40** 迁移到正式 **Calcit 0.32.0** 的类型标注语法，CLI 与 `@calcit/procs` 同步为 0.32.0。使用 Node.js 24、Yarn 4.18.0。消费者需同步完整依赖图并保留 Caps strict：
+候选版本 **0.0.40** 将旧 0.31 类型标注迁移到正式 **Calcit 0.32.1**，CLI 与 `@calcit/procs` 成套升级。使用 Node.js 24、Yarn 4.18.0，消费者需重新安装完整依赖图并生成 JS，保留 Caps strict：
 
-- Alerts 0.11.0、Reel 0.7.0、Markdown 0.5.0、Router 0.9.0。
-- UI 0.9.0、Respo 0.17.0、js-ffi 0.2.8；不以 main/hash 代替正式 tag。
+- 已发布 Alerts 0.11.0-alpha.4、Reel 0.7.0-alpha.5、Markdown 0.5.0-alpha.5、Router 0.9.0-alpha.4。
+- UI 0.9.0、Respo 0.17.1、js-ffi 0.2.9；所有依赖声明 Calcit 0.32.1。
 
-目前这是本地候选：上游候选模块通过本地链接联合验证，尚不能视为已发布依赖图通过 Caps strict；须等这些精确 tag 可用，再验证干净安装和 PR Linux CI。
+前四个模块尚无对应正式 tag，因此保留精确已发布 alpha；不把它们称为稳定版，不使用未发布版本、本地链接、main 或 hash 替代。当前真实发布图已通过 Caps strict；候选模块仍未发布，本 PR 不合并、发版或部署。
 
 官方 formatter 转换 25 处旧类型形式，48 个定义的 schema 不变；函数提示、具名结构与附带测试中的类型使用新语法，原业务表达式和断言保持。
 不新增强转、质量预算、验证脚本或 concurrently。不改变历史容量、默认路径、快捷键、Markdown/语音代码、公开导航回调或存档行为，保留实际 `hud!`。
@@ -75,7 +75,9 @@ Remarkable linkify 使用安装包声明的 `remarkable/dist/cjs/linkify.js` 发
 
 PR 只检查和构建，不上传 COS 或部署；保存原始双前端构建 artifact，使用本地相对路径验收，不改写生成 HTML。生产部署串行完成，资源与页面发布前分别核对 main HEAD。前端 COS 仅上传 `dist/assets`；mdBook 保留原公开前缀。两者都使用 COS Action v1.2.0 自身的 verify，不增加重复校验脚本。原两个服务器目录及 CDN 前缀不变。Actions 使用精确正式 tag，接受 tag 可移动风险。
 
-正式 0.32.0 配对及原 mdBook 双前端构建以 PR Linux CI 的精确提交结果为准。生产部署和正式 tag 发布仍需独立验收。
+正式 0.32.1 工具链配对及原 mdBook 双前端构建以 PR Linux CI 的精确提交结果为准。生产部署和正式 tag 发布仍需独立验收。
+
+已知未修复边界：[mdBook Cirru/Clojure 高亮缺失 #95](https://github.com/calcit-lang/docs-workflow/issues/95) 与 [SPA 相对 Markdown 链接支持合同 #96](https://github.com/calcit-lang/docs-workflow/issues/96) 继续跟踪。双前端构建通过不表示这些问题已修复。
 
 ## License
 
