@@ -13,7 +13,7 @@
         '*text-content $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *text-content ([])
           :examples $ []
-          :schema $ :: 'Ref $ :: 'List 'String
+          :schema $ quote $ Ref (List String)
         'comp-child-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-child-entries (parent-path entries on-select)
             div
@@ -24,10 +24,9 @@
                   [] idx $ div
                     {} (:tab-index 0)
                       :on-click $ fn (e d!)
-                        hint-fn $ {} (:return 'Unit)
-                          :args $ [] (:: 'Map 'Tag 'Dynamic)
-                            :: 'Fn $ {} (:return 'Unit)
-                              :args $ [] 'Dynamic
+                        hint-fn $ Fn (Map Tag Dynamic)
+                          Fn Dynamic $ -> Unit
+                          -> Unit
                         on-select
                           conj parent-path $ :key entry
                           , d!
@@ -39,12 +38,11 @@
                         not $ empty? $ :children entry
                         <> "|☰" $ {} $ :color (hsl 180 80 60)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'List 'Tag) (:: 'List 'docs-workflow.schema/DocNode)
-              :: 'Fn $ {} (:return 'Unit)
-                :args $ [] (:: 'List 'Tag)
-                  :: 'Fn $ {} (:return 'Unit)
-                    :args $ [] 'Enum
+          :schema $ quote $ Fn (List Tag) (List docs-workflow.schema/DocNode)
+            Fn (List Tag)
+              Fn Enum $ -> Unit
+              -> Unit
+            -> respo.schema/Component
         'comp-container $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-container (reel docs)
             let
@@ -74,11 +72,9 @@
                         {} $ :class-name $ str-spaced ui/expand style-jump-modal
                         comp-nav-tree docs ([])
                           fn (path d!)
-                            hint-fn $ {}
-                              :args $ [] (:: 'List 'Tag)
-                                :: 'Fn $ {} (:return 'Unit)
-                                  :args $ [] 'Enum
-                              :return 'Unit
+                            hint-fn $ Fn (List Tag)
+                              Fn Enum $ -> Unit
+                              -> Unit
                             d! $ docs-workflow.schema/Op :states cursor $ next-path state path
                             , &unit
               div
@@ -95,20 +91,17 @@
                         {}
                           :style $ {}
                           :on-click $ fn (e d!)
-                            hint-fn $ {} (:return 'Unit)
-                              :args $ [] (:: 'Map 'Tag 'Dynamic)
-                                :: 'Fn $ {} (:return 'Unit)
-                                  :args $ [] 'Dynamic
+                            hint-fn $ Fn (Map Tag Dynamic)
+                              Fn Dynamic $ -> Unit
+                              -> Unit
                             .show quick-modal d!
                         <> "|☰" $ str-spaced css/font-fancy style-jump
                     a $ {} (:href |mdbook.html) (:inner-text |mdbook)
                       :style $ {} (:font-size |12px) (:font-family ui/font-fancy) (:opacity |0.3)
                   comp-parent-menu selected docs $ fn (path d!)
-                    hint-fn $ {}
-                      :args $ [] (:: 'List 'Tag)
-                        :: 'Fn $ {} (:return 'Unit)
-                          :args $ [] 'Enum
-                      :return 'Unit
+                    hint-fn $ Fn (List Tag)
+                      Fn Enum $ -> Unit
+                      -> Unit
                     d! $ docs-workflow.schema/Op :states cursor $ next-path state path
                     , &unit
                   let
@@ -119,22 +112,18 @@
                       comp-page-entries
                         .unwrap $ last selected
                         , parent-path entries $ fn (xs d!)
-                          hint-fn $ {}
-                            :args $ [] (:: 'List 'Tag)
-                              :: 'Fn $ {} (:return 'Unit)
-                                :args $ [] 'Enum
-                            :return 'Unit
+                          hint-fn $ Fn (List Tag)
+                            Fn Enum $ -> Unit
+                            -> Unit
                           d! $ docs-workflow.schema/Op :states cursor $ next-path state xs
                           , &unit
                   div
                     {} $ :style $ {} (:margin-top |20px)
                     <> |Histories style-title
                     comp-history-menu history docs $ fn (path d!)
-                      hint-fn $ {}
-                        :args $ [] (:: 'List 'Tag)
-                          :: 'Fn $ {} (:return 'Unit)
-                            :args $ [] 'Enum
-                        :return 'Unit
+                      hint-fn $ Fn (List Tag)
+                        Fn Enum $ -> Unit
+                        -> Unit
                       d! $ docs-workflow.schema/Op :states cursor $ next-path state path
                       , &unit
                 let
@@ -146,11 +135,9 @@
                         let
                             children $ :children target-value
                           if (empty? children) nil $ comp-child-entries (:selected state) children $ fn (xs d!)
-                            hint-fn $ {}
-                              :args $ [] (:: 'List 'Tag)
-                                :: 'Fn $ {} (:return 'Unit)
-                                  :args $ [] 'Enum
-                              :return 'Unit
+                            hint-fn $ Fn (List Tag)
+                              Fn Enum $ -> Unit
+                              -> Unit
                             d! $ docs-workflow.schema/Op :states cursor $ next-path state xs
                             , &unit
                       (:none) nil
@@ -159,12 +146,9 @@
                 comp-global-keydown
                   {} $ :disabled-commands $ #{} |p
                   fn (e d!)
-                    hint-fn $ {}
-                      :args $ [] (:: 'Map 'Tag 'Dynamic)
-                        :: 'Fn $ {}
-                          :args $ [] 'Dynamic
-                          :return 'Unit
-                      :return 'Unit
+                    hint-fn $ Fn (Map Tag Dynamic)
+                      Fn Dynamic $ -> Unit
+                      -> Unit
                     let
                         key $ contract/expect-string |keyboard.key $ .unwrap (get e :key)
                         meta? $ contract/expect-bool |keyboard.meta $ .unwrap (get e :meta?)
@@ -177,9 +161,7 @@
                 .render quick-modal
                 when dev? $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'reel.typed/State 'docs-workflow.schema/Op 'docs-workflow.schema/Store) (:: 'List 'docs-workflow.schema/DocNode)
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (reel.typed/State docs-workflow.schema/Op docs-workflow.schema/Store) (List docs-workflow.schema/DocNode) (-> respo.schema/Component) (:features :js-ffi)
         'comp-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-doc-page (target)
             match target
@@ -206,9 +188,7 @@
                           .unwrap-or (get-env |lang) |en-US
               (:none) (<> |)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] $ :: 'calcit.core/Option 'docs-workflow.schema/DocNode
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (calcit.core/Option docs-workflow.schema/DocNode) (-> respo.schema/Component) (:features :js-ffi)
         'comp-history-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-history-menu (history docs on-select)
             list-> ({})
@@ -219,23 +199,21 @@
                     {} (:tab-index 0)
                       :class-name $ str-spaced style-doc-entry style-history-entry
                       :on-click $ fn (e d!)
-                        hint-fn $ {} (:return 'Unit)
-                          :args $ [] (:: 'Map 'Tag 'Dynamic)
-                            :: 'Fn $ {} (:return 'Unit)
-                              :args $ [] 'Dynamic
+                        hint-fn $ Fn (Map Tag Dynamic)
+                          Fn Dynamic $ -> Unit
+                          -> Unit
                         on-select path d!
                     <> $ match target
                       (:some target-value) (:title target-value)
                       (:none) |
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ []
-              :: 'List $ :: 'List 'Tag
-              :: 'List 'docs-workflow.schema/DocNode
-              :: 'Fn $ {} (:return 'Unit)
-                :args $ [] (:: 'List 'Tag)
-                  :: 'Fn $ {} (:return 'Unit)
-                    :args $ [] 'Enum
+          :schema $ quote $ Fn
+            List $ List Tag
+            List docs-workflow.schema/DocNode
+            Fn (List Tag)
+              Fn Enum $ -> Unit
+              -> Unit
+            -> respo.schema/Component
         'comp-nav-tree $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-nav-tree (docs base-path on-select)
             list-> ({})
@@ -246,10 +224,9 @@
                       {} (:tab-index 0) (:class-name style-doc-entry)
                         :style $ {} (:padding "|0 8px") (:cursor |pointer)
                         :on-click $ fn (e d!)
-                          hint-fn $ {} (:return 'Unit)
-                            :args $ [] (:: 'Map 'Tag 'Dynamic)
-                              :: 'Fn $ {} (:return 'Unit)
-                                :args $ [] 'Dynamic
+                          hint-fn $ Fn (Map Tag Dynamic)
+                            Fn Dynamic $ -> Unit
+                            -> Unit
                           on-select
                             conj base-path $ :key entry
                             , d!
@@ -265,12 +242,11 @@
                             , on-select
                         , nil
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'List 'docs-workflow.schema/DocNode) (:: 'List 'Tag)
-              :: 'Fn $ {} (:return 'Unit)
-                :args $ [] (:: 'List 'Tag)
-                  :: 'Fn $ {} (:return 'Unit)
-                    :args $ [] 'Enum
+          :schema $ quote $ Fn (List docs-workflow.schema/DocNode) (List Tag)
+            Fn (List Tag)
+              Fn Enum $ -> Unit
+              -> Unit
+            -> respo.schema/Component
         'comp-page-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-page-entries (selected parent-path entries on-select)
             div
@@ -282,10 +258,9 @@
                     div
                       {} (:tab-index 0)
                         :on-click $ fn (e d!)
-                          hint-fn $ {} (:return 'Unit)
-                            :args $ [] (:: 'Map 'Tag 'Dynamic)
-                              :: 'Fn $ {} (:return 'Unit)
-                                :args $ [] 'Dynamic
+                          hint-fn $ Fn (Map Tag Dynamic)
+                            Fn Dynamic $ -> Unit
+                            -> Unit
                           on-select
                             conj parent-path $ :key entry
                             , d!
@@ -297,12 +272,11 @@
                           not $ empty? $ :children entry
                           <> "|☰" $ {} $ :color (hsl 180 80 60)
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] 'Tag (:: 'List 'Tag) (:: 'List 'docs-workflow.schema/DocNode)
-              :: 'Fn $ {} (:return 'Unit)
-                :args $ [] (:: 'List 'Tag)
-                  :: 'Fn $ {} (:return 'Unit)
-                    :args $ [] 'Enum
+          :schema $ quote $ Fn Tag (List Tag) (List docs-workflow.schema/DocNode)
+            Fn (List Tag)
+              Fn Enum $ -> Unit
+              -> Unit
+            -> respo.schema/Component
         'comp-parent-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-parent-menu (selected docs on-select)
             list->
@@ -321,22 +295,20 @@
                             :color $ hsl 0 0 40
                             :background-color $ hsl 180 90 94
                           :on-click $ fn (e d!)
-                            hint-fn $ {} (:return 'Unit)
-                              :args $ [] (:: 'Map 'Tag 'Dynamic)
-                                :: 'Fn $ {} (:return 'Unit)
-                                  :args $ [] 'Dynamic
+                            hint-fn $ Fn (Map Tag Dynamic)
+                              Fn Dynamic $ -> Unit
+                              -> Unit
                             on-select sub-path d!
                         <> $ str "|< " $ match target
                           (:some target-value) (:title target-value)
                           (:none) "|NOT FOUND"
                 []
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'respo.schema/Component)
-            :args $ [] (:: 'List 'Tag) (:: 'List 'docs-workflow.schema/DocNode)
-              :: 'Fn $ {} (:return 'Unit)
-                :args $ [] (:: 'List 'Tag)
-                  :: 'Fn $ {} (:return 'Unit)
-                    :args $ [] 'Enum
+          :schema $ quote $ Fn (List Tag) (List docs-workflow.schema/DocNode)
+            Fn (List Tag)
+              Fn Enum $ -> Unit
+              -> Unit
+            -> respo.schema/Component
         'css-doc $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-doc
             {}
@@ -348,7 +320,7 @@
                 :border-radius |3px
                 :border $ str "|1px solid " $ hsl 0 0 90
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'css-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-doc-page
             {}
@@ -358,13 +330,13 @@
               "|& iframe" $ {} $ :border
                 str "|1px solid " $ hsl 0 0 86
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'css-layout $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-layout
             {} $ |& $ {} (:padding "|0 8px") (:width |20%) (:min-width |266px) (:background-color |white)
               :border-right $ str "|1px solid " $ hsl 0 0 94
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'css-markdown $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-markdown
             {}
@@ -376,12 +348,12 @@
               "|& pre" $ {} (:background-color "|hsla(0, 0%, 96%, 0.5)") (:border "|1px solid #eee") (:padding "|2px 8px") (:line-height |1.4) (:min-width |400px) (:border-radius |4px) (:overflow |auto)
               "|& blockquote" $ {} (:margin "|16px 0") (:padding "|1px 16px") (:color |#777) (:background-color |#eee8e8) (:border-left "|4px solid #ccc") (:line-height |1.5em)
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'css-speech-button $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle css-speech-button
             {} $ |& $ {} (:position |absolute) (:top |32px) (:right |8px) (:font-family css/font-fancy)
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'find-entries $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn find-entries (entries path)
             if (empty? path) entries $ match (find-target entries path)
@@ -389,10 +361,9 @@
               (:none)
                 do (js/console.warn "|no entries found for" entries path) ([])
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] (:: 'List 'docs-workflow.schema/DocNode) (:: 'List 'Tag)
-            :features $ #{} :js-ffi
-            :return $ :: 'List 'docs-workflow.schema/DocNode
+          :schema $ quote $ Fn (List docs-workflow.schema/DocNode) (List Tag)
+            -> $ List docs-workflow.schema/DocNode
+            :features :js-ffi
         'find-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn find-target (entries path)
             match (first path)
@@ -400,9 +371,7 @@
               (:some p0)
                 match
                   find entries $ fn (entry)
-                    hint-fn $ {}
-                      :args $ [] 'docs-workflow.schema/DocNode
-                      :return 'Bool
+                    hint-fn $ Fn docs-workflow.schema/DocNode $ -> Bool
                     = p0 $ :key entry
                   (:some target)
                     if
@@ -411,19 +380,16 @@
                       find-target (:children target) (rest path)
                   (:none) (Option :none)
           :examples $ []
-          :schema $ :: 'Fn $ {}
-            :args $ [] (:: 'List 'docs-workflow.schema/DocNode) (:: 'List 'Tag)
-            :features $ #{} :js-ffi
-            :return $ :: 'calcit.core/Option 'docs-workflow.schema/DocNode
+          :schema $ quote $ Fn (List docs-workflow.schema/DocNode) (List Tag)
+            -> $ calcit.core/Option docs-workflow.schema/DocNode
+            :features :js-ffi
           :tests $ [] $ %{} 'TestEntry (:name |finds-existing-and-missing-paths)
             :code $ quote $ do
               assert= (Option :some |Overview)
                 .map
                   find-target docs-workflow.schema/docs $ [] :design :overview
                   fn (target)
-                    hint-fn $ {}
-                      :args $ [] 'docs-workflow.schema/DocNode
-                      :return 'String
+                    hint-fn $ Fn docs-workflow.schema/DocNode $ -> String
                     :title target
               assert= (Option :none)
                 find-target docs-workflow.schema/docs $ [] :design :missing
@@ -435,10 +401,7 @@
                 m $ js-cast
                   new Remarkable $ js-object (:html true) (:breaks true)
                     :highlight $ fn (code lang)
-                      hint-fn $ {}
-                        :args $ [] 'String 'String
-                        :return 'String
-                        :features $ #{} :js-ffi
+                      hint-fn $ Fn String String (-> String) (:features :js-ffi)
                       if (= lang |cirru)
                         contract/expect-string "|Cirru highlight" $ color/generate code
                         .-value $ .highlight-auto highlighter code $ js-array lang
@@ -446,13 +409,11 @@
               .use m $ contract/expect-function "|Remarkable linkify plugin" linkify
               , m
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'docs-workflow.schema/RemarkableHost)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> docs-workflow.schema/RemarkableHost) (:features :js-ffi)
         'md $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def md (make-markdown-parser)
           :examples $ []
-          :schema $ :: 'docs-workflow.schema/RemarkableHost
+          :schema $ quote docs-workflow.schema/RemarkableHost
         'next-path $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn next-path (state path)
             let
@@ -464,8 +425,7 @@
                   , xs
                 , path
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'docs-workflow.schema/State)
-            :args $ [] 'docs-workflow.schema/State $ :: 'List 'Tag
+          :schema $ quote $ Fn docs-workflow.schema/State (List Tag) (-> docs-workflow.schema/State)
           :tests $ [] $ %{} 'TestEntry (:name |preserves-history-order-and-cap)
             :code $ quote $ do
               assert=
@@ -488,7 +448,7 @@
             {} $ |& $ {} (:padding |8px) (:min-width |320px) (:max-width |400px) (:background-color |white) (:margin "|8px 12px") (:border-radius |4px)
               :border $ str "|1px solid " $ hsl 0 0 86
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'style-child-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-child-entry
             {}
@@ -496,14 +456,14 @@
               |&:hover $ {} $ :background-color
                 hsl 190 10 70 $ Option :some 0.1
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'style-doc-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-doc-entry
             {} (|& style-entry)
               |&:hover $ {} $ :background-color
                 hsl 190 10 70 $ Option :some 0.1
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'style-doc-entry-selected $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-doc-entry-selected
             {}
@@ -512,20 +472,20 @@
               |&:hover $ {} $ :border-left
                 str "|10px solid " $ hsl 200 90 70
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'style-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def style-entry
             {} (:padding "|0 8px") (:cursor |pointer) (:transition-duration |200ms) (:line-height |2.4)
               :border-bottom $ str "|1px solid " $ hsl 0 0 92
               :border-left $ str "|0px solid " $ hsl 200 90 60
           :examples $ []
-          :schema $ :: 'Map 'Tag 'String
+          :schema $ quote $ Map Tag String
         'style-history-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-history-entry
             {} $ |& $ {} (:cursor |pointer) (:padding "|0 8px") (:font-size |12px)
               :color $ hsl 0 0 60
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'style-jump $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-jump
             {}
@@ -535,19 +495,19 @@
                 :opacity |0.6
               |&:hover $ {} $ :opacity |1
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'style-jump-modal $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-jump-modal
             {} $ |& $ {} (:padding "|16px 16px 120px")
               :border-top $ str "|1px solid " $ hsl 0 0 94
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
         'style-title $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-title
             {} $ |& $ {} (:font-family ui/font-fancy) (:font-size |18px) (:font-weight |300)
               :color $ hsl 0 0 60
           :examples $ []
-          :schema $ :: 'String
+          :schema $ quote String
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.comp.container
           :require (respo-ui.core :as ui)
@@ -573,7 +533,7 @@
           :code $ quote $ def dev?
             = |dev $ .unwrap-or (get-env |mode) |release
           :examples $ []
-          :schema $ :: 'Bool
+          :schema $ quote Bool
         'register-languages! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn register-languages! ()
             let
@@ -584,13 +544,11 @@
               .register-language highlighter |glsl glsl-lang
               , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'site $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def site (docs-workflow.schema/SiteConfig :storage-key |workflow)
           :examples $ []
-          :schema $ :: 'docs-workflow.schema/SiteConfig
+          :schema $ quote docs-workflow.schema/SiteConfig
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.config
           :require (|highlight.js/lib/languages/rust :default rust-lang) (|highlight.js/lib/languages/clojure :default clojure-lang) (|highlight.js/lib/languages/bash :default bash-lang) (|highlight.js/lib/languages/glsl :default glsl-lang) (|highlight.js :default hljs)
@@ -599,7 +557,7 @@
         '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
-          :schema $ :: 'Ref $ :: 'reel.typed/State 'docs-workflow.schema/Op 'docs-workflow.schema/Store
+          :schema $ quote $ Ref (reel.typed/State docs-workflow.schema/Op docs-workflow.schema/Store)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ println |Dispatch: op
@@ -627,9 +585,7 @@
                     :timestamp $ shared/date-now-snapshot
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ [] 'Enum
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn Enum (-> Unit) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! () (config/register-languages!)
             println "|Running mode:" $ if config/dev? |dev |release
@@ -646,18 +602,14 @@
                 dispatch! $ :: :hydrate-storage $ parse-cirru-edn raw
             println "|App started."
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn persist-storage! () (js/console.log |persist)
             js/localStorage.setItem (:storage-key config/site)
               format-cirru-edn $ :store @*reel
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'reload! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn reload! ()
             if (nil? build-errors)
@@ -668,26 +620,19 @@
               hud! |error build-errors
             , &unit
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
         'render-app! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn render-app! ()
             match (browser/query-selector |.app)
               (:some element)
                 render! (narrow-element element) (comp-container @*reel schema/docs)
                   fn (op)
-                    hint-fn $ {}
-                      :args $ [] 'Dynamic
-                      :return 'Unit
-                      :features $ #{} :js-ffi
+                    hint-fn $ Fn Dynamic (-> Unit) (:features :js-ffi)
                     if (enum? op) (dispatch! op) (raise "|Expected an Enum render action")
                     , &unit
               (:none) (raise "|Missing .app mount element")
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'Unit)
-            :args $ []
-            :features $ #{} :js-ffi
+          :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.main
           :require
@@ -708,58 +653,52 @@
       :defs $ {}
         'DocNode $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct DocNode (:title 'String) (:key 'Tag) (:content 'String)
-            :children $ :: 'List 'docs-workflow.schema/DocNode
+            :children $ quote $ List docs-workflow.schema/DocNode
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'HighlightJsHost $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait HighlightJsHost
-            .highlight-auto $ :: 'Fn $ {}
-              :args $ [] 'docs-workflow.schema/HighlightJsHost 'String 'JsObject
-              :return 'docs-workflow.schema/HighlightResultHost
-            .register-language $ :: 'Fn $ {}
-              :args $ [] 'docs-workflow.schema/HighlightJsHost 'String 'Dynamic
-              :return 'Unit
+            .highlight-auto $ quote $ Fn docs-workflow.schema/HighlightJsHost String JsObject (-> docs-workflow.schema/HighlightResultHost)
+            .register-language $ quote $ Fn docs-workflow.schema/HighlightJsHost String Dynamic (-> Unit)
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
             :names $ {} $ :register-language |registerLanguage
-          :schema $ :: 'Trait
+          :schema $ quote Trait
         'HighlightResultHost $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait HighlightResultHost (:value 'String)
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
-          :schema $ :: 'Trait
+          :schema $ quote Trait
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op
-            :states (:: 'List 'Dynamic) 'Dynamic
+            :states
+              quote $ List Dynamic
+              , 'Dynamic
             :hydrate-storage 'docs-workflow.schema/Store
           :examples $ []
-          :schema $ :: 'EnumDef
+          :schema $ quote EnumDef
         'RemarkableHost $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait RemarkableHost
-            .render $ :: 'Fn $ {}
-              :args $ [] 'docs-workflow.schema/RemarkableHost 'String
-              :return 'String
-            .use $ :: 'Fn $ {}
-              :args $ [] 'docs-workflow.schema/RemarkableHost 'JsObject
-              :return 'docs-workflow.schema/RemarkableHost
+            .render $ quote $ Fn docs-workflow.schema/RemarkableHost String (-> String)
+            .use $ quote $ Fn docs-workflow.schema/RemarkableHost JsObject (-> docs-workflow.schema/RemarkableHost)
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
-          :schema $ :: 'Trait
+          :schema $ quote Trait
         'SiteConfig $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct SiteConfig (:storage-key 'String)
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'State $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct State
-            :selected $ :: 'List 'Tag
-            :history $ :: 'List $ :: 'List 'Tag
+            :selected $ quote $ List Tag
+            :history $ quote $ List (List Tag)
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'Store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Store
-            :states $ :: 'Map 'Dynamic 'Dynamic
+            :states $ quote $ Map Dynamic Dynamic
           :examples $ []
-          :schema $ :: 'StructDef
+          :schema $ quote StructDef
         'docs $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def docs
             []
@@ -771,20 +710,19 @@
               DocNode :title |About :key :about :content (load-doc |about.md) :children $ []
               DocNode :title |Cirru :key :cirru :content (load-doc |cirru.md) :children $ []
           :examples $ []
-          :schema $ :: 'List 'docs-workflow.schema/DocNode
+          :schema $ quote $ List docs-workflow.schema/DocNode
         'load-doc $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defmacro load-doc (filename)
             read-file $ str |docs/ filename
           :examples $ []
-          :schema $ :: 'Macro $ {}
-            :capabilities $ #{} :fs-read
-            :expansion $ :: 'Expr 'String
-            :required $ [] 'Syntax
+          :schema $ quote $ Macro Syntax
+            -> $ Expr String
+            :capabilities :fs-read
         'store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ def store
             Store :states $ {}
           :examples $ []
-          :schema $ :: 'docs-workflow.schema/Store
+          :schema $ quote docs-workflow.schema/Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.schema
     'docs-workflow.updater $ %{} 'FileEntry
@@ -802,8 +740,7 @@
               (:hydrate-storage d) d
               _ $ do (eprintln "|unknown op:" op) store
           :examples $ []
-          :schema $ :: 'Fn $ {} (:return 'docs-workflow.schema/Store)
-            :args $ [] 'docs-workflow.schema/Store 'docs-workflow.schema/Op 'String 'Number
+          :schema $ quote $ Fn docs-workflow.schema/Store docs-workflow.schema/Op String Number (-> docs-workflow.schema/Store)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.updater
           :require $ respo.cursor :refer $ update-state-tree
