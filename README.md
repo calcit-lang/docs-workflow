@@ -6,12 +6,14 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 ## 使用者需要注意
 
-候选版本 **0.0.40** 将旧 0.31 类型标注迁移到正式 **Calcit 0.32.1**，CLI 与 `@calcit/procs` 成套升级。使用 Node.js 24、Yarn 4.18.0，消费者需重新安装完整依赖图并生成 JS，保留 Caps strict：
+**0.0.41** 升级到 **Calcit / @calcit/procs 0.34.3**，依赖全部换成 Respo 0.18.1 兼容线上的正式 tag。使用 Node.js 24、Yarn 4.18.0，消费者需重新安装完整依赖图并生成 JS，保留 Caps strict：
 
-- 已发布 Alerts 0.11.0-alpha.4、Reel 0.7.0-alpha.5、Markdown 0.5.0-alpha.5、Router 0.9.0-alpha.4。
-- UI 0.9.0、Respo 0.17.1、js-ffi 0.2.9；所有依赖声明 Calcit 0.32.1。
+- Alerts 0.11.3、Reel 0.8.1、Markdown 0.6.0、Router 0.10.1。
+- UI 0.12.1、Respo 0.18.1、js-ffi 0.2.9。
 
-前四个模块尚无对应正式 tag，因此保留精确已发布 alpha；不把它们称为稳定版，不使用未发布版本、本地链接、main 或 hash 替代。当前真实发布图已通过 Caps strict；候选模块仍未发布，本 PR 不合并、发版或部署。
+这条线不能与 Respo 0.19.1 / UI 0.14.0 混装（Reel 0.8.1 仍在 0.18.1，见 Respo/respo.calcit#341）。导航树、子页面标记和开发模式 Reel 面板中没有 else 的子节点改为返回 `Option :some` / `Option :none`，以通过 0.34 的 `E_IMPLICIT_NIL_BRANCH`；页面行为不变。
+
+### 0.0.40 历史说明
 
 官方 formatter 转换 25 处旧类型形式，48 个定义的 schema 不变；函数提示、具名结构与附带测试中的类型使用新语法，原业务表达式和断言保持。
 不新增强转、质量预算、验证脚本或 concurrently。不改变历史容量、默认路径、快捷键、Markdown/语音代码、公开导航回调或存档行为，保留实际 `hud!`。
