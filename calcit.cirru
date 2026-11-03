@@ -36,7 +36,9 @@
                       =< 8 nil
                       if
                         not $ empty? $ :children entry
-                        <> "|☰" $ {} $ :color (hsl 180 80 60)
+                        Option :some $ <> "|☰" $ {}
+                          :color $ hsl 180 80 60
+                        Option :none
           :examples $ []
           :schema $ quote $ Fn (List Tag) (List docs-workflow.schema/DocNode)
             Fn (List Tag)
@@ -52,7 +54,7 @@
                   or
                     .unwrap-or (get states :cursor) nil
                     []
-                  :: 'List 'Dynamic
+                  quote $ List Dynamic
                 state $ let
                     raw $ or
                       .unwrap-or (get states :data) nil
@@ -159,7 +161,9 @@
                         if (= |Escape key) (.close quick-modal d!) (Option :none)
                     , &unit
                 .render quick-modal
-                when dev? $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
+                if dev?
+                  Option :some $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
+                  Option :none
           :examples $ []
           :schema $ quote $ Fn (reel.typed/State docs-workflow.schema/Op docs-workflow.schema/Store) (List docs-workflow.schema/DocNode) (-> respo.schema/Component) (:features :js-ffi)
         'comp-doc-page $ %{} 'CodeEntry (:doc |)
@@ -235,12 +239,12 @@
                         xs $ :children entry
                       if
                         not $ empty? xs
-                        div
+                        Option :some $ div
                           {} $ :style $ {} (:padding-left |16px)
                           comp-nav-tree xs
                             conj base-path $ :key entry
                             , on-select
-                        , nil
+                        Option :none
           :examples $ []
           :schema $ quote $ Fn (List docs-workflow.schema/DocNode) (List Tag)
             Fn (List Tag)
@@ -270,7 +274,9 @@
                         =< 8 nil
                         if
                           not $ empty? $ :children entry
-                          <> "|☰" $ {} $ :color (hsl 180 80 60)
+                          Option :some $ <> "|☰" $ {}
+                            :color $ hsl 180 80 60
+                          Option :none
           :examples $ []
           :schema $ quote $ Fn Tag (List Tag) (List docs-workflow.schema/DocNode)
             Fn (List Tag)
@@ -570,7 +576,7 @@
                     match op
                       (:states cursor data)
                         match
-                          try-decode-map-as cursor $ :: 'List 'Dynamic
+                          try-decode-map-as cursor $ quote $ List Dynamic
                           (:ok checked-cursor) (docs-workflow.schema/Op :states checked-cursor data)
                           (:err message) (raise message)
                       (:hydrate-storage data)
@@ -652,7 +658,7 @@
     'docs-workflow.schema $ %{} 'FileEntry
       :defs $ {}
         'DocNode $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defstruct DocNode (:title 'String) (:key 'Tag) (:content 'String)
+          :code $ quote $ defstruct DocNode (:title String) (:key Tag) (:content String)
             :children $ quote $ List docs-workflow.schema/DocNode
           :examples $ []
           :schema $ quote StructDef
@@ -673,8 +679,8 @@
           :code $ quote $ defenum Op
             :states
               quote $ List Dynamic
-              , 'Dynamic
-            :hydrate-storage 'docs-workflow.schema/Store
+              , Dynamic
+            :hydrate-storage docs-workflow.schema/Store
           :examples $ []
           :schema $ quote EnumDef
         'RemarkableHost $ %{} 'CodeEntry (:doc |)
@@ -685,7 +691,7 @@
           :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
           :schema $ quote Trait
         'SiteConfig $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defstruct SiteConfig (:storage-key 'String)
+          :code $ quote $ defstruct SiteConfig (:storage-key String)
           :examples $ []
           :schema $ quote StructDef
         'State $ %{} 'CodeEntry (:doc |)
@@ -734,7 +740,7 @@
                 assoc store :states $ match
                   try-decode-map-as
                     update-state-tree (:states store) cursor s
-                    :: 'Map 'Dynamic 'Dynamic
+                    quote $ Map Dynamic Dynamic
                   (:ok updated-states) updated-states
                   (:err message) (raise message)
               (:hydrate-storage d) d
