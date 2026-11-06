@@ -82,11 +82,11 @@ test('real navigation callbacks retain paths and history with the single-op disp
   ]);
 
   // Use the same RespoEvent conversion as the browser renderer.
-  function keydown(key, ctrl = false) {
+  function keydown(key, ctrl = false, meta = false) {
     const target = clickable(comp_container(new_reel(store), schema.docs), 'keydown')
       .find(x => x.owner === 'comp-global-keydown');
     assert.ok(target, 'Missing global keyboard listener');
-    target.listener(event__GT_edn({ type: 'keydown', key, ctrlKey: ctrl, metaKey: false }), dispatch);
+    target.listener(event__GT_edn({ type: 'keydown', key, ctrlKey: ctrl, metaKey: meta }), dispatch);
   }
   function quickShown() {
     const quick = some(c.get(field(store, 'states'), tag('quick')));
@@ -99,4 +99,6 @@ test('real navigation callbacks retain paths and history with the single-op disp
   assert.equal(quickShown(), true);
   keydown('Escape');
   assert.equal(quickShown(), false);
+  keydown('p', false, true);
+  assert.equal(quickShown(), true);
 });
