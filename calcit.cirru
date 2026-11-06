@@ -33,7 +33,7 @@
                     div
                       {} $ :class-name style-child-entry
                       <> $ :title entry
-                      =< 8 nil
+                      space-x 8
                       if
                         not $ empty? $ :children entry
                         Option :some $ <> "|☰" $ {}
@@ -54,7 +54,7 @@
                   or
                     .unwrap-or (get states :cursor) nil
                     []
-                  quote $ List Dynamic
+                  List respo.schema/CoordKey
                 state $ let
                     raw $ or
                       .unwrap-or (get states :data) nil
@@ -93,8 +93,8 @@
                         {}
                           :style $ {}
                           :on-click $ fn (e d!)
-                            hint-fn $ Fn (Map Tag Dynamic)
-                              Fn Dynamic $ -> Unit
+                            hint-fn $ Fn respo.schema/RespoEvent
+                              Fn AnyEnum $ -> Unit
                               -> Unit
                             .show quick-modal d!
                         <> "|☰" $ str-spaced css/font-fancy style-jump
@@ -144,17 +144,17 @@
                             , &unit
                       (:none) nil
                     comp-doc-page target
-                    =< nil 120
+                    space-y 120
                 comp-global-keydown
                   {} $ :disabled-commands $ #{} |p
                   fn (e d!)
-                    hint-fn $ Fn (Map Tag Dynamic)
-                      Fn Dynamic $ -> Unit
+                    hint-fn $ Fn respo.schema/RespoEvent
+                      Fn AnyEnum $ -> Unit
                       -> Unit
                     let
-                        key $ contract/expect-string |keyboard.key $ .unwrap (get e :key)
-                        meta? $ contract/expect-bool |keyboard.meta $ .unwrap (get e :meta?)
-                        ctrl? $ contract/expect-bool |keyboard.ctrl $ .unwrap (get e :ctrl?)
+                        key $ contract/expect-string |keyboard.key $ :key e
+                        meta? $ contract/expect-bool |keyboard.meta $ :meta? e
+                        ctrl? $ contract/expect-bool |keyboard.ctrl $ :ctrl? e
                       if
                         and (= |p key) (or meta? ctrl?)
                         .show quick-modal d!
@@ -271,7 +271,7 @@
                       div
                         {} $ :class-name $ if selected? (str-spaced style-doc-entry style-doc-entry-selected) style-doc-entry
                         <> $ :title entry
-                        =< 8 nil
+                        space-x 8
                         if
                           not $ empty? $ :children entry
                           Option :some $ <> "|☰" $ {}
@@ -519,7 +519,7 @@
           :require (respo-ui.core :as ui)
             respo-ui.core :refer $ hsl
             respo.core :refer $ defcomp defeffect <> >> div button textarea span input list-> a
-            respo.comp.space :refer $ =<
+            respo.comp.space :refer $ space-x space-y
             reel.comp.reel :refer $ comp-reel
             respo-md.comp.md :refer $ comp-md
             docs-workflow.config :refer $ dev?
@@ -576,7 +576,7 @@
                     match op
                       (:states cursor data)
                         match
-                          try-decode-map-as cursor $ quote $ List Dynamic
+                          try-decode-map-as cursor $ List respo.schema/CoordKey
                           (:ok checked-cursor) (docs-workflow.schema/Op :states checked-cursor data)
                           (:err message) (raise message)
                       (:hydrate-storage data)
@@ -591,7 +591,7 @@
                     :timestamp $ shared/date-now-snapshot
             , &unit
           :examples $ []
-          :schema $ quote $ Fn Enum (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn AnyEnum (-> Unit) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! () (config/register-languages!)
             println "|Running mode:" $ if config/dev? |dev |release
@@ -659,13 +659,13 @@
       :defs $ {}
         'DocNode $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct DocNode (:title String) (:key Tag) (:content String)
-            :children $ quote $ List docs-workflow.schema/DocNode
+            :children $ List docs-workflow.schema/DocNode
           :examples $ []
           :schema $ quote StructDef
         'HighlightJsHost $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait HighlightJsHost
-            .highlight-auto $ quote $ Fn docs-workflow.schema/HighlightJsHost String JsObject (-> docs-workflow.schema/HighlightResultHost)
-            .register-language $ quote $ Fn docs-workflow.schema/HighlightJsHost String Dynamic (-> Unit)
+            .highlight-auto $ Fn docs-workflow.schema/HighlightJsHost String JsObject $ -> docs-workflow.schema/HighlightResultHost
+            .register-language $ Fn docs-workflow.schema/HighlightJsHost String Dynamic $ -> Unit
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
             :names $ {} $ :register-language |registerLanguage
@@ -677,16 +677,14 @@
           :schema $ quote Trait
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op
-            :states
-              quote $ List Dynamic
-              , Dynamic
+            :states (List respo.schema/CoordKey) Dynamic
             :hydrate-storage docs-workflow.schema/Store
           :examples $ []
           :schema $ quote EnumDef
         'RemarkableHost $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait RemarkableHost
-            .render $ quote $ Fn docs-workflow.schema/RemarkableHost String (-> String)
-            .use $ quote $ Fn docs-workflow.schema/RemarkableHost JsObject (-> docs-workflow.schema/RemarkableHost)
+            .render $ Fn docs-workflow.schema/RemarkableHost String $ -> String
+            .use $ Fn docs-workflow.schema/RemarkableHost JsObject $ -> docs-workflow.schema/RemarkableHost
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
           :schema $ quote Trait
@@ -696,13 +694,13 @@
           :schema $ quote StructDef
         'State $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct State
-            :selected $ quote $ List Tag
-            :history $ quote $ List (List Tag)
+            :selected $ List Tag
+            :history $ List $ List Tag
           :examples $ []
           :schema $ quote StructDef
         'Store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Store
-            :states $ quote $ Map Dynamic Dynamic
+            :states $ Map Dynamic Dynamic
           :examples $ []
           :schema $ quote StructDef
         'docs $ %{} 'CodeEntry (:doc |)
@@ -740,7 +738,7 @@
                 assoc store :states $ match
                   try-decode-map-as
                     update-state-tree (:states store) cursor s
-                    quote $ Map Dynamic Dynamic
+                    Map Dynamic Dynamic
                   (:ok updated-states) updated-states
                   (:err message) (raise message)
               (:hydrate-storage d) d
