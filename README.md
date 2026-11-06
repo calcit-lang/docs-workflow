@@ -6,12 +6,12 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 ## 使用者需要注意
 
-**0.0.41** 升级到 **Calcit / @calcit/procs 0.34.3**，依赖全部换成 Respo 0.18.1 兼容线上的正式 tag。使用 Node.js 24、Yarn 4.18.0，消费者需重新安装完整依赖图并生成 JS，保留 Caps strict：
+**0.0.41** 升级到 **Calcit / @calcit/procs 0.35.1**，依赖使用正式 Respo 0.19.4 兼容图。使用 Node.js 24、Yarn 4.18.0，消费者需重新安装完整依赖图并生成 JS，保留 Caps strict：
 
-- Alerts 0.11.3、Reel 0.8.1、Markdown 0.6.0、Router 0.10.1。
-- UI 0.12.1、Respo 0.18.1、js-ffi 0.2.9。
+- Alerts 0.13.1、Reel 0.9.2、Markdown 0.8.1、Router 0.12.1。
+- UI 0.15.1、Respo 0.19.4、js-ffi 0.2.13。
 
-这条线不能与 Respo 0.19.1 / UI 0.14.0 混装（Reel 0.8.1 仍在 0.18.1，见 Respo/respo.calcit#341）。导航树、子页面标记和开发模式 Reel 面板中没有 else 的子节点改为返回 `Option :some` / `Option :none`，以通过 0.34 的 `E_IMPLICIT_NIL_BRANCH`；页面行为不变。
+快速跳转快捷键读取 `RespoEvent`，业务游标使用 `CoordKey`。导航树、子页面标记和开发模式 Reel 面板中没有 else 的子节点改为返回 `Option :some` / `Option :none`，以通过 0.34 的 `E_IMPLICIT_NIL_BRANCH`；页面行为不变。
 
 ### 0.0.40 历史说明
 

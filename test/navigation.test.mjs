@@ -5,6 +5,7 @@ import * as schema from '../js-out/docs-workflow.schema.mjs';
 import { comp_container } from '../js-out/docs-workflow.comp.container.mjs';
 import { updater } from '../js-out/docs-workflow.updater.mjs';
 import { new_reel } from '../js-out/reel.typed.mjs';
+import { event__GT_edn } from '../js-out/respo.util.format.mjs';
 
 const tag = c.newTag;
 const field = (value, name) => c._$n_struct_$o_get(value, tag(name));
@@ -80,12 +81,12 @@ test('real navigation callbacks retain paths and history with the single-op disp
     ['guide'], ['design', 'overview'], ['design'],
   ]);
 
-  // Respo delivers normalized Calcit Map events, not native KeyboardEvent objects.
+  // Use the same RespoEvent conversion as the browser renderer.
   function keydown(key, ctrl = false) {
     const target = clickable(comp_container(new_reel(store), schema.docs), 'keydown')
       .find(x => x.owner === 'comp-global-keydown');
     assert.ok(target, 'Missing global keyboard listener');
-    target.listener(c._$n__$M_(tag('key'), key, tag('ctrl?'), ctrl, tag('meta?'), false), dispatch);
+    target.listener(event__GT_edn({ type: 'keydown', key, ctrlKey: ctrl, metaKey: false }), dispatch);
   }
   function quickShown() {
     const quick = some(c.get(field(store, 'states'), tag('quick')));
