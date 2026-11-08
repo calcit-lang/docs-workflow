@@ -6,7 +6,7 @@
     {} (:description |) (:init-fn 'docs-workflow.main/main!) (:mode :js) (:reload-fn 'docs-workflow.main/reload!) (:target :browser)
       :feature-policy $ {}
       :modules $ [] |respo.calcit/ |respo-ui.calcit/ |respo-markdown.calcit/ |reel.calcit/ |respo-router.calcit/ |alerts.calcit/ |js-ffi/
-      :type-slots $ {} $ :dispatch-op 'Dynamic
+      :type-slots $ {} $ :dispatch-op 'docs-workflow.schema/Op
   :files $ {}
     'docs-workflow.comp.container $ %{} 'FileEntry
       :defs $ {}
@@ -24,8 +24,8 @@
                   [] idx $ div
                     {} (:tab-index 0)
                       :on-click $ fn (e d!)
-                        hint-fn $ Fn (Map Tag Dynamic)
-                          Fn Dynamic $ -> Unit
+                        hint-fn $ Fn respo.schema/RespoEvent
+                          Fn docs-workflow.schema/Op $ -> Unit
                           -> Unit
                         on-select
                           conj parent-path $ :key entry
@@ -42,7 +42,7 @@
           :examples $ []
           :schema $ quote $ Fn (List Tag) (List docs-workflow.schema/DocNode)
             Fn (List Tag)
-              Fn Enum $ -> Unit
+              Fn docs-workflow.schema/Op $ -> Unit
               -> Unit
             -> respo.schema/Component
         'comp-container $ %{} 'CodeEntry (:doc |)
@@ -51,14 +51,17 @@
                 store $ :store reel
                 states $ :states store
                 cursor $ decode-map-as
-                  or
-                    .unwrap-or (get states :cursor) nil
-                    []
+                  match (get states :cursor)
+                    (:some value)
+                      or value $ []
+                    (:none) ([])
                   List respo.schema/CoordKey
                 state $ let
-                    raw $ or
-                      .unwrap-or (get states :data) nil
-                      docs-workflow.schema/State :selected ([] :guide) :history $ []
+                    raw $ match (get states :data)
+                      (:some value)
+                        or value $ docs-workflow.schema/State :selected ([] :guide) :history $ []
+                      (:none)
+                        docs-workflow.schema/State :selected ([] :guide) :history $ []
                   decode-map-as
                     if (struct? raw) (&struct:to-map raw) raw
                     , 'docs-workflow.schema/State
@@ -75,7 +78,7 @@
                         comp-nav-tree docs ([])
                           fn (path d!)
                             hint-fn $ Fn (List Tag)
-                              Fn Enum $ -> Unit
+                              Fn docs-workflow.schema/Op $ -> Unit
                               -> Unit
                             d! $ docs-workflow.schema/Op :states cursor $ next-path state path
                             , &unit
@@ -94,7 +97,7 @@
                           :style $ {}
                           :on-click $ fn (e d!)
                             hint-fn $ Fn respo.schema/RespoEvent
-                              Fn AnyEnum $ -> Unit
+                              Fn docs-workflow.schema/Op $ -> Unit
                               -> Unit
                             .show quick-modal d!
                         <> "|☰" $ str-spaced css/font-fancy style-jump
@@ -102,7 +105,7 @@
                       :style $ {} (:font-size |12px) (:font-family ui/font-fancy) (:opacity |0.3)
                   comp-parent-menu selected docs $ fn (path d!)
                     hint-fn $ Fn (List Tag)
-                      Fn Enum $ -> Unit
+                      Fn docs-workflow.schema/Op $ -> Unit
                       -> Unit
                     d! $ docs-workflow.schema/Op :states cursor $ next-path state path
                     , &unit
@@ -115,7 +118,7 @@
                         .unwrap $ last selected
                         , parent-path entries $ fn (xs d!)
                           hint-fn $ Fn (List Tag)
-                            Fn Enum $ -> Unit
+                            Fn docs-workflow.schema/Op $ -> Unit
                             -> Unit
                           d! $ docs-workflow.schema/Op :states cursor $ next-path state xs
                           , &unit
@@ -124,7 +127,7 @@
                     <> |Histories style-title
                     comp-history-menu history docs $ fn (path d!)
                       hint-fn $ Fn (List Tag)
-                        Fn Enum $ -> Unit
+                        Fn docs-workflow.schema/Op $ -> Unit
                         -> Unit
                       d! $ docs-workflow.schema/Op :states cursor $ next-path state path
                       , &unit
@@ -136,20 +139,21 @@
                       (:some target-value)
                         let
                             children $ :children target-value
-                          if (empty? children) nil $ comp-child-entries (:selected state) children $ fn (xs d!)
-                            hint-fn $ Fn (List Tag)
-                              Fn Enum $ -> Unit
-                              -> Unit
-                            d! $ docs-workflow.schema/Op :states cursor $ next-path state xs
-                            , &unit
-                      (:none) nil
+                          if (empty? children) (Option :none)
+                            Option :some $ comp-child-entries (:selected state) children $ fn (xs d!)
+                              hint-fn $ Fn (List Tag)
+                                Fn docs-workflow.schema/Op $ -> Unit
+                                -> Unit
+                              d! $ docs-workflow.schema/Op :states cursor $ next-path state xs
+                              , &unit
+                      (:none) (Option :none)
                     comp-doc-page target
                     space-y 120
                 comp-global-keydown
                   {} $ :disabled-commands $ #{} |p
                   fn (e d!)
                     hint-fn $ Fn respo.schema/RespoEvent
-                      Fn AnyEnum $ -> Unit
+                      Fn docs-workflow.schema/Op $ -> Unit
                       -> Unit
                     let
                         key $ contract/expect-string |keyboard.key $ :key e
@@ -203,8 +207,8 @@
                     {} (:tab-index 0)
                       :class-name $ str-spaced style-doc-entry style-history-entry
                       :on-click $ fn (e d!)
-                        hint-fn $ Fn (Map Tag Dynamic)
-                          Fn Dynamic $ -> Unit
+                        hint-fn $ Fn respo.schema/RespoEvent
+                          Fn docs-workflow.schema/Op $ -> Unit
                           -> Unit
                         on-select path d!
                     <> $ match target
@@ -215,7 +219,7 @@
             List $ List Tag
             List docs-workflow.schema/DocNode
             Fn (List Tag)
-              Fn Enum $ -> Unit
+              Fn docs-workflow.schema/Op $ -> Unit
               -> Unit
             -> respo.schema/Component
         'comp-nav-tree $ %{} 'CodeEntry (:doc |)
@@ -228,8 +232,8 @@
                       {} (:tab-index 0) (:class-name style-doc-entry)
                         :style $ {} (:padding "|0 8px") (:cursor |pointer)
                         :on-click $ fn (e d!)
-                          hint-fn $ Fn (Map Tag Dynamic)
-                            Fn Dynamic $ -> Unit
+                          hint-fn $ Fn respo.schema/RespoEvent
+                            Fn docs-workflow.schema/Op $ -> Unit
                             -> Unit
                           on-select
                             conj base-path $ :key entry
@@ -248,7 +252,7 @@
           :examples $ []
           :schema $ quote $ Fn (List docs-workflow.schema/DocNode) (List Tag)
             Fn (List Tag)
-              Fn Enum $ -> Unit
+              Fn docs-workflow.schema/Op $ -> Unit
               -> Unit
             -> respo.schema/Component
         'comp-page-entries $ %{} 'CodeEntry (:doc |)
@@ -262,8 +266,8 @@
                     div
                       {} (:tab-index 0)
                         :on-click $ fn (e d!)
-                          hint-fn $ Fn (Map Tag Dynamic)
-                            Fn Dynamic $ -> Unit
+                          hint-fn $ Fn respo.schema/RespoEvent
+                            Fn docs-workflow.schema/Op $ -> Unit
                             -> Unit
                           on-select
                             conj parent-path $ :key entry
@@ -280,7 +284,7 @@
           :examples $ []
           :schema $ quote $ Fn Tag (List Tag) (List docs-workflow.schema/DocNode)
             Fn (List Tag)
-              Fn Enum $ -> Unit
+              Fn docs-workflow.schema/Op $ -> Unit
               -> Unit
             -> respo.schema/Component
         'comp-parent-menu $ %{} 'CodeEntry (:doc |)
@@ -301,8 +305,8 @@
                             :color $ hsl 0 0 40
                             :background-color $ hsl 180 90 94
                           :on-click $ fn (e d!)
-                            hint-fn $ Fn (Map Tag Dynamic)
-                              Fn Dynamic $ -> Unit
+                            hint-fn $ Fn respo.schema/RespoEvent
+                              Fn docs-workflow.schema/Op $ -> Unit
                               -> Unit
                             on-select sub-path d!
                         <> $ str "|< " $ match target
@@ -312,7 +316,7 @@
           :examples $ []
           :schema $ quote $ Fn (List Tag) (List docs-workflow.schema/DocNode)
             Fn (List Tag)
-              Fn Enum $ -> Unit
+              Fn docs-workflow.schema/Op $ -> Unit
               -> Unit
             -> respo.schema/Component
         'css-doc $ %{} 'CodeEntry (:doc |)
@@ -567,28 +571,33 @@
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ println |Dispatch: op
-            let
-                control $ typed/decode-control op
-              reset! *reel $ match control
-                (:some action) (typed/apply-control updater @*reel action)
+            reset! *reel $ typed/record-op updater @*reel op (generate-id!)
+              :timestamp $ shared/date-now-snapshot
+            , &unit
+          :examples $ []
+          :schema $ quote $ Fn docs-workflow.schema/Op (-> Unit) (:features :js-ffi)
+        'dispatch-view! $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn dispatch-view! (raw)
+            if
+              = (enum-definition raw) (Option :some schema/Op)
+              dispatch! $ decode-map-as raw 'docs-workflow.schema/Op
+              match (typed/decode-control raw)
+                (:some control) (on-control! control)
                 (:none)
-                  typed/record-op updater @*reel
-                    match op
-                      (:states cursor data)
-                        match
-                          try-decode-map-as cursor $ List respo.schema/CoordKey
-                          (:ok checked-cursor) (docs-workflow.schema/Op :states checked-cursor data)
-                          (:err message) (raise message)
-                      (:hydrate-storage data)
-                        match
-                          try-decode-map-as
-                            if (struct? data) (&struct:to-map data) data
-                            , 'docs-workflow.schema/Store
-                          (:ok checked-store) (docs-workflow.schema/Op :hydrate-storage checked-store)
-                          (:err message) (raise message)
-                      _ $ raise "|Unknown Docs Workflow operation"
-                    generate-id!
-                    :timestamp $ shared/date-now-snapshot
+                  dispatch! $ match raw
+                    (:states cursor data)
+                      match
+                        try-decode-map-as cursor $ List respo.schema/CoordKey
+                        (:ok checked-cursor) (docs-workflow.schema/Op :states checked-cursor data)
+                        (:err message) (raise message)
+                    (:hydrate-storage data)
+                      match
+                        try-decode-map-as
+                          if (struct? data) (&struct:to-map data) data
+                          , 'docs-workflow.schema/Store
+                        (:ok checked-store) (docs-workflow.schema/Op :hydrate-storage checked-store)
+                        (:err message) (raise message)
+                    _ $ raise "|Unknown Docs Workflow operation"
             , &unit
           :examples $ []
           :schema $ quote $ Fn AnyEnum (-> Unit) (:features :js-ffi)
@@ -598,7 +607,7 @@
             if config/dev? $ load-console-formatter!
             render-app!
             add-watch! *reel :changes $ fn (reel prev) (render-app!)
-            listen-devtools! |k dispatch!
+            listen-devtools-toggle! |k $ fn () $ on-control! (typed/Control :toggle)
             js/window.addEventListener |beforeunload $ fn (event) (persist-storage!)
             browser/set-interval! persist-storage! 60000
             ; let
@@ -609,6 +618,12 @@
             println "|App started."
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
+        'on-control! $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defn on-control! (control)
+            reset! *reel $ typed/apply-control updater @*reel control
+            , &unit
+          :examples $ []
+          :schema $ quote $ Fn reel.typed/Control (-> Unit) (:features :js-ffi)
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn persist-storage! () (js/console.log |persist)
             js/localStorage.setItem (:storage-key config/site)
@@ -631,22 +646,20 @@
           :code $ quote $ defn render-app! ()
             match (browser/query-selector |.app)
               (:some element)
-                render! (narrow-element element) (comp-container @*reel schema/docs)
-                  fn (op)
-                    hint-fn $ Fn Dynamic (-> Unit) (:features :js-ffi)
-                    if (enum? op) (dispatch! op) (raise "|Expected an Enum render action")
-                    , &unit
+                render-with! (narrow-element element)
+                  fn () $ comp-container @*reel schema/docs
+                  , dispatch-view!
               (:none) (raise "|Missing .app mount element")
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.main
           :require
-            respo.core :refer $ render! clear-cache!
+            respo.core :refer $ render-with! clear-cache!
             docs-workflow.comp.container :refer $ comp-container
             docs-workflow.updater :refer $ updater
             docs-workflow.schema :as schema
-            reel.util :refer $ listen-devtools!
+            reel.util :refer $ listen-devtools-toggle!
             reel.typed :as typed
             reel.typed-compat :as reel-view
             docs-workflow.config :as config

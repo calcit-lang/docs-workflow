@@ -49,7 +49,7 @@ test('real navigation callbacks retain paths and history with the single-op disp
     const targets = clickable(comp_container(new_reel(store), schema.docs));
     const target = targets.find(x => x.owner === owner && x.text === text);
     assert.ok(target, `Missing ${owner} ${text}; got ${targets.map(x => `${x.owner}:${x.text}`)}`);
-    target.listener(c._$n__$M_(), dispatch);
+    target.listener(event__GT_edn({ type: 'click' }), dispatch);
   }
   const state = () => some(c.get(field(store, 'states'), tag('data')));
 
