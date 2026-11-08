@@ -6,12 +6,12 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 ## 使用者需要注意
 
-**0.0.41** 升级到 **Calcit / @calcit/procs 0.35.1**，依赖使用正式 Respo 0.19.4 兼容图。使用 Node.js 24、Yarn 4.18.0，消费者需重新安装完整依赖图并生成 JS，保留 Caps strict：
+**0.0.42 候选**使用正式 Calcit / `@calcit/procs` 0.38.0。使用 Node.js 24 和 Yarn 4.18.0 重新安装完整依赖图并生成 JS，保留 Caps strict。
 
-- Alerts 0.13.1、Reel 0.9.2、Markdown 0.8.1、Router 0.12.1。
-- UI 0.15.1、Respo 0.19.4、js-ffi 0.2.13。
+- Alerts 0.14.2、Reel 0.10.0、Markdown 0.8.2、Router 0.12.2。
+- UI 0.15.2、Respo 0.19.5、JS FFI 0.2.13。
 
-快速跳转快捷键读取 `RespoEvent`，业务游标使用 `CoordKey`。导航树、子页面标记和开发模式 Reel 面板中没有 else 的子节点改为返回 `Option :some` / `Option :none`，以通过 0.34 的 `E_IMPLICIT_NIL_BRANCH`；页面行为不变。
+应用导航和快捷键使用具名 `Op` 与 `RespoEvent`。Reel 0.10.0 面板仍会发出旧控制事件，渲染入口集中校验这些事件。导航树、历史、快速跳转和存档合同沿用原行为。
 
 ### 0.0.40 历史说明
 
@@ -61,11 +61,11 @@ node --test test/navigation.test.mjs
 
 保留原两项定义内路径/历史测试；Node 回归执行实际生成的组件事件，按当前 Respo 直接传入 dispatcher 的方式进入原 updater，覆盖页面、子页面、父级、历史及快速导航。原业务断言保留；它不替代真实浏览器的 DOM、样式或键盘验收。
 
-事件回调按 Respo 的实际 `EventHandler` 合同标注：事件为 `Map<Tag, Dynamic>`，dispatch 接受一个 Dynamic 并返回 Unit。具体导航回调仍只发送 Enum，不扩大公开回调合同。此前合同丢失问题见 [Respo #275](https://github.com/Respo/respo.calcit/issues/275)。
+事件回调接收 `RespoEvent`，导航发送具名 `Op` 并返回 Unit。此前事件合同问题见 [Respo #275](https://github.com/Respo/respo.calcit/issues/275)。
 
 内部 Option helper 使用公开 `.unwrap` / `.unwrap-or`，保留环境变量 fallback 和空路径失败行为；`md` 使用构造函数承诺的 `RemarkableHost` schema，不增加强转。
 
-快速跳转的键盘回调接收 Respo 规范化的 `Map<Tag, Dynamic>`，检查 `:key/:ctrl?/:meta?`，保留 Ctrl+P 和 Escape 行为；现有导航测试覆盖该入口，背景见 [#94](https://github.com/calcit-lang/docs-workflow/issues/94)。
+快速跳转的键盘回调接收 `RespoEvent`，检查 `:key/:ctrl?/:meta?`，保留 Ctrl+P 和 Escape 行为；现有导航测试覆盖该入口，背景见 [#94](https://github.com/calcit-lang/docs-workflow/issues/94)。
 
 unsafe、废弃调用和动态方法分派保持为 0；状态/FFI 及部分 nil 边界仍真实开放，不宣称全模块类型闭合。沿用完整 strict 和类型定位视图，不新增 quality 预算、验证脚本或编译器 fix/proof 规则。
 
