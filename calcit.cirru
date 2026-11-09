@@ -600,7 +600,7 @@
                     _ $ raise "|Unknown Docs Workflow operation"
             , &unit
           :examples $ []
-          :schema $ quote $ Fn AnyEnum (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn AnyEnum (-> Unit) (:features :js-ffi) (:open :decode)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! () (config/register-languages!)
             println "|Running mode:" $ if config/dev? |dev |release
