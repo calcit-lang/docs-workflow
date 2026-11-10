@@ -36,9 +36,9 @@
                       space-x 8
                       if
                         not $ empty? $ :children entry
-                        Option :some $ <> "|☰" $ {}
+                        Some $ <> "|☰" $ {}
                           :color $ hsl 180 80 60
-                        Option :none
+                        , None
           :examples $ []
           :schema $ quote $ Fn (List Tag) (List docs-workflow.schema/DocNode)
             Fn (List Tag)
@@ -71,7 +71,7 @@
                   {} (:title "|Quick jump")
                     :card-style $ {} (:max-width |18vw) (:height |90vh) (:max-height |90vh) (:margin-left |0px)
                     :backdrop-style $ {} $ :background-color
-                      hsl 0 29 10 $ Option :some 0.2
+                      hsl 0 29 10 $ Some 0.2
                     :render $ fn (on-close)
                       div
                         {} $ :class-name $ str-spaced ui/expand style-jump-modal
@@ -80,7 +80,7 @@
                             hint-fn $ Fn (List Tag)
                               Fn docs-workflow.schema/Op $ -> Unit
                               -> Unit
-                            d! $ docs-workflow.schema/Op :states cursor $ next-path state path
+                            d! $ docs-workflow.schema/Op :navigate cursor $ next-path state path
                             , &unit
               div
                 {} $ :class-name $ str-spaced |calcit-tile css/preset css/fullscreen css/global css/row
@@ -107,7 +107,7 @@
                     hint-fn $ Fn (List Tag)
                       Fn docs-workflow.schema/Op $ -> Unit
                       -> Unit
-                    d! $ docs-workflow.schema/Op :states cursor $ next-path state path
+                    d! $ docs-workflow.schema/Op :navigate cursor $ next-path state path
                     , &unit
                   let
                       parent-path $ or (butlast selected) ([])
@@ -120,7 +120,7 @@
                           hint-fn $ Fn (List Tag)
                             Fn docs-workflow.schema/Op $ -> Unit
                             -> Unit
-                          d! $ docs-workflow.schema/Op :states cursor $ next-path state xs
+                          d! $ docs-workflow.schema/Op :navigate cursor $ next-path state xs
                           , &unit
                   div
                     {} $ :style $ {} (:margin-top |20px)
@@ -129,7 +129,7 @@
                       hint-fn $ Fn (List Tag)
                         Fn docs-workflow.schema/Op $ -> Unit
                         -> Unit
-                      d! $ docs-workflow.schema/Op :states cursor $ next-path state path
+                      d! $ docs-workflow.schema/Op :navigate cursor $ next-path state path
                       , &unit
                 let
                     target $ find-target docs $ :selected state
@@ -139,14 +139,14 @@
                       (:some target-value)
                         let
                             children $ :children target-value
-                          if (empty? children) (Option :none)
-                            Option :some $ comp-child-entries (:selected state) children $ fn (xs d!)
+                          if (empty? children) None $ Some $ comp-child-entries (:selected state) children
+                            fn (xs d!)
                               hint-fn $ Fn (List Tag)
                                 Fn docs-workflow.schema/Op $ -> Unit
                                 -> Unit
-                              d! $ docs-workflow.schema/Op :states cursor $ next-path state xs
+                              d! $ docs-workflow.schema/Op :navigate cursor $ next-path state xs
                               , &unit
-                      (:none) (Option :none)
+                      (:none) None
                     comp-doc-page target
                     space-y 120
                 comp-global-keydown
@@ -162,12 +162,12 @@
                       if
                         and (= |p key) (or meta? ctrl?)
                         .show quick-modal d!
-                        if (= |Escape key) (.close quick-modal d!) (Option :none)
+                        if (= |Escape key) (.close quick-modal d!) None
                     , &unit
                 .render quick-modal
                 if dev?
-                  Option :some $ comp-typed-reel (>> states :reel) reel ({}) on-control!
-                  Option :none
+                  Some $ comp-typed-reel (>> states :reel) reel ({}) on-control!
+                  , None
           :examples $ []
           :schema $ quote $ Fn (reel.typed/State docs-workflow.schema/Op docs-workflow.schema/Store) (List docs-workflow.schema/DocNode)
             Fn reel.typed/Control $ -> Unit
@@ -199,7 +199,7 @@
                           .unwrap-or (get-env |lang) |en-US
               (:none) (<> |)
           :examples $ []
-          :schema $ quote $ Fn (calcit.core/Option docs-workflow.schema/DocNode) (-> respo.schema/Component) (:features :js-ffi)
+          :schema $ quote $ Fn (Option docs-workflow.schema/DocNode) (-> respo.schema/Component) (:features :js-ffi)
         'comp-history-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-history-menu (history docs on-select)
             keyed-> ({})
@@ -246,12 +246,12 @@
                         xs $ :children entry
                       if
                         not $ empty? xs
-                        Option :some $ div
+                        Some $ div
                           {} $ :style $ {} (:padding-left |16px)
                           comp-nav-tree xs
                             conj base-path $ :key entry
                             , on-select
-                        Option :none
+                        , None
           :examples $ []
           :schema $ quote $ Fn (List docs-workflow.schema/DocNode) (List Tag)
             Fn (List Tag)
@@ -281,9 +281,9 @@
                         space-x 8
                         if
                           not $ empty? $ :children entry
-                          Option :some $ <> "|☰" $ {}
+                          Some $ <> "|☰" $ {}
                             :color $ hsl 180 80 60
-                          Option :none
+                          , None
           :examples $ []
           :schema $ quote $ Fn Tag (List Tag) (List docs-workflow.schema/DocNode)
             Fn (List Tag)
@@ -300,7 +300,7 @@
                   range $ dec $ .len selected
                   map $ fn (idx)
                     let
-                        sub-path $ selected .slice 0 $ Option :some (inc idx)
+                        sub-path $ selected .slice 0 $ Some (inc idx)
                         target $ find-target docs sub-path
                       keyed-element idx $ div
                         {}
@@ -338,7 +338,7 @@
           :code $ quote $ defstyle css-doc-page
             {}
               |& $ .merge ui/expand $ {} (:padding "|8px 16px")
-                :background-color $ hsl 0 0 100 $ Option :some 0.6
+                :background-color $ hsl 0 0 100 $ Some 0.6
                 :position |relative
               "|& iframe" $ {} $ :border
                 str "|1px solid " $ hsl 0 0 86
@@ -380,7 +380,7 @@
         'find-target $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn find-target (entries path)
             match (first path)
-              (:none) (Option :none)
+              (:none) None
               (:some p0)
                 match
                   find entries $ fn (entry)
@@ -389,23 +389,22 @@
                   (:some target)
                     if
                       = 1 $ .len path
-                      Option :some target
+                      Some target
                       find-target (:children target) (rest path)
-                  (:none) (Option :none)
+                  (:none) None
           :examples $ []
           :schema $ quote $ Fn (List docs-workflow.schema/DocNode) (List Tag)
-            -> $ calcit.core/Option docs-workflow.schema/DocNode
+            -> $ Option docs-workflow.schema/DocNode
             :features :js-ffi
           :tests $ [] $ %{} 'TestEntry (:name |finds-existing-and-missing-paths)
             :code $ quote $ do
-              assert= (Option :some |Overview)
+              assert= (Some |Overview)
                 .map
                   find-target docs-workflow.schema/docs $ [] :design :overview
                   fn (target)
                     hint-fn $ Fn docs-workflow.schema/DocNode $ -> String
                     :title target
-              assert= (Option :none)
-                find-target docs-workflow.schema/docs $ [] :design :missing
+              assert= None $ find-target docs-workflow.schema/docs $ [] :design :missing
             :tags $ #{} :unit
         'make-markdown-parser $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn make-markdown-parser ()
@@ -467,14 +466,14 @@
             {}
               |& $ {} (:padding "|0 8px") (:cursor |pointer) (:transition-duration |200ms) (:line-height |2.4)
               |&:hover $ {} $ :background-color
-                hsl 190 10 70 $ Option :some 0.1
+                hsl 190 10 70 $ Some 0.1
           :examples $ []
           :schema $ quote String
         'style-doc-entry $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstyle style-doc-entry
             {} (|& style-entry)
               |&:hover $ {} $ :background-color
-                hsl 190 10 70 $ Option :some 0.1
+                hsl 190 10 70 $ Some 0.1
           :examples $ []
           :schema $ quote String
         'style-doc-entry-selected $ %{} 'CodeEntry (:doc |)
@@ -569,7 +568,7 @@
         '*reel $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defref *reel (typed/new-reel schema/store)
           :examples $ []
-          :schema $ quote $ Ref (reel.typed/State docs-workflow.schema/Op docs-workflow.schema/Store)
+          :schema $ quote $ Ref (typed/State schema/Op schema/Store)
         'dispatch! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn dispatch! (op)
             when config/dev? $ println |Dispatch: op
@@ -577,7 +576,7 @@
               :timestamp $ shared/date-now-snapshot
             , &unit
           :examples $ []
-          :schema $ quote $ Fn docs-workflow.schema/Op (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn schema/Op (-> Unit) (:features :js-ffi)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! () (config/register-languages!)
             println "|Running mode:" $ if config/dev? |dev |release
@@ -600,7 +599,7 @@
             reset! *reel $ typed/apply-control updater @*reel control
             , &unit
           :examples $ []
-          :schema $ quote $ Fn reel.typed/Control (-> Unit) (:features :js-ffi)
+          :schema $ quote $ Fn typed/Control (-> Unit) (:features :js-ffi)
         'persist-storage! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn persist-storage! () (js/console.log |persist)
             js/localStorage.setItem (:storage-key config/site)
@@ -667,6 +666,7 @@
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op
             :states (List respo.schema/CoordKey) Dynamic
+            :navigate (List respo.schema/CoordKey) docs-workflow.schema/State
             :hydrate-storage docs-workflow.schema/Store
           :examples $ []
           :schema $ quote EnumDef
@@ -703,7 +703,7 @@
               DocNode :title |About :key :about :content (load-doc |about.md) :children $ []
               DocNode :title |Cirru :key :cirru :content (load-doc |cirru.md) :children $ []
           :examples $ []
-          :schema $ quote $ List docs-workflow.schema/DocNode
+          :schema $ quote $ List DocNode
         'load-doc $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defmacro load-doc (filename)
             read-file $ str |docs/ filename
@@ -715,7 +715,7 @@
           :code $ quote $ def store
             Store :states $ {}
           :examples $ []
-          :schema $ quote docs-workflow.schema/Store
+          :schema $ quote Store
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.schema
     'docs-workflow.updater $ %{} 'FileEntry
@@ -730,6 +730,10 @@
                     Map Dynamic Dynamic
                   (:ok updated-states) updated-states
                   (:err message) (raise message)
+              (:navigate cursor navigation)
+                assoc store :states $ decode-map-as
+                  update-state-tree (:states store) cursor navigation
+                  Map Dynamic Dynamic
               (:hydrate-storage d) d
               _ $ do (eprintln "|unknown op:" op) store
           :examples $ []
