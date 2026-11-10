@@ -19,9 +19,9 @@
             div
               {} $ :class-name style-child-entries-block
               <> "|Child pages" style-title
-              list-> ({})
+              keyed-> ({})
                 -> entries $ map-indexed $ fn (idx entry)
-                  [] idx $ div
+                  keyed-element idx $ div
                     {} (:tab-index 0)
                       :on-click $ fn (e d!)
                         hint-fn $ Fn respo.schema/RespoEvent
@@ -46,7 +46,7 @@
               -> Unit
             -> respo.schema/Component
         'comp-container $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defcomp comp-container (reel docs)
+          :code $ quote $ defcomp comp-container (reel docs on-control!)
             let
                 store $ :store reel
                 states $ :states store
@@ -166,10 +166,13 @@
                     , &unit
                 .render quick-modal
                 if dev?
-                  Option :some $ comp-reel (>> states :reel) (reel-view/view-data reel) ({})
+                  Option :some $ comp-typed-reel (>> states :reel) reel ({}) on-control!
                   Option :none
           :examples $ []
-          :schema $ quote $ Fn (reel.typed/State docs-workflow.schema/Op docs-workflow.schema/Store) (List docs-workflow.schema/DocNode) (-> respo.schema/Component) (:features :js-ffi)
+          :schema $ quote $ Fn (reel.typed/State docs-workflow.schema/Op docs-workflow.schema/Store) (List docs-workflow.schema/DocNode)
+            Fn reel.typed/Control $ -> Unit
+            -> respo.schema/Component
+            :features :js-ffi
         'comp-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-doc-page (target)
             match target
@@ -199,9 +202,9 @@
           :schema $ quote $ Fn (calcit.core/Option docs-workflow.schema/DocNode) (-> respo.schema/Component) (:features :js-ffi)
         'comp-history-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-history-menu (history docs on-select)
-            list-> ({})
+            keyed-> ({})
               -> history $ map-indexed $ fn (idx path)
-                [] idx $ let
+                keyed-element idx $ let
                     target $ find-target docs path
                   div
                     {} (:tab-index 0)
@@ -224,9 +227,9 @@
             -> respo.schema/Component
         'comp-nav-tree $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-nav-tree (docs base-path on-select)
-            list-> ({})
+            keyed-> ({})
               -> docs $ map $ fn (entry)
-                [] (:key entry)
+                keyed-element (:key entry)
                   div ({})
                     div
                       {} (:tab-index 0) (:class-name style-doc-entry)
@@ -259,9 +262,9 @@
           :code $ quote $ defcomp comp-page-entries (selected parent-path entries on-select)
             div
               {} $ :style $ {} (:min-width |240px) (:max-width |320px)
-              list-> ({})
+              keyed-> ({})
                 -> entries $ map-indexed $ fn (idx entry)
-                  [] idx $ let
+                  keyed-element idx $ let
                       selected? $ = selected $ :key entry
                     div
                       {} (:tab-index 0)
@@ -289,7 +292,7 @@
             -> respo.schema/Component
         'comp-parent-menu $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-parent-menu (selected docs on-select)
-            list->
+            keyed->
               {} $ :style $ {}
               if
                 not $ empty? selected
@@ -299,7 +302,7 @@
                     let
                         sub-path $ selected .slice 0 $ Option :some (inc idx)
                         target $ find-target docs sub-path
-                      [] idx $ div
+                      keyed-element idx $ div
                         {}
                           :style $ {} (:cursor |pointer) (:font-style |italic) (:font-family ui/font-fancy)
                             :color $ hsl 0 0 40
@@ -522,9 +525,9 @@
         :code $ quote $ ns docs-workflow.comp.container
           :require (respo-ui.core :as ui)
             respo-ui.core :refer $ hsl
-            respo.core :refer $ defcomp defeffect <> >> div button textarea span input list-> a
+            respo.core :refer $ defcomp defeffect <> >> div button textarea span input keyed-> keyed-element a
             respo.comp.space :refer $ space-x space-y
-            reel.comp.reel :refer $ comp-reel
+            reel.comp.reel :refer $ comp-typed-reel
             respo-md.comp.md :refer $ comp-md
             docs-workflow.config :refer $ dev?
             |remarkable :refer $ Remarkable
@@ -535,7 +538,6 @@
             respo.css :refer $ defstyle
             respo-ui.css :as css
             respo.comp.global-keydown :refer $ comp-global-keydown
-            reel.typed-compat :as reel-view
             js-ffi.contract :as contract
     'docs-workflow.config $ %{} 'FileEntry
       :defs $ {}
@@ -576,31 +578,6 @@
             , &unit
           :examples $ []
           :schema $ quote $ Fn docs-workflow.schema/Op (-> Unit) (:features :js-ffi)
-        'dispatch-view! $ %{} 'CodeEntry (:doc |)
-          :code $ quote $ defn dispatch-view! (raw)
-            if
-              = (enum-definition raw) (Option :some schema/Op)
-              dispatch! $ decode-map-as raw 'docs-workflow.schema/Op
-              match (typed/decode-control raw)
-                (:some control) (on-control! control)
-                (:none)
-                  dispatch! $ match raw
-                    (:states cursor data)
-                      match
-                        try-decode-map-as cursor $ List respo.schema/CoordKey
-                        (:ok checked-cursor) (docs-workflow.schema/Op :states checked-cursor data)
-                        (:err message) (raise message)
-                    (:hydrate-storage data)
-                      match
-                        try-decode-map-as
-                          if (struct? data) (&struct:to-map data) data
-                          , 'docs-workflow.schema/Store
-                        (:ok checked-store) (docs-workflow.schema/Op :hydrate-storage checked-store)
-                        (:err message) (raise message)
-                    _ $ raise "|Unknown Docs Workflow operation"
-            , &unit
-          :examples $ []
-          :schema $ quote $ Fn AnyEnum (-> Unit) (:features :js-ffi) (:open :decode)
         'main! $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defn main! () (config/register-languages!)
             println "|Running mode:" $ if config/dev? |dev |release
@@ -647,8 +624,8 @@
             match (browser/query-selector |.app)
               (:some element)
                 render-with! (narrow-element element)
-                  fn () $ comp-container @*reel schema/docs
-                  , dispatch-view!
+                  fn () $ comp-container @*reel schema/docs on-control!
+                  , dispatch!
               (:none) (raise "|Missing .app mount element")
           :examples $ []
           :schema $ quote $ Fn (-> Unit) (:features :js-ffi)
@@ -661,7 +638,6 @@
             docs-workflow.schema :as schema
             reel.util :refer $ listen-devtools-toggle!
             reel.typed :as typed
-            reel.typed-compat :as reel-view
             docs-workflow.config :as config
             js-ffi.shared :as shared
             |./calcit.build-errors :default build-errors
@@ -678,7 +654,7 @@
         'HighlightJsHost $ %{} 'CodeEntry (:doc |)
           :code $ quote $ deftrait HighlightJsHost
             .highlight-auto $ Fn docs-workflow.schema/HighlightJsHost String JsObject $ -> docs-workflow.schema/HighlightResultHost
-            .register-language $ Fn docs-workflow.schema/HighlightJsHost String Dynamic $ -> Unit
+            .register-language $ Fn docs-workflow.schema/HighlightJsHost String JsObject $ -> Unit
           :examples $ []
           :ffi $ {} (:backend :js) (:kind :external-object) (:target :browser)
             :names $ {} $ :register-language |registerLanguage

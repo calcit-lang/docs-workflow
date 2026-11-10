@@ -45,8 +45,9 @@ test('real navigation callbacks retain paths and history with the single-op disp
     store = updater(store, op, 'navigation-test', 0);
     return undefined; // Calcit Unit in generated JavaScript.
   };
+  const onControl = () => assert.fail('Navigation must use the document dispatcher');
   function click(owner, text) {
-    const targets = clickable(comp_container(new_reel(store), schema.docs));
+    const targets = clickable(comp_container(new_reel(store), schema.docs, onControl));
     const target = targets.find(x => x.owner === owner && x.text === text);
     assert.ok(target, `Missing ${owner} ${text}; got ${targets.map(x => `${x.owner}:${x.text}`)}`);
     target.listener(event__GT_edn({ type: 'click' }), dispatch);
@@ -83,7 +84,7 @@ test('real navigation callbacks retain paths and history with the single-op disp
 
   // Use the same RespoEvent conversion as the browser renderer.
   function keydown(key, ctrl = false, meta = false) {
-    const target = clickable(comp_container(new_reel(store), schema.docs), 'keydown')
+    const target = clickable(comp_container(new_reel(store), schema.docs, onControl), 'keydown')
       .find(x => x.owner === 'comp-global-keydown');
     assert.ok(target, 'Missing global keyboard listener');
     target.listener(event__GT_edn({ type: 'keydown', key, ctrlKey: ctrl, metaKey: meta }), dispatch);

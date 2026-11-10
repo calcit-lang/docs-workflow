@@ -6,12 +6,12 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 ## 使用者需要注意
 
-**0.0.42 候选**使用正式 Calcit / `@calcit/procs` 0.38.0。使用 Node.js 24 和 Yarn 4.18.0 重新安装完整依赖图并生成 JS，保留 Caps strict。
+**0.1.0 候选**使用正式 Calcit / `@calcit/procs` 0.40.0。使用 Node.js 24 和 Yarn 4.18.0 重新安装完整依赖图并生成 JS，保留 Caps strict。
 
-- Alerts 0.14.2、Reel 0.10.0、Markdown 0.8.2、Router 0.12.2。
+- Alerts 0.14.3、Reel 0.11.0、Markdown 0.8.2、Router 0.12.2。
 - UI 0.15.2、Respo 0.19.5、JS FFI 0.2.13。
 
-应用导航和快捷键使用具名 `Op` 与 `RespoEvent`。Reel 0.10.0 面板仍会发出旧控制事件，渲染入口集中校验这些事件。导航树、历史、快速跳转和存档合同沿用原行为。
+升级到 0.1.0 时，调用方给 `comp-container` 增加第三个参数 `on-control!`。文档导航使用具名 `Op`，Reel 面板使用 `reel.typed/Control`，调用方分别接入业务历史与调试控制。
 
 ### 0.0.40 历史说明
 
@@ -30,10 +30,10 @@ Quick Jump 保留 `.show` 的结果和 dispatcher 的泛型返回关系，不吞
 
 ## API
 
-由调用方提供 Reel 状态和文档：
+由调用方提供 Reel 状态、文档和 `Fn(reel.typed/Control) -> Unit` 回调。
 
 ```cirru.no-check
-docs-workflow.comp.container/comp-container reel docs
+docs-workflow.comp.container/comp-container reel docs on-control!
 ```
 
 `docs-workflow.schema` 提供 `DocNode`、`State`、`Store` 和 `Op`。内部导航发送单个 `Op :states cursor next-state`，不再依赖旧的双参数 dispatch 简写。状态 cursor 仍如实支持混合类型路径，不伪装为 Tag-only。
