@@ -63,10 +63,11 @@ test('real navigation callbacks retain paths and history with the single-op disp
   click('comp-history-menu', 'Overview');
   assert.deepEqual(path(field(state(), 'selected')), ['design', 'overview']);
   assert.deepEqual(field(state(), 'history').toArray().map(path), [['design', 'overview'], ['design']]);
-  // The four selection closures now emit one Enum, not the legacy (cursor, value) call.
+  // The four selection closures emit one nominal navigation operation.
   assert.equal(ops.length, 4);
   for (const op of ops) {
-    assert.equal(op.tag.value, 'states');
+    assert.equal(op.tag.value, 'navigate');
+    assert.equal(c.option_$o_unwrap(c.enum_definition(op)), schema.Op);
     assert.equal(op.extra.length, 2);
     assert.deepEqual(path(op.extra[0]), []);
   }
@@ -74,7 +75,8 @@ test('real navigation callbacks retain paths and history with the single-op disp
   click('comp-nav-tree', 'Guide');
   assert.deepEqual(path(field(state(), 'selected')), ['guide']);
   const navOp = ops.at(-1);
-  assert.equal(navOp.tag.value, 'states');
+  assert.equal(navOp.tag.value, 'navigate');
+  assert.equal(c.option_$o_unwrap(c.enum_definition(navOp)), schema.Op);
   assert.equal(navOp.extra.length, 2);
   assert.deepEqual(path(navOp.extra[0]), []);
   assert.deepEqual(path(field(navOp.extra[1], 'selected')), ['guide']);
