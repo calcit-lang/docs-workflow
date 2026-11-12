@@ -56,15 +56,14 @@
                       or value $ []
                     (:none) ([])
                   List respo.schema/CoordKey
-                state $ let
-                    raw $ match (get states :data)
-                      (:some value)
-                        or value $ docs-workflow.schema/State :selected ([] :guide) :history $ []
-                      (:none)
-                        docs-workflow.schema/State :selected ([] :guide) :history $ []
-                  decode-map-as
-                    if (struct? raw) (&struct:to-map raw) raw
-                    , 'docs-workflow.schema/State
+                state $ match (get states :data)
+                  (:some value)
+                    match value
+                      (docs-workflow.schema/State navigation) navigation
+                      (Map legacy) (decode-map-as legacy 'docs-workflow.schema/State)
+                      _ $ raise "|Expected documentation navigation state"
+                  (:none)
+                    docs-workflow.schema/State :selected ([] :guide) :history $ []
                 selected $ :selected state
                 history $ :history state
                 quick-modal $ use-modal (>> states :quick)
@@ -665,7 +664,7 @@
           :schema $ quote Trait
         'Op $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defenum Op
-            :states (List respo.schema/CoordKey) (Map Dynamic Dynamic)
+            :states (List respo.schema/CoordKey) (Map respo.schema/CoordKey StateValue)
             :navigate (List respo.schema/CoordKey) docs-workflow.schema/State
             :hydrate-storage docs-workflow.schema/Store
           :examples $ []
@@ -687,9 +686,13 @@
             :history $ List $ List Tag
           :examples $ []
           :schema $ quote StructDef
+        'StateValue $ %{} 'CodeEntry (:doc |)
+          :code $ quote $ defunion StateValue Bool Number String Tag State (List StateValue) (Map respo.schema/CoordKey StateValue)
+          :examples $ []
+          :schema $ quote UnionDef
         'Store $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defstruct Store
-            :states $ Map Dynamic Dynamic
+            :states $ Map respo.schema/CoordKey StateValue
           :examples $ []
           :schema $ quote StructDef
         'docs $ %{} 'CodeEntry (:doc |)
@@ -727,13 +730,13 @@
                 assoc store :states $ match
                   try-decode-map-as
                     update-state-tree (:states store) cursor s
-                    Map Dynamic Dynamic
+                    Map respo.schema/CoordKey docs-workflow.schema/StateValue
                   (:ok updated-states) updated-states
                   (:err message) (raise message)
               (:navigate cursor navigation)
                 assoc store :states $ decode-map-as
                   update-state-tree (:states store) cursor navigation
-                  Map Dynamic Dynamic
+                  Map respo.schema/CoordKey docs-workflow.schema/StateValue
               (:hydrate-storage d) d
               _ $ do (eprintln "|unknown op:" op) store
           :examples $ []
