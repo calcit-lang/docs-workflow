@@ -6,7 +6,7 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 ## 使用者需要注意
 
-**0.1.0 候选**使用正式 Calcit / `@calcit/procs` 0.41.1。使用 Node.js 24 和 Yarn 4.18.0 重新安装完整依赖图并生成 JS，保留 Caps strict。文档导航使用具名 `:navigate` 和页面状态 `State`，弹窗仍通过原框架状态入口。
+**0.1.0 候选**使用正式 Calcit / `@calcit/procs` 0.42.1。使用 Node.js 24 和 Yarn 4.18.0 重新安装完整依赖图并生成 JS，保留 Caps strict。文档导航使用具名 `:navigate` 和页面状态 `State`，弹窗仍通过原框架状态入口。
 
 - Alerts 0.14.3、Reel 0.11.0、Markdown 0.8.2、Router 0.12.2。
 - UI 0.15.2、Respo 0.19.5、JS FFI 0.2.13。
