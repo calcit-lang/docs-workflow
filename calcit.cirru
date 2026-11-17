@@ -152,7 +152,7 @@
                   {} $ :disabled-commands $ #{} |p
                   fn (e d!)
                     hint-fn $ Fn respo.schema/RespoEvent
-                      Fn docs-workflow.schema/Op $ -> Unit
+                      Fn docs-workflow.schema/Op (-> Unit) (:features :io :state)
                       -> Unit
                     let
                         key $ contract/expect-string |keyboard.key $ :key e
@@ -160,8 +160,12 @@
                         ctrl? $ contract/expect-bool |keyboard.ctrl $ :ctrl? e
                       if
                         and (= |p key) (or meta? ctrl?)
-                        .show quick-modal d!
-                        if (= |Escape key) (.close quick-modal d!) None
+                        d! $ docs-workflow.schema/Op :states (conj cursor :quick)
+                          {} $ :show? true
+                        if (= |Escape key)
+                          d! $ docs-workflow.schema/Op :states (conj cursor :quick)
+                            {} $ :show? false
+                          , &unit
                     , &unit
                 .render quick-modal
                 if dev?
@@ -169,9 +173,9 @@
                   , None
           :examples $ []
           :schema $ quote $ Fn (reel.typed/State docs-workflow.schema/Op docs-workflow.schema/Store) (List docs-workflow.schema/DocNode)
-            Fn reel.typed/Control $ -> Unit
+            Fn reel.typed/Control (-> Unit) (:features :io :state)
             -> respo.schema/Component
-            :features :js-ffi
+            :features :io :js-ffi :state
         'comp-doc-page $ %{} 'CodeEntry (:doc |)
           :code $ quote $ defcomp comp-doc-page (target)
             match target
@@ -738,9 +742,8 @@
                   update-state-tree (:states store) cursor navigation
                   Map respo.schema/CoordKey docs-workflow.schema/StateValue
               (:hydrate-storage d) d
-              _ $ do (eprintln "|unknown op:" op) store
           :examples $ []
-          :schema $ quote $ Fn docs-workflow.schema/Store docs-workflow.schema/Op String Number (-> docs-workflow.schema/Store) (:features :io)
+          :schema $ quote $ Fn docs-workflow.schema/Store docs-workflow.schema/Op String Number (-> docs-workflow.schema/Store)
       :ns $ %{} 'NsEntry (:doc |)
         :code $ quote $ ns docs-workflow.updater
           :require $ respo.cursor :refer $ update-state-tree
