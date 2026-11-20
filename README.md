@@ -6,10 +6,10 @@ Demo：http://repo.calcit-lang.org/docs-workflow/
 
 ## 使用者需要注意
 
-**0.1.0 候选**使用正式 Calcit / `@calcit/procs` 0.44.0。使用 Node.js 24 和 Yarn 4.18.0 重新安装完整依赖图并生成 JS，保留 Caps strict。文档导航使用具名 `:navigate` 和页面状态 `State`，弹窗仍通过原框架状态入口。
+**0.1.2 候选**使用正式 Calcit / `@calcit/procs` 0.44.0。使用 Node.js 24 和 Yarn 4.18.0 重新安装完整依赖图并生成 JS，保留 Caps strict。文档导航使用具名 `:navigate` 和页面状态 `State`，弹窗仍通过原框架状态入口。
 
-- Alerts 0.14.3、Reel 0.11.0、Markdown 0.8.2、Router 0.12.2。
-- UI 0.15.2、Respo 0.19.5、JS FFI 0.2.13。
+- Alerts 0.14.7、Reel 0.11.4、Markdown 0.9.4、Router 0.12.10。
+- UI 0.15.6、Respo 0.19.12、JS FFI 0.2.18。
 
 升级到 0.1.0 时，调用方给 `comp-container` 增加第三个参数 `on-control!`。文档导航使用具名 `Op`，Reel 面板使用 `reel.typed/Control`，调用方分别接入业务历史与调试控制。
 
@@ -75,7 +75,7 @@ Remarkable linkify 使用安装包声明的 `remarkable/dist/cjs/linkify.js` 发
 
 `yarn build` 生成前端资源。CI 另构建 mdBook，保留 `mdbook.html` 入口，二进制下载仍验证原 SHA256。
 
-PR 只检查和构建，不上传 COS 或部署；保存原始双前端构建 artifact，使用本地相对路径验收，不改写生成 HTML。生产部署串行完成，资源与页面发布前分别核对 main HEAD。前端 COS 仅上传 `dist/assets`；mdBook 保留原公开前缀。两者都使用 COS Action v1.2.0 自身的 verify，不增加重复校验脚本。原两个服务器目录及 CDN 前缀不变。Actions 使用精确正式 tag，接受 tag 可移动风险。
+PR 只检查和构建，不上传 COS 或部署；保存原始双前端构建 artifact，使用本地相对路径验收，不改写生成 HTML。生产部署串行完成，资源与页面发布前分别核对 main HEAD。前端 COS 仅上传 `dist/assets`；mdBook 保留原公开前缀。两者都使用 COS Action v1.3.0 自身的 verify，不增加重复校验脚本。原两个服务器目录及 CDN 前缀不变。Actions 使用精确正式 tag，接受 tag 可移动风险。
 
 正式 0.32.1 工具链配对及原 mdBook 双前端构建以 PR Linux CI 的精确提交结果为准。生产部署和正式 tag 发布仍需独立验收。
 
